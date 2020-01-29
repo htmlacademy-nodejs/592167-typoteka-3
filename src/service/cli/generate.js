@@ -76,12 +76,11 @@ const Category = {
 const writeToFile = (fileName, content) => {
   fs.writeFile(fileName, content, (err) => {
     if (err) {
-      return console.error(`Can't write data to file...`)
+      return console.error(`Can't write data to file...`);
     }
 
     return console.info(`Operation success. File created.`);
-    process.exit(ExitCode.error);
-  })
+  });
 };
 
 const getRandomDate = () => {
