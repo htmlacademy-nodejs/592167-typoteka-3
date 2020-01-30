@@ -4,7 +4,7 @@ const fs = require(`fs`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 
-const FILE_NAME = `mocks.json`;
+const FILE_NAME = `mock.json`;
 const DEFAULT_OFFER = 1;
 const MAX_OFFER = 1000;
 
