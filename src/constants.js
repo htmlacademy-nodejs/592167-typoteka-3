@@ -1,8 +1,8 @@
 'use strict';
 
 const ExitCode = {
-  success: 0,
-  error: 1,
+  SUCCESS: 0,
+  ERROR: 1,
 };
 
 const DEFAULT_COMMAND = `--help`;

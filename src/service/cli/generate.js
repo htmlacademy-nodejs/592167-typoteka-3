@@ -59,18 +59,18 @@ const CATEGORIES = [
 ];
 
 const Annonce = {
-  min: 1,
-  max: 5,
+  MIN: 1,
+  MAX: 5,
 };
 
 const FullText = {
-  min: 1,
-  max: ANNOUNCEMENT_AND_FULL_TEXT.length - 1,
+  MIN: 1,
+  MAX: ANNOUNCEMENT_AND_FULL_TEXT.length - 1,
 };
 
 const Category = {
-  min: 1,
-  max: CATEGORIES.length - 1,
+  MIN: 1,
+  MAX: CATEGORIES.length - 1,
 };
 
 const writeToFile = (fileName, content) => {
@@ -94,9 +94,9 @@ const generateOffers = (count) => (
   Array(count).fill({}).map(() => ({
     title: TITLES[getRandomInt(0, TITLES.length - 1)],
     createDate: getRandomDate().toLocaleString(),
-    annonce: shuffle(ANNOUNCEMENT_AND_FULL_TEXT).slice(0, getRandomInt(Annonce.min, Annonce.max)).join(` `),
-    fullText: shuffle(ANNOUNCEMENT_AND_FULL_TEXT).slice(0, getRandomInt(FullText.min, FullText.max)).join(` `),
-    category: shuffle(CATEGORIES).slice(0, getRandomInt(Category.min, Category.max)),
+    annonce: shuffle(ANNOUNCEMENT_AND_FULL_TEXT).slice(0, getRandomInt(Annonce.MIN, Annonce.MAX)).join(` `),
+    fullText: shuffle(ANNOUNCEMENT_AND_FULL_TEXT).slice(0, getRandomInt(FullText.MIN, FullText.MAX)).join(` `),
+    category: shuffle(CATEGORIES).slice(0, getRandomInt(Category.MIN, Category.MAX)),
   }))
 );
 
