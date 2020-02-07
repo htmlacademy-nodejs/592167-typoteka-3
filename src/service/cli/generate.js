@@ -1,6 +1,8 @@
 'use strict';
 
 const fs = require(`fs`);
+const chalk = require(`chalk`);
+
 const {getRandomInt, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 
@@ -76,10 +78,10 @@ const Category = {
 const writeToFile = (fileName, content) => {
   fs.writeFile(fileName, content, (err) => {
     if (err) {
-      return console.error(`Can't write data to file...`);
+      return console.error(chalk.red(`Can't write data to file...`));
     }
 
-    return console.info(`Operation success. File created.`);
+    return console.info(chalk.green(`Operation success. File created.`));
   });
 };
 
@@ -104,7 +106,7 @@ const generateMocks = (arg) => {
   const [count] = arg;
   const countOffer = Number.parseInt(count, 10) || DEFAULT_OFFER;
   if (countOffer > MAX_OFFER) {
-    console.error(`Не больше 1000 публикаций`);
+    console.error(chalk.red(`Не больше 1000 публикаций`));
     process.exit(ExitCode.error);
   }
   const content = JSON.stringify(generateOffers(countOffer));
