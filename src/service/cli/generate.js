@@ -21,12 +21,12 @@ const Annonce = {
 
 const FullText = {
   MIN: 1,
-  MAX: ANNOUNCEMENT_AND_FULL_TEXT.length - 1,
+  MAX: 8,
 };
 
 const Category = {
   MIN: 1,
-  MAX: CATEGORIES.length - 1,
+  MAX: 5,
 };
 
 const writeToFile = async (fileName, content) => {
@@ -40,7 +40,7 @@ const writeToFile = async (fileName, content) => {
 
 const readContent = async (filePath) => {
   try {
-    const content = await fs.readFile(filePath, 'utf8');
+    const content = await fs.readFile(filePath, `utf8`);
     return content.split(`\n`);
   } catch (err) {
     console.error(chalk.red(err));
@@ -55,7 +55,7 @@ const getRandomDate = () => {
   return day;
 };
 
-const generateOffers = (count, titles, announcment, categories) => (
+const generateOffers = (count, titles, announcement, categories) => (
   Array(count).fill({}).map(() => ({
     title: titles[getRandomInt(0, titles.length - 1)],
     createDate: getRandomDate().toLocaleString(),
