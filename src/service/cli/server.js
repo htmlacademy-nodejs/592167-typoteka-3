@@ -4,10 +4,9 @@ const fs = require(`fs`).promises;
 const http = require(`http`);
 const chalk = require(`chalk`);
 
-const {HttpCode} = require(`../../constants`);
+const {HttpCode, FILE_NAME} = require(`../../constants`);
 
 const DEFAULT_PORT = 3000;
-const FILE_NAME = `mock.json`;
 
 const sendResponse = (res, statusCode, message) => {
   const template = `

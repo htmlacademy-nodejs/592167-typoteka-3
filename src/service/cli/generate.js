@@ -4,13 +4,13 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {getRandomInt, shuffle} = require(`../../utils`);
-const {ExitCode} = require(`../../constants`);
+const {ExitCode, FILE_NAME} = require(`../../constants`);
 
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 const FILE_ANNOUNCEMENT_PATH = `./data/announcement.txt`;
 
-const FILE_NAME = `mock.json`;
+
 const DEFAULT_OFFER = 1;
 const MAX_OFFER = 1000;
 
