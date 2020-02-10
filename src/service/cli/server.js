@@ -9,6 +9,11 @@ const {HttpCode, FILE_NAME} = require(`../../constants`);
 const DEFAULT_PORT = 3000;
 
 const sendResponse = (res, statusCode, message) => {
+  res.statusCode = statusCode;
+  res.writeHead(statusCode, {
+    'Content-Type': `text/html; charset=UTF-8`,
+  });
+
   const responseBoby = `
   <!Doctype html>
     <html lang="ru">
@@ -21,10 +26,6 @@ const sendResponse = (res, statusCode, message) => {
     </html>
   `.trim();
 
-  res.statusCode = statusCode;
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`,
-  });
   res.end(responseBoby);
 };
 
