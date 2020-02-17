@@ -4,7 +4,7 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {getRandomInt, shuffle} = require(`../../utils`);
-const {ExitCode, FILE_NAME} = require(`../../constants`);
+const {ExitCode, MOCK_FILE_NAME} = require(`../../constants`);
 
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
@@ -77,7 +77,7 @@ const generateMocks = async (arg) => {
     process.exit(ExitCode.error);
   }
   const content = JSON.stringify(generateOffers(countOffer, titles, announcment, catigories));
-  await writeToFile(FILE_NAME, content);
+  await writeToFile(MOCK_FILE_NAME, content);
 };
 
 module.exports = {

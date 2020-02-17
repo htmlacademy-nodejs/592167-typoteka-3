@@ -15,12 +15,12 @@ const HttpCode = {
 
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
-const FILE_NAME = `mock.json`;
+const MOCK_FILE_NAME = `mock.json`;
 
 module.exports = {
   ExitCode,
   HttpCode,
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-  FILE_NAME,
+  MOCK_FILE_NAME,
 };
