@@ -4,17 +4,17 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {getRandomInt, shuffle} = require(`../../utils`);
-const {ExitCode} = require(`../../constants`);
+const {ExitCode, MOCK_FILE_NAME} = require(`../../constants`);
 
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 const FILE_ANNOUNCEMENT_PATH = `./data/announcement.txt`;
 
-const FILE_NAME = `mock.json`;
+
 const DEFAULT_OFFER = 1;
 const MAX_OFFER = 1000;
 
-const Annonce = {
+const Announce = {
   MIN: 1,
   MAX: 5,
 };
@@ -59,7 +59,7 @@ const generateOffers = (count, titles, announcement, categories) => (
   Array(count).fill({}).map(() => ({
     title: titles[getRandomInt(0, titles.length - 1)],
     createDate: getRandomDate().toLocaleString(),
-    annonce: shuffle(announcement).slice(0, getRandomInt(Annonce.MIN, Annonce.MAX)).join(` `),
+    announce: shuffle(announcement).slice(0, getRandomInt(Announce.MIN, Announce.MAX)).join(` `),
     fullText: shuffle(announcement).slice(0, getRandomInt(FullText.MIN, FullText.MAX)).join(` `),
     category: shuffle(categories).slice(0, getRandomInt(Category.MIN, Category.MAX)),
   }))
@@ -67,8 +67,8 @@ const generateOffers = (count, titles, announcement, categories) => (
 
 const generateMocks = async (arg) => {
   const titles = await readContent(FILE_TITLES_PATH);
-  const announcment = await readContent(FILE_ANNOUNCEMENT_PATH);
-  const catigories = await readContent(FILE_CATEGORIES_PATH);
+  const announcement = await readContent(FILE_ANNOUNCEMENT_PATH);
+  const categories = await readContent(FILE_CATEGORIES_PATH);
 
   const [count] = arg;
   const countOffer = Number.parseInt(count, 10) || DEFAULT_OFFER;
@@ -76,8 +76,8 @@ const generateMocks = async (arg) => {
     console.error(chalk.red(`Не больше 1000 публикаций`));
     process.exit(ExitCode.error);
   }
-  const content = JSON.stringify(generateOffers(countOffer, titles, announcment, catigories));
-  await writeToFile(FILE_NAME, content);
+  const content = JSON.stringify(generateOffers(countOffer, titles, announcement, categories));
+  await writeToFile(MOCK_FILE_NAME, content);
 };
 
 module.exports = {
