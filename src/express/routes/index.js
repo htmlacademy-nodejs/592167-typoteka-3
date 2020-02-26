@@ -3,7 +3,7 @@
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
-const responseContext = (app) => {
+const getAppRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
 
@@ -22,5 +22,5 @@ const responseContext = (app) => {
 };
 
 module.exports = {
-  responseContext
+  getAppRoutes
 };
