@@ -1,10 +1,10 @@
 'use strict';
 
 const express = require(`express`);
-const {getAppRoutes} = require(`./routes/index`);
+const {initializeRoutes} = require(`./routes/index`);
 
 const app = express();
-getAppRoutes(app);
+initializeRoutes(app);
 
 const port = 8080;
 app.listen(port, () => {

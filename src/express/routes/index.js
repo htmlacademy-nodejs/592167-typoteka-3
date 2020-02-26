@@ -3,7 +3,7 @@
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
-const getAppRoutes = (app) => {
+const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
 
@@ -22,5 +22,5 @@ const getAppRoutes = (app) => {
 };
 
 module.exports = {
-  getAppRoutes
+  initializeRoutes
 };
