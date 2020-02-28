@@ -17,7 +17,7 @@ const initializeRoutes = (app) => {
     res.render(`login`);
   });
   app.get(`/search`, (req, res) => {
-    res.send(req.url);
+    res.render(`search`);
   });
 };
 
