@@ -11,7 +11,7 @@ const initializeRoutes = (app) => {
     res.render(`main`);
   });
   app.get(`/register`, (req, res) => {
-    res.send(req.url);
+    res.render(`sign-up`);
   });
   app.get(`/login`, (req, res) => {
     res.render(`login`);
