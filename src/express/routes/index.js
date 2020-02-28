@@ -11,7 +11,7 @@ const initializeRoutes = (app) => {
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, (req, res) => {
-    res.send(req.url);
+    res.render(`main`);
   });
   app.get(`/register`, (req, res) => {
     res.send(req.url);
