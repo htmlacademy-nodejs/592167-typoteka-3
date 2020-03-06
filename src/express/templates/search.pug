@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper-color
-    include header/header
+    include common/header
     main
       section.search-page
         .search-page__wrapper
@@ -12,5 +12,6 @@ block content
               label
                 input(type='text', placeholder='Что ищем?')
               button.search__button.button.button--transparent(type='submit') Найти
-    include footer/footer
+    include common/footer
 
+block scripts

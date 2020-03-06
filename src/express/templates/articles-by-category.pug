@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper
-    include header/header
+    include common/header
     main.articles-category
       h1 Бизнес
       section.articles-category__theme-list
@@ -96,8 +96,4 @@ block content
               | Комментарии
               span.preview__cloud
               b.preview__comment-count 12
-    include footer/footer
-
-block scripts
-  script(src='js/vendor.js')
-  script(src='js/main.js')
+    include common/footer

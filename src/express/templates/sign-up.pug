@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper
-    include header/header
+    include common/header
     main
       h1.visually-hidden Регистрация пользователя
       section.modal
@@ -48,7 +48,7 @@ block content
                   input(type='password', placeholder='Пароль', required='')
               button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
         .modal__overlay
-    include footer/footer
+    include common/footer
 
 block scripts
   script(src='js/main.js')

@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper.wrapper--nobackground
-    include header/header
+    include common/header
     main.main-page.main-page--padding
       section.main-page__publication.publication
         h1.publication__title Комментарии
@@ -84,8 +84,4 @@ block content
               | Игровая студия Playrix из Вологды потратила более $100 млн на покупку конкурентов в 2018 году
             button.publication__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка
-    include footer/footer
-
-block scripts
-  script(src='js/vendor.js')
-  script(src='js/main.js')
+    include common/footer

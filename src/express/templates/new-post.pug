@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper
-    include header/header
+    include common/header
     main
       section.modal.modal--flex
         .popup.popup--new-publication.popup--flex
@@ -40,7 +40,3 @@ block content
                     label
                       textarea(rows='1', placeholder='Полный текст публикации')
         .modal__overlay
-
-block scripts
-  script(src='js/vendor.js')
-  script(src='js/main.js')

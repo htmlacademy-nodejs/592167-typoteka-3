@@ -1,8 +1,8 @@
-extends layout
+extends common/layout
 
 block content
   .wrapper
-    include header/header
+    include common/header
     main
       section.post
         h1.visually-hidden Пост
@@ -89,8 +89,4 @@ block content
                 label
                   textarea(rows='1', placeholder='Присоединиться к обсуждению')
                 button.comments__button.button.button--colored(type='submit') Опубликовать
-    include footer/footer
-
-block scripts
-  script(src='js/vendor.js')
-  script(src='js/main.js')
+    include common/footer
