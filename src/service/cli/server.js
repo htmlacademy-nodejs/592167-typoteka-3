@@ -1,10 +1,6 @@
 'use strict';
 
-const fs = require(`fs`).promises;
 const express = require(`express`);
-const chalk = require(`chalk`);
-
-const {HttpCode, MOCK_FILE_NAME} = require(`../../constants`);
 const {initializeRoutes} = require(`../routes/index`);
 
 const DEFAULT_PORT = 3000;
