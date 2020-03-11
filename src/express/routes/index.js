@@ -3,24 +3,24 @@
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
-const getAppRoutes = (app) => {
+const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, (req, res) => {
-    res.send(req.url);
+    res.render(`main`);
   });
   app.get(`/register`, (req, res) => {
-    res.send(req.url);
+    res.render(`sign-up`);
   });
   app.get(`/login`, (req, res) => {
-    res.send(req.url);
+    res.render(`login`);
   });
   app.get(`/search`, (req, res) => {
-    res.send(req.url);
+    res.render(`search`);
   });
 };
 
 module.exports = {
-  getAppRoutes
+  initializeRoutes
 };

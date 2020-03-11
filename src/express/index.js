@@ -1,10 +1,14 @@
 'use strict';
 
 const express = require(`express`);
-const {getAppRoutes} = require(`./routes/index`);
+const {initializeRoutes} = require(`./routes/index`);
 
 const app = express();
-getAppRoutes(app);
+
+app.set(`views`, `${__dirname}/templates`);
+app.set(`view engine`, `pug`);
+
+initializeRoutes(app);
 
 const port = 8080;
 app.listen(port, () => {
