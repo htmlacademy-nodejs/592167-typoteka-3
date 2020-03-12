@@ -10,7 +10,7 @@ const {MOCK_FILE_NAME} = require(`../../constants`);
 router.get(`/`, async (req, res) => {
   try {
     const content = await fs.readFile(MOCK_FILE_NAME);
-    res.json(JSON.parse(content).map((el) => el.title));
+    res.json(JSON.parse(content));
   } catch (err) {
     console.log(chalk.red(err));
     res.send([]);

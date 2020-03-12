@@ -15,7 +15,7 @@ const startServer = async (args) => {
 
   app.listen(port, () => {
     console.log(`Сервер запущен на порту: ${port}`);
-  })
+  });
 };
 
 module.exports = {
