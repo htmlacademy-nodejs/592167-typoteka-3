@@ -19,9 +19,16 @@ const getNewId = () => {
   return nanoid(6);
 };
 
+const addNewArticle = (articleList, newArticle) => {
+  newArticle.id = getNewId();
+  articleList.push(newArticle);
+
+  return articleList;
+};
 
 module.exports = {
   getRandomInt,
   shuffle,
   getNewId,
+  addNewArticle,
 };

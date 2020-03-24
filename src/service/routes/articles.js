@@ -7,6 +7,7 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
+const {addNewArticle} = require(`../../utils`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -24,6 +25,14 @@ router.get(`/:articleId`, (req, res) => {
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
+  }
+});
+router.post(`/`, (req, res) => {
+  if (Object.keys(req.body).length !== 6) {
+    res.status(400).send({error: `Переданы не все поля для нового объявления.`})
+  } else {
+    content = addNewArticle(content, req.body);
+    res.send(content);
   }
 });
 
