@@ -1,9 +1,9 @@
 'use strict';
 
-const postsRouter = require(`./posts`);
+const articlesRouter = require(`./articles`);
 
 const initializeRoutes = (app) => {
-  app.use(`/posts`, postsRouter);
+  app.use(`/api/articles`, articlesRouter);
 };
 
 module.exports = {
