@@ -18,5 +18,13 @@ router.get(`/`, (req, res) => {
     res.send([]);
   }
 });
+router.get(`/:articleId`, (req, res) => {
+  try {
+    res.send(content.filter((el) => el.id === req.params.articleId.toString()));
+  } catch (err) {
+    console.error(chalk.red(err));
+    res.send([]);
+  }
+});
 
 module.exports = router;
