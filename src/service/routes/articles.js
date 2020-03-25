@@ -7,7 +7,7 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {addNewArticle, changeArticle} = require(`../../utils`);
+const {addNewArticle, changeArticle, deleteArticle} = require(`../../utils`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -41,6 +41,16 @@ router.put(`/:articleId`, (req, res) => {
   } else {
     content = changeArticle(content, req.body, req.params.articleId);
     res.send(content);
+  }
+});
+router.delete(`/:articleId`, (req, res) => {
+  try {
+    content = deleteArticle(content, req.params.articleId);
+    content !== -1 ? res.send(content) : res.status(400).send(`Неудалось удалить заявление,
+    так как оно не обнаружено в списке`);
+  } catch (err) {
+    console.log(chalk.red(err));
+    res.send([]);
   }
 });
 

@@ -47,6 +47,9 @@ const changeArticle = (articleList, newArticle, id) => {
 
   return newArticleList;
 };
+const deleteArticle = (articleList, id) => {
+  return deleteItemFromArray(articleList, id);
+};
 
 module.exports = {
   getRandomInt,
@@ -54,4 +57,5 @@ module.exports = {
   getNewId,
   addNewArticle,
   changeArticle,
+  deleteArticle,
 };
