@@ -7,7 +7,7 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {addNewArticle, changeArticle, deleteArticle} = require(`../../utils`);
+const {addNewArticle, changeArticle, deleteArticle, deleteComment} = require(`../../utils`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -57,6 +57,16 @@ router.get(`/:articleId/comments`, (req, res) => {
   try {
     const article = content.find((el) => el.id === req.params.articleId.toString());
     res.send(article.comments);
+  } catch (err) {
+    console.log(chalk.red(err));
+    res.send([]);
+  }
+});
+router.delete(`/:articleId/comments/:commentId`, (req, res) => {
+  try {
+    content = deleteComment(content, req.params.articleId, req.params.commentId);
+    content !== -1 ? res.send(content) : res.status(400).send(`Невозможно удалить комментарий, так как
+    он не обнаружен в списке.`);
   } catch (err) {
     console.log(chalk.red(err));
     res.send([]);
