@@ -77,6 +77,10 @@ const addComment = (articleList, newCommentText, id) => {
   return newArticleList;
 };
 
+const searchArticles = (articleList, search) => {
+  return articleList.filter((el) => el.title.toUpperCase().match(search.query.toUpperCase()));
+};
+
 module.exports = {
   getRandomInt,
   shuffle,
@@ -86,4 +90,5 @@ module.exports = {
   deleteArticle,
   deleteComment,
   addComment,
+  searchArticles,
 };
