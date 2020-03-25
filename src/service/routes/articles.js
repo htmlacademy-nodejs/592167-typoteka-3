@@ -53,5 +53,14 @@ router.delete(`/:articleId`, (req, res) => {
     res.send([]);
   }
 });
+router.get(`/:articleId/comments`, (req, res) => {
+  try {
+    const article = content.find((el) => el.id === req.params.articleId.toString());
+    res.send(article.comments);
+  } catch (err) {
+    console.log(chalk.red(err));
+    res.send([]);
+  }
+});
 
 module.exports = router;
