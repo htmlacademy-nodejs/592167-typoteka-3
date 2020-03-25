@@ -7,7 +7,7 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {addNewArticle} = require(`../../utils`);
+const {addNewArticle, changeArticle} = require(`../../utils`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -32,6 +32,14 @@ router.post(`/`, (req, res) => {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`})
   } else {
     content = addNewArticle(content, req.body);
+    res.send(content);
+  }
+});
+router.put(`/:articleId`, (req, res) => {
+  if (Object.keys(req.body).length !== 6) {
+    res.status(400).send({error: `Переданы не все поля для нового объявления.`})
+  } else {
+    content = changeArticle(content, req.body, req.params.articleId);
     res.send(content);
   }
 });

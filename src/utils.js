@@ -2,6 +2,18 @@
 
 const nanoid = require(`nanoid`);
 
+const deleteItemFromArray = (array, id) => {
+  const idx = array.map((el) => el.id).indexOf(id);
+  if (idx === -1) {
+    return idx;
+  }
+
+  const beforeIdx = array.slice(0, idx);
+  const afterIdx = array.slice(idx + 1);
+
+  return [...beforeIdx, ...afterIdx];
+};
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -25,10 +37,21 @@ const addNewArticle = (articleList, newArticle) => {
 
   return articleList;
 };
+const changeArticle = (articleList, newArticle, id) => {
+  let newArticleList = deleteItemFromArray(articleList, id);
+  if (newArticleList !== -1) {
+    const mutableItem = articleList.find((el) => el.id === id);
+    const modifiedItem = Object.assign({}, mutableItem, newArticle);
+    newArticleList.push(modifiedItem);
+  }
+
+  return newArticleList;
+};
 
 module.exports = {
   getRandomInt,
   shuffle,
   getNewId,
   addNewArticle,
+  changeArticle,
 };
