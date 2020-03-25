@@ -7,7 +7,7 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {addNewArticle, changeArticle, deleteArticle, deleteComment} = require(`../../utils`);
+const {addNewArticle, changeArticle, deleteArticle, deleteComment, addComment} = require(`../../utils`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -70,6 +70,14 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   } catch (err) {
     console.log(chalk.red(err));
     res.send([]);
+  }
+});
+router.put(`/:articleId/comments`, (req, res) => {
+  if (Object.keys(req.body).length !== 1) {
+    res.status(400).send(`Переданы не все поля для нового комментария.`);
+  } else {
+    content = addComment(content, req.body, req.params.articleId);
+    res.send(content);
   }
 });
 

@@ -63,6 +63,19 @@ const deleteComment = (articleList, id, commentId) => {
 
   return newArticleList;
 };
+const addComment = (articleList, newCommentText, id) => {
+  const newArticleList = deleteItemFromArray(articleList, id);
+  const mutableArticle = articleList.find((el) => el.id === id);
+
+  const newComment = {
+    id: nanoid(6),
+    text: newCommentText.text,
+  };
+  mutableArticle.comments.push(newComment);
+  newArticleList.push(mutableArticle);
+
+  return newArticleList;
+};
 
 module.exports = {
   getRandomInt,
@@ -72,4 +85,5 @@ module.exports = {
   changeArticle,
   deleteArticle,
   deleteComment,
+  addComment,
 };
