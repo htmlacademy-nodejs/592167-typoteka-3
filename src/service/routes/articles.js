@@ -7,8 +7,8 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {deleteComment, addComment} = require(`../control-utils/comment`);
-const {addNewArticle, changeArticle, deleteArticle} = require(`../control-utils/article`);
+const commentService = require(`../control-utils/comment`);
+const articleService = require(`../control-utils/article`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -30,25 +30,29 @@ router.get(`/:articleId`, (req, res) => {
 });
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({error: `Переданы не все поля для нового объявления.`})
+    res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    content = addNewArticle(content, req.body);
+    content = articleService.add(content, req.body);
     res.send(content);
   }
 });
 router.put(`/:articleId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({error: `Переданы не все поля для нового объявления.`})
+    res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    content = changeArticle(content, req.body, req.params.articleId);
+    content = articleService.change(content, req.body, req.params.articleId);
     res.send(content);
   }
 });
 router.delete(`/:articleId`, (req, res) => {
   try {
-    content = deleteArticle(content, req.params.articleId);
-    content !== -1 ? res.send(content) : res.status(400).send(`Неудалось удалить заявление,
+    content = articleService.deleteArticle(content, req.params.articleId);
+    if (content !== -1) {
+      res.send(content);
+    } else {
+      res.status(400).send(`Неудалось удалить заявление,
     так как оно не обнаружено в списке`);
+    }
   } catch (err) {
     console.log(chalk.red(err));
     res.send([]);
@@ -65,9 +69,13 @@ router.get(`/:articleId/comments`, (req, res) => {
 });
 router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   try {
-    content = deleteComment(content, req.params.articleId, req.params.commentId);
-    content !== -1 ? res.send(content) : res.status(400).send(`Невозможно удалить комментарий, так как
-    он не обнаружен в списке.`);
+    content = commentService.deleteComment(content, req.params.articleId, req.params.commentId);
+    if (content !== -1) {
+      res.send(content);
+    } else {
+      res.status(400).send(`Неудалось удалить заявление,
+    так как оно не обнаружено в списке`);
+    }
   } catch (err) {
     console.log(chalk.red(err));
     res.send([]);
@@ -77,7 +85,7 @@ router.put(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send(`Переданы не все поля для нового комментария.`);
   } else {
-    content = addComment(content, req.body, req.params.articleId);
+    content = commentService.add(content, req.body, req.params.articleId);
     res.send(content);
   }
 });

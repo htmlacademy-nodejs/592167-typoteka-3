@@ -1,7 +1,6 @@
 'use strict';
 
-const nanoid = require(`nanoid`);
-const {deleteItemFromArray} = require(`../../utils`);
+const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
 const deleteComment = (articleList, id, commentId) => {
   const newArticleList = deleteItemFromArray(articleList, id);
@@ -16,12 +15,12 @@ const deleteComment = (articleList, id, commentId) => {
 
   return newArticleList;
 };
-const addComment = (articleList, newCommentText, id) => {
+const add = (articleList, newCommentText, id) => {
   const newArticleList = deleteItemFromArray(articleList, id);
   const mutableArticle = articleList.find((el) => el.id === id);
 
   const newComment = {
-    id: nanoid(6),
+    id: getNewId(),
     text: newCommentText.text,
   };
   mutableArticle.comments.push(newComment);
@@ -32,5 +31,5 @@ const addComment = (articleList, newCommentText, id) => {
 
 module.exports = {
   deleteComment,
-  addComment,
+  add,
 };
