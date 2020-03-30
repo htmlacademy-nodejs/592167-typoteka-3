@@ -48,8 +48,8 @@ const remove = (id) => {
   return answer;
 };
 
-const search = (articleList, queryString) => {
-  return articleList.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
+const search = (queryString) => {
+  return content.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
 
 const changeContent = (newContent) => {

@@ -1,18 +1,15 @@
 'use strict';
 
-const fs = require(`fs`);
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
 
 const router = new Router();
 
-const {MOCK_FILE_NAME} = require(`../../constants`);
 const articleService = require(`../control-utils/article`);
-let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 router.get(`/`, (req, res) => {
   try {
-    res.send(articleService.search(content, req.query));
+    res.send(articleService.search(req.query));
   } catch (err) {
     console.log(chalk.red(err));
     res.status(404).send(`Нет такой страницы.`);
