@@ -1,15 +1,12 @@
 'use strict';
 
-// const fs = require(`fs`);
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
 
 const router = new Router();
 
-// const {MOCK_FILE_NAME} = require(`../../constants`);
 const commentService = require(`../control-utils/comment`);
 const articleService = require(`../control-utils/article`);
-// let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
 router.get(`/`, (req, res) => {
