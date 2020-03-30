@@ -1,38 +1,62 @@
 'use strict';
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
+const articleService = require(`./article`);
 
 
-const deleteComment = (articleList, id, commentId) => {
-  const newArticleList = deleteItemFromArray(articleList, id);
-  const mutableArticle = articleList.find((el) => el.id === id);
-
-  const comments = mutableArticle.comments;
-  const newComments = {
-    comments: deleteItemFromArray(comments, commentId),
-  };
-  const modifiedArticle = Object.assign({}, mutableArticle, newComments);
-  newArticleList.push(modifiedArticle);
-
-  return newArticleList;
+const getContent = (id) => {
+  const article = articleService.getContent().find((el) => el.id === id);
+  return article.comments;
 };
 
-const add = (articleList, newCommentText, id) => {
-  const newArticleList = deleteItemFromArray(articleList, id);
-  const mutableArticle = articleList.find((el) => el.id === id);
+const remove = (id, commentId) => {
+  const answer = {};
+  const localContent = articleService.getContent();
+  const newArticleList = deleteItemFromArray(localContent, id);
+  if (newArticleList !== -1) {
+    const mutableArticle = localContent.find((el) => el.id === id);
 
-  const newComment = {
-    id: getNewId(),
-    text: newCommentText.text,
-  };
-  mutableArticle.comments.push(newComment);
-  newArticleList.push(mutableArticle);
+    const comments = mutableArticle.comments;
+    const newComments = {
+      comments: deleteItemFromArray(comments, commentId),
+    };
+    if (newComments.comments === -1) {
+      answer.status = 410;
+      answer.text = `Возможно комментарий уже был удален`;
+      articleService.changeContent(localContent);
+      return answer;
+    }
+    const modifiedArticle = Object.assign({}, mutableArticle, newComments);
+    newArticleList.push(modifiedArticle);
+    articleService.changeContent(newArticleList);
+    answer.status = 204;
+    answer.text = ``;
+  }
 
-  return newArticleList;
+  return answer;
+};
+
+const add = (newCommentText, id) => {
+  const localContent = articleService.getContent();
+  const newComment = {};
+  const newArticleList = deleteItemFromArray(localContent, id);
+  if (newArticleList !== -1) {
+    const mutableArticle = localContent.find((el) => el.id === id);
+
+    newComment.id = getNewId();
+    newComment.text = newCommentText.text;
+
+    mutableArticle.comments.push(newComment);
+    newArticleList.push(mutableArticle);
+    articleService.changeContent(newArticleList);
+  }
+
+  return newComment.id;
 };
 
 
 module.exports = {
-  deleteComment,
+  remove,
   add,
+  getContent,
 };

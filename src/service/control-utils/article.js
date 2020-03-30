@@ -1,38 +1,67 @@
 'use strict';
 
-
+const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
+const {MOCK_FILE_NAME} = require(`../../constants`);
+let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
-const add = (articleList, newArticle) => {
-  newArticle.id = getNewId();
-  articleList.push(newArticle);
 
-  return articleList;
+const getContent = () => {
+  return content;
 };
 
-const change = (articleList, newArticle, id) => {
-  let newArticleList = deleteItemFromArray(articleList, id);
+const add = (newArticle) => {
+  newArticle.id = getNewId();
+  content.push(newArticle);
+
+  return newArticle.id;
+};
+
+const getContentById = (id) => {
+  return content.find((el) => el.id === id);
+};
+
+const change = (newArticle, id) => {
+  let newArticleList = deleteItemFromArray(content, id);
   if (newArticleList !== -1) {
-    const mutableItem = articleList.find((el) => el.id === id);
+    const mutableItem = content.find((el) => el.id === id);
     const modifiedItem = Object.assign({}, mutableItem, newArticle);
     newArticleList.push(modifiedItem);
+    content = newArticleList;
   }
 
-  return newArticleList;
+  return content;
 };
 
-const deleteArticle = (articleList, id) => {
-  return deleteItemFromArray(articleList, id);
+const remove = (id) => {
+  const answer = {};
+  const newContent = deleteItemFromArray(content, id);
+  if (newContent !== -1) {
+    content = newContent;
+    answer.status = 204;
+    answer.text = ``;
+  } else {
+    answer.status = 410;
+    answer.text = `Возможно заявление уже было удалено.`;
+  }
+  return answer;
 };
 
 const search = (articleList, queryString) => {
   return articleList.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
 
+const changeContent = (newContent) => {
+  content = newContent;
+};
+
 module.exports = {
   add,
   change,
-  deleteArticle,
+  remove,
   search,
+  getContent,
+  getContentById,
+  changeContent,
 };
