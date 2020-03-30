@@ -10,6 +10,7 @@ const add = (articleList, newArticle) => {
 
   return articleList;
 };
+
 const change = (articleList, newArticle, id) => {
   let newArticleList = deleteItemFromArray(articleList, id);
   if (newArticleList !== -1) {
@@ -20,9 +21,11 @@ const change = (articleList, newArticle, id) => {
 
   return newArticleList;
 };
+
 const deleteArticle = (articleList, id) => {
   return deleteItemFromArray(articleList, id);
 };
+
 const search = (articleList, queryString) => {
   return articleList.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
