@@ -19,7 +19,7 @@ const add = (newArticle) => {
   return newArticle.id;
 };
 
-const getContentById = (id) => {
+const getById = (id) => {
   return content.find((el) => el.id === id);
 };
 
@@ -55,6 +55,6 @@ module.exports = {
   remove,
   search,
   getContent,
-  getContentById,
+  getById,
   changeContent,
 };
