@@ -2,6 +2,7 @@
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const articleService = require(`./article`);
+const errors = require(`../errors/errors`);
 
 
 const getContent = (id) => {
@@ -10,7 +11,6 @@ const getContent = (id) => {
 };
 
 const remove = (id, commentId) => {
-  const answer = {};
   const localContent = articleService.getContent();
   const newArticleList = deleteItemFromArray(localContent, id);
   if (newArticleList !== -1) {
@@ -21,19 +21,13 @@ const remove = (id, commentId) => {
       comments: deleteItemFromArray(comments, commentId),
     };
     if (newComments.comments === -1) {
-      answer.status = 410;
-      answer.text = `Возможно комментарий уже был удален`;
       articleService.changeContent(localContent);
-      return answer;
+      throw new errors.CommentNotFoundError();
     }
     const modifiedArticle = Object.assign({}, mutableArticle, newComments);
     newArticleList.push(modifiedArticle);
     articleService.changeContent(newArticleList);
-    answer.status = 204;
-    answer.text = ``;
   }
-
-  return answer;
 };
 
 const add = (newCommentText, id) => {

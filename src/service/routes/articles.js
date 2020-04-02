@@ -7,6 +7,7 @@ const router = new Router();
 
 const commentService = require(`../control-utils/comment`);
 const articleService = require(`../control-utils/article`);
+const errors = require(`../errors/errors`);
 
 
 router.get(`/`, (req, res) => {
@@ -14,7 +15,7 @@ router.get(`/`, (req, res) => {
     res.send(articleService.getContent());
   } catch (err) {
     console.log(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
@@ -23,7 +24,7 @@ router.get(`/:articleId`, (req, res) => {
     res.send(articleService.getContentById(req.params.articleId));
   } catch (err) {
     console.error(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
@@ -31,8 +32,8 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    const newId = articleService.add(req.body);
-    res.status(201).send(`Новое заявление сохранено с id=${newId}`);
+    articleService.add(req.body);
+    res.status(201).send(``);
   }
 });
 
@@ -41,17 +42,21 @@ router.put(`/:articleId`, (req, res) => {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
     articleService.change(req.body, req.params.articleId);
-    res.status(201).send(`Данные успешно изменены.`);
+    res.status(201).send(``);
   }
 });
 
 router.delete(`/:articleId`, (req, res) => {
   try {
-    const isDelete = articleService.remove(req.params.articleId);
-    res.status(isDelete.status).send(isDelete.text);
+    articleService.remove(req.params.articleId);
+    res.status(204).send(``);
   } catch (err) {
     console.log(chalk.red(err));
-    res.send([]);
+    if (err instanceof errors.ArticleNotFoundError) {
+      res.status(410).send({code: 410, message: `article with id ${req.params.articleId} isn't found.`});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
@@ -60,17 +65,21 @@ router.get(`/:articleId/comments`, (req, res) => {
     res.send(commentService.getContent(req.params.articleId));
   } catch (err) {
     console.log(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
 router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   try {
-    const isDelete = commentService.remove(req.params.articleId, req.params.commentId);
-    res.status(isDelete.status).send(isDelete.text);
+    commentService.remove(req.params.articleId, req.params.commentId);
+    res.status(204).send(``);
   } catch (err) {
     console.log(chalk.red(err));
-    res.send([]);
+    if (err instanceof errors.CommentNotFoundError) {
+      res.status(410).send({code: 410, message: `comment with id ${req.params.commentId} isn't found`});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
@@ -78,8 +87,8 @@ router.put(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send(`Переданы не все поля для нового комментария.`);
   } else {
-    const commentId = commentService.add(req.body, req.params.articleId);
-    res.status(201).send(`Новый комментарий сохранен с id=${commentId}.`);
+    commentService.add(req.body, req.params.articleId);
+    res.status(201).send(``);
   }
 });
 
