@@ -36,7 +36,7 @@ const change = (newArticle, id) => {
 const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent === -1) {
-    throw new errors.ArticleNotFoundError();
+    throw new errors.ArticleNotFoundError(id);
   }
   content = newContent;
 };
