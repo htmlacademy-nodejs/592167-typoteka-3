@@ -33,7 +33,7 @@ router.post(`/`, (req, res) => {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
     articleService.add(req.body);
-    res.status(201).send(``);
+    res.status(201).end();
   }
 });
 
@@ -42,14 +42,14 @@ router.put(`/:articleId`, (req, res) => {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
     articleService.change(req.body, req.params.articleId);
-    res.status(201).send(``);
+    res.status(201).end();
   }
 });
 
 router.delete(`/:articleId`, (req, res) => {
   try {
     articleService.remove(req.params.articleId);
-    res.status(204).send(``);
+    res.status(204).end();
   } catch (err) {
     console.log(chalk.red(err));
     if (err instanceof errors.ArticleNotFoundError) {
@@ -72,7 +72,7 @@ router.get(`/:articleId/comments`, (req, res) => {
 router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   try {
     commentService.remove(req.params.articleId, req.params.commentId);
-    res.status(204).send(``);
+    res.status(204).end();
   } catch (err) {
     console.log(chalk.red(err));
     if (err instanceof errors.CommentNotFoundError) {
@@ -88,7 +88,7 @@ router.put(`/:articleId/comments`, (req, res) => {
     res.status(400).send(`Переданы не все поля для нового комментария.`);
   } else {
     commentService.add(req.body, req.params.articleId);
-    res.status(201).send(``);
+    res.status(201).end();
   }
 });
 
