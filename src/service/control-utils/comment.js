@@ -1,56 +1,37 @@
 'use strict';
 
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
-const articleService = require(`./article`);
-const errors = require(`../errors/errors`);
+const articleRepository = require(`../repositories/article`);
+const commentRepository = require(`../repositories/comment`);
+const {CommentNotFoundError, ArticleNotFoundError} = require(`../errors/errors`);
 
 
-const getContent = (id) => {
-  const article = articleService.getContent().find((el) => el.id === id);
-  return article.comments;
-};
-
-const remove = (id, commentId) => {
-  const localContent = articleService.getContent();
-  const newArticleList = deleteItemFromArray(localContent, id);
-  if (newArticleList !== -1) {
-    const mutableArticle = localContent.find((el) => el.id === id);
-
-    const comments = mutableArticle.comments;
-    const newComments = {
-      comments: deleteItemFromArray(comments, commentId),
-    };
-    if (newComments.comments === -1) {
-      articleService.changeContent(localContent);
-      throw new errors.CommentNotFoundError(id, commentId);
-    }
-    const modifiedArticle = Object.assign({}, mutableArticle, newComments);
-    newArticleList.push(modifiedArticle);
-    articleService.changeContent(newArticleList);
-  }
-};
-
-const add = (newCommentText, id) => {
-  const localContent = articleService.getContent();
-  const newComment = {};
-  const newArticleList = deleteItemFromArray(localContent, id);
-  if (newArticleList !== -1) {
-    const mutableArticle = localContent.find((el) => el.id === id);
-
-    newComment.id = getNewId();
-    newComment.text = newCommentText.text;
-
-    mutableArticle.comments.push(newComment);
-    newArticleList.push(mutableArticle);
-    articleService.changeContent(newArticleList);
+const getByArticleId = (articleId) => {
+  if (!articleRepository.exists(articleId)) {
+    throw new ArticleNotFoundError(articleId);
   }
 
-  return newComment.id;
+  return commentRepository.findByArticleId(articleId);
+};
+
+const remove = (articleId, commentId) => {
+  if (!commentRepository.exists(commentId)) {
+    throw new CommentNotFoundError(articleId, commentId);
+  }
+
+  commentRepository.remove(articleId, commentId);
+};
+
+const add = (newCommentText, articleId) => {
+  if (!articleRepository.exists(articleId)) {
+    throw new ArticleNotFoundError(articleId);
+  }
+
+  commentRepository.save(newCommentText.text, articleId);
 };
 
 
 module.exports = {
+  getByArticleId,
   remove,
   add,
-  getContent,
 };
