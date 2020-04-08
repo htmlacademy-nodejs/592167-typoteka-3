@@ -12,7 +12,7 @@ router.get(`/`, async (req, res) => {
     res.send(categoriesService.getCategories());
   } catch (err) {
     console.error(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: err.message});
   }
 });
 
