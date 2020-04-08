@@ -8,9 +8,7 @@ let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FI
 
 const findAll = () => content;
 
-const findById = (id) => {
-  return content.find((el) => el.id === id);
-};
+const findById = (id) => content.find((el) => el.id === id);
 
 const exists = (id) => findById(id) !== undefined;
 
