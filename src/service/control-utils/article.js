@@ -13,7 +13,7 @@ const findById = (id) => {
 const create = (newArticle) => articleRepository.save(newArticle, undefined);
 
 const update = (newArticle, id) => {
-  if (articleRepository.exists(id)) {
+  if (!articleRepository.exists(id)) {
     throw new ArticleNotFoundError(id);
   }
 
