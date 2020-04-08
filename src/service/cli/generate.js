@@ -75,7 +75,7 @@ const generateOffers = (count, titles, announcement, categories, comments) => (
     createDate: getRandomDate().toLocaleString(),
     announce: shuffle(announcement).slice(0, getRandomInt(Announce.MIN, Announce.MAX)).join(` `),
     fullText: shuffle(announcement).slice(0, getRandomInt(FullText.MIN, FullText.MAX)).join(` `),
-    category: shuffle(categories).slice(0, getRandomInt(Category.MIN, Category.MAX)),
+    categories: shuffle(categories).slice(0, getRandomInt(Category.MIN, Category.MAX)),
     comments: getComments(getRandomInt(Comment.MIN, Comment.MAX), comments),
   }))
 );
