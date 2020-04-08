@@ -83,7 +83,7 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   }
 });
 
-router.put(`/:articleId/comments`, (req, res) => {
+router.post(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send(`Переданы не все поля для нового комментария.`);
   } else {
