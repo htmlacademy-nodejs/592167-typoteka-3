@@ -1,14 +1,8 @@
 'use strict';
 
-const articleService = require(`./article`);
-const content = articleService.getContent();
+const categoriesRepository = require(`../repositories/categories`);
 
-const getCategories = () => {
-  let categories = [];
-  content.map((el) => (categories = categories.concat(el.category)));
-  const tempSet = new Set(categories);
-  return [...tempSet];
-};
+const getCategories = () => categoriesRepository.findAll();
 
 module.exports = {
   getCategories,
