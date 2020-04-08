@@ -12,7 +12,7 @@ const errors = require(`../errors/errors`);
 
 router.get(`/`, (req, res) => {
   try {
-    res.send(articleService.getContent());
+    res.send(articleService.findAll());
   } catch (err) {
     console.log(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
@@ -21,7 +21,7 @@ router.get(`/`, (req, res) => {
 
 router.get(`/:articleId`, (req, res) => {
   try {
-    res.send(articleService.getContentById(req.params.articleId));
+    res.send(articleService.findById(req.params.articleId));
   } catch (err) {
     console.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
@@ -32,7 +32,7 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    articleService.add(req.body);
+    articleService.create(req.body);
     res.status(201).end();
   }
 });
@@ -41,7 +41,7 @@ router.put(`/:articleId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    articleService.change(req.body, req.params.articleId);
+    articleService.update(req.body, req.params.articleId);
     res.status(201).end();
   }
 });

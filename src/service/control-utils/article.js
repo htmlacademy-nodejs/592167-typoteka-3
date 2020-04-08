@@ -1,60 +1,41 @@
 'use strict';
 
-const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
-const errors = require(`../errors/errors`);
-
-const {MOCK_FILE_NAME} = require(`../../constants`);
-let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
+const articleRepository = require(`../repositories/article`);
+const {ArticleNotFoundError} = require(`../errors/errors`);
 
 
-const getContent = () => {
-  return content;
+const findAll = () => articleRepository.findAll();
+
+const findById = (id) => {
+  return articleRepository.findById(id);
 };
 
-const add = (newArticle) => {
-  newArticle.id = getNewId();
-  content.push(newArticle);
+const create = (newArticle) => articleRepository.save(newArticle, undefined);
 
-  return newArticle.id;
-};
-
-const getById = (id) => {
-  return content.find((el) => el.id === id);
-};
-
-const change = (newArticle, id) => {
-  let newArticleList = deleteItemFromArray(content, id);
-  if (newArticleList !== -1) {
-    const mutableItem = content.find((el) => el.id === id);
-    const modifiedItem = Object.assign({}, mutableItem, newArticle);
-    newArticleList.push(modifiedItem);
-    content = newArticleList;
+const update = (newArticle, id) => {
+  if (articleRepository.exists(id)) {
+    throw new ArticleNotFoundError(id);
   }
+
+  articleRepository.save(newArticle, id);
 };
 
 const remove = (id) => {
-  const newContent = deleteItemFromArray(content, id);
-  if (newContent === -1) {
-    throw new errors.ArticleNotFoundError(id);
+  if (!articleRepository.exists(id)) {
+    throw new ArticleNotFoundError(id);
   }
-  content = newContent;
+
+  articleRepository.remove(id);
 };
 
-const search = (queryString) => {
-  return content.filter((el) => el.title.toUpperCase().includes(queryString.query.toUpperCase()));
-};
+const search = (queryString) => articleRepository.findByTitle(queryString.query);
 
-const changeContent = (newContent) => {
-  content = newContent;
-};
 
 module.exports = {
-  add,
-  change,
+  create,
+  update,
   remove,
   search,
-  getContent,
-  getById,
-  changeContent,
+  findAll,
+  findById,
 };
