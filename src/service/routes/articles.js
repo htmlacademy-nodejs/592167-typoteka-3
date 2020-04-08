@@ -7,7 +7,7 @@ const router = new Router();
 
 const commentService = require(`../control-utils/comment`);
 const articleService = require(`../control-utils/article`);
-const errors = require(`../errors/errors`);
+const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
 
 router.get(`/`, (req, res) => {
@@ -52,7 +52,7 @@ router.delete(`/:articleId`, (req, res) => {
     res.status(204).end();
   } catch (err) {
     console.log(chalk.red(err));
-    if (err instanceof errors.ArticleNotFoundError) {
+    if (err instanceof ArticleNotFoundError) {
       res.status(410).send({code: 410, message: `article with id ${req.params.articleId} isn't found.`});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
@@ -75,7 +75,7 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
     res.status(204).end();
   } catch (err) {
     console.log(chalk.red(err));
-    if (err instanceof errors.CommentNotFoundError) {
+    if (err instanceof CommentNotFoundError) {
       res.status(410).send({code: 410, message: `comment with id ${req.params.commentId} isn't found`});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
