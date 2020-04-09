@@ -8,7 +8,7 @@ const findAll = () => articleRepository.findAll();
 
 const findById = (id) => articleRepository.findById(id);
 
-const create = (newArticle) => articleRepository.save(newArticle, undefined);
+const create = (newArticle) => articleRepository.save(newArticle);
 
 const update = (newArticle, id) => {
   if (!articleRepository.exists(id)) {
