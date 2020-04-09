@@ -26,7 +26,7 @@ const remove = (id) => {
   articleRepository.remove(id);
 };
 
-const search = (queryString) => articleRepository.findByTitle(queryString.query);
+const search = (queryString) => articleRepository.findByTitle(queryString);
 
 
 module.exports = {

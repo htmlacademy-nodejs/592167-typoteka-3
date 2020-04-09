@@ -9,7 +9,7 @@ const articleService = require(`../control-utils/article`);
 
 router.get(`/`, (req, res) => {
   try {
-    res.send(articleService.search(req.query));
+    res.send(articleService.search(req.query.query));
   } catch (err) {
     console.log(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
