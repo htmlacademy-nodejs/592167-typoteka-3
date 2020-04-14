@@ -32,8 +32,13 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
-    const id = articleService.create(req.body);
-    res.status(201).send({id});
+    try {
+      const id = articleService.create(req.body);
+      res.status(201).send({id});
+    } catch (err) {
+      console.error(chalk.red(err));
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
@@ -41,8 +46,13 @@ router.put(`/:articleId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
-    articleService.update(req.body, req.params.articleId);
-    res.status(201).end();
+    try {
+      articleService.update(req.body, req.params.articleId);
+      res.status(201).end();
+    } catch (err) {
+      console.error(chalk.red(err));
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
