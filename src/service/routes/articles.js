@@ -87,8 +87,8 @@ router.post(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send(`Not all fields for a new comment have been submitted`);
   } else {
-    commentService.add(req.body, req.params.articleId);
-    res.status(201).end();
+    const id = commentService.add(req.body, req.params.articleId);
+    res.status(201).send({id});
   }
 });
 
