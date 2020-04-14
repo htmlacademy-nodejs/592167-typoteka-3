@@ -32,8 +32,8 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
-    articleService.create(req.body);
-    res.status(201).end();
+    const id = articleService.create(req.body);
+    res.status(201).send({id});
   }
 });
 
