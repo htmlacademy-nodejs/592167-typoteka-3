@@ -30,7 +30,7 @@ router.get(`/:articleId`, (req, res) => {
 
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
     articleService.create(req.body);
     res.status(201).end();
@@ -39,7 +39,7 @@ router.post(`/`, (req, res) => {
 
 router.put(`/:articleId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
     articleService.update(req.body, req.params.articleId);
     res.status(201).end();
@@ -85,7 +85,7 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
 
 router.post(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
-    res.status(400).send(`Переданы не все поля для нового комментария.`);
+    res.status(400).send(`Not all fields for a new comment have been submitted`);
   } else {
     commentService.add(req.body, req.params.articleId);
     res.status(201).end();
