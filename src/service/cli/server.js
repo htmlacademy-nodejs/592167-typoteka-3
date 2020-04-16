@@ -12,9 +12,10 @@ const startServer = async (args) => {
 
   app.use(express.json());
   initializeRoutes(app);
+  app.use((req, res) => res.status(404).send({code: 404, message: `Page not found`}));
 
   app.listen(port, () => {
-    console.log(`Сервер запущен на порту: ${port}`);
+    console.log(`Server start on: ${port}`);
   });
 };
 

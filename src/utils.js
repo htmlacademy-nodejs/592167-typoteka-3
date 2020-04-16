@@ -1,5 +1,8 @@
 'use strict';
 
+const nanoid = require(`nanoid`);
+
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -15,7 +18,26 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
+const getNewId = () => {
+  return nanoid(6);
+};
+
+const deleteItemFromArray = (array, id) => {
+  const idx = array.map((el) => el.id).indexOf(id);
+  if (idx === -1) {
+    return idx;
+  }
+
+  const beforeIdx = array.slice(0, idx);
+  const afterIdx = array.slice(idx + 1);
+
+  return [...beforeIdx, ...afterIdx];
+};
+
+
 module.exports = {
   getRandomInt,
   shuffle,
+  deleteItemFromArray,
+  getNewId,
 };
