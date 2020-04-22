@@ -6,9 +6,9 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/",
-    "start": "node ./src/service/service.js",
-    "server": "nodemon ./src/service/service.js --server 8080",
-    "start-front-server": "nodemon ./src/express/index.js"
+    "start": "node src/service.js",
+    "server": "nodemon src/service.js --server 8080",
+    "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {
     "type": "git",

@@ -5,8 +5,8 @@ const chalk = require(`chalk`);
 
 const router = new Router();
 
-const commentService = require(`../control-utils/comment`);
-const articleService = require(`../control-utils/article`);
+const commentService = require(`../services/comment`);
+const articleService = require(`../services/article`);
 const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
 

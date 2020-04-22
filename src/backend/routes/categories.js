@@ -5,13 +5,13 @@ const chalk = require(`chalk`);
 
 const router = new Router();
 
-const articleService = require(`../control-utils/article`);
+const categoriesService = require(`../services/categories`);
 
-router.get(`/`, (req, res) => {
+router.get(`/`, async (req, res) => {
   try {
-    res.send(articleService.search(req.query.query));
+    res.send(categoriesService.getCategories());
   } catch (err) {
-    console.log(chalk.red(err));
+    console.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
