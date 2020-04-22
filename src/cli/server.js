@@ -1,6 +1,6 @@
 'use strict';
 
-const app = require(`../frontend/app`);
+const app = require(`../backend/app`);
 const DEFAULT_PORT = 3000;
 
 const startServer = async (args) => {

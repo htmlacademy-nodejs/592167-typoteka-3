@@ -5,7 +5,7 @@ const chalk = require(`chalk`);
 
 const router = new Router();
 
-const articleService = require(`./src/backend/services`);
+const articleService = require(`../services/article`);
 
 router.get(`/`, (req, res) => {
   try {

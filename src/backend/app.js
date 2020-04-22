@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const {initializeRoutes} = require(`src/backend`);
+const {initializeRoutes} = require(`./routes/index`);
 
 const app = express();
 

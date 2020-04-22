@@ -5,7 +5,7 @@ const chalk = require(`chalk`);
 
 const router = new Router();
 
-const categoriesService = require(`./src/backend/services`);
+const categoriesService = require(`../services/categories`);
 
 router.get(`/`, async (req, res) => {
   try {
