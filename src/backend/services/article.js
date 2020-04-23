@@ -6,7 +6,13 @@ const {ArticleNotFoundError} = require(`../errors/errors`);
 
 const findAll = () => articleRepository.findAll();
 
-const findById = (id) => articleRepository.findById(id);
+const findById = (id) => {
+  if (!articleRepository.exists(id)) {
+    throw new ArticleNotFoundError(id);
+  }
+
+  return articleRepository.findById(id);
+};
 
 const create = (newArticle) => articleRepository.save(newArticle);
 
