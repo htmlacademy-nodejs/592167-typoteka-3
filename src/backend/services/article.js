@@ -21,7 +21,7 @@ const update = (newArticle, id) => {
     throw new ArticleNotFoundError(id);
   }
 
-  articleRepository.save(newArticle, id);
+  return articleRepository.save(newArticle, id);
 };
 
 const remove = (id) => {
