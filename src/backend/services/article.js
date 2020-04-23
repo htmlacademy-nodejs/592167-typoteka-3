@@ -30,6 +30,7 @@ const remove = (id) => {
   }
 
   articleRepository.remove(id);
+  return true;
 };
 
 const search = (queryString) => articleRepository.findByTitle(queryString);
