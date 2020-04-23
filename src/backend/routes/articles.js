@@ -47,8 +47,8 @@ router.put(`/:articleId`, (req, res) => {
     res.status(400).send({code: 1, message: `Not all fields for a new article have been submitted`});
   } else {
     try {
-      articleService.update(req.body, req.params.articleId);
-      res.status(201).end();
+      const id = articleService.update(req.body, req.params.articleId);
+      res.status(201).send({id});
     } catch (err) {
       console.error(chalk.red(err));
       res.status(500).send({code: 500, message: `Internal service error`});
