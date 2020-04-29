@@ -83,7 +83,11 @@ router.get(`/:articleId/comments`, (req, res) => {
     res.send(commentService.getByArticleId(req.params.articleId));
   } catch (err) {
     console.log(chalk.red(err));
-    res.status(500).send({code: 500, message: `Internal service error`});
+    if (err instanceof ArticleNotFoundError) {
+      res.status(410).send({code: 410, message: err.message});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
