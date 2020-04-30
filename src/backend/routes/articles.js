@@ -5,6 +5,9 @@ const chalk = require(`chalk`);
 
 const router = new Router();
 
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
+
 const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
 const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
@@ -13,8 +16,9 @@ const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`)
 router.get(`/`, (req, res) => {
   try {
     res.send(articleService.findAll());
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
@@ -22,8 +26,9 @@ router.get(`/`, (req, res) => {
 router.get(`/:articleId`, (req, res) => {
   try {
     res.send(articleService.findById(req.params.articleId));
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.error(chalk.red(err));
+    logger.error(chalk.red(err));
     if (err instanceof ArticleNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -39,8 +44,9 @@ router.post(`/`, (req, res) => {
     try {
       const id = articleService.create(req.body);
       res.status(201).send({id});
+      logger.info(`End request with status code ${res.statusCode}`);
     } catch (err) {
-      console.error(chalk.red(err));
+      logger.error(chalk.red(err));
       res.status(500).send({code: 500, message: `Internal service error`});
     }
   }
@@ -53,8 +59,9 @@ router.put(`/:articleId`, (req, res) => {
     try {
       const id = articleService.update(req.body, req.params.articleId);
       res.status(201).send({id});
+      logger.info(`End request with status code ${res.statusCode}`);
     } catch (err) {
-      console.error(chalk.red(err));
+      logger.error(chalk.red(err));
       if (err instanceof ArticleNotFoundError) {
         res.status(410).send({code: 410, message: err.message});
       } else {
@@ -68,8 +75,9 @@ router.delete(`/:articleId`, (req, res) => {
   try {
     articleService.remove(req.params.articleId);
     res.status(204).end();
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(chalk.red(err));
     if (err instanceof ArticleNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -81,8 +89,9 @@ router.delete(`/:articleId`, (req, res) => {
 router.get(`/:articleId/comments`, (req, res) => {
   try {
     res.send(commentService.getByArticleId(req.params.articleId));
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(chalk.red(err));
     if (err instanceof ArticleNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -95,8 +104,9 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
   try {
     commentService.remove(req.params.articleId, req.params.commentId);
     res.status(204).end();
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.log(chalk.red(err));
+    logger.error(chalk.red(err));
     if (err instanceof CommentNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -111,6 +121,7 @@ router.post(`/:articleId/comments`, (req, res) => {
   } else {
     const id = commentService.add(req.body, req.params.articleId);
     res.status(201).send({id});
+    logger.info(`End request with status code ${res.statusCode}`);
   }
 });
 
