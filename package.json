@@ -26,6 +26,7 @@
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "25.4.0",
     "nodemon": "2.0.2",
+    "pino-pretty": "4.0.0",
     "supertest": "4.0.2"
   },
   "dependencies": {
