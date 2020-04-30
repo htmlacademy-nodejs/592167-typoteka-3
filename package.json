@@ -8,7 +8,7 @@
     "test:rest": "jest .rest.test.js",
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
-    "server": "nodemon src/service.js --server 8080",
+    "server": "nodemon src/service.js --server 8080 > src/backend/logs/app.log",
     "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {
