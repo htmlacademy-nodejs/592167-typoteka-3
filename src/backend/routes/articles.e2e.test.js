@@ -40,7 +40,17 @@ const expectedComments = MOCK_ARTICLE.comments;
 const articleRepository = require(`../repositories/article`);
 const MOCK_ID = 123456;
 
-const addMockArticle = () => articleRepository.save(MOCK_ARTICLE);
+let tempId;
+
+beforeEach(() => {
+  tempId = addMockArticle();
+});
+
+afterEach(() => {
+  deleteMockArticle(tempId);
+});
+
+const addMockArticle = () => articleRepository.save(Object.assign({}, MOCK_ARTICLE));
 const deleteMockArticle = (id) => articleRepository.remove(id);
 
 
