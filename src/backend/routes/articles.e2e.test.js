@@ -59,87 +59,86 @@ describe(`get all articles`, () => {
     const res = await request(app).get(`/api/articles`);
 
     expect(res.statusCode).toBe(OK);
+    expect(res.body[0]).toHaveProperty(`id`);
+    expect(res.body[0]).toHaveProperty(`title`);
+    expect(res.body[0]).toHaveProperty(`createDate`);
+    expect(res.body[0]).toHaveProperty(`announce`);
+    expect(res.body[0]).toHaveProperty(`fullText`);
+    expect(res.body[0]).toHaveProperty(`categories`);
+    expect(res.body[0]).toHaveProperty(`comments`);
   });
 
   test(`when request non-existing page status code should be NOT_FOUND`, async () => {
-    const res = await request(app).get(`/api/article`);
+    const res = await request(app).get(`/api/no-articles`);
 
     expect(res.statusCode).toBe(NOT_FOUND);
   });
 });
 
 describe(`get article by id`, () => {
-  test(`when get article by id status code should be OK`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).get(`/api/articles/${id}`);
-
+  test(`when get article by id status code should be OK and response body should be expected body`, async () => {
+    const res = await request(app).get(`/api/articles/${tempId}`);
     expect(res.statusCode).toBe(OK);
-    expect(res.body).toHaveProperty(`id`);
-    expect(res.body).toHaveProperty(`title`);
-    expect(res.body).toHaveProperty(`createDate`);
-    expect(res.body).toHaveProperty(`announce`);
-    expect(res.body).toHaveProperty(`fullText`);
-    expect(res.body).toHaveProperty(`categories`);
-    expect(res.body).toHaveProperty(`comments`);
 
-    deleteMockArticle(id);
+    const expectedBody = Object.assign({}, MOCK_ARTICLE);
+    expectedBody.id = tempId;
+    expect(res.body).toEqual(expectedBody);
   });
 
   test(`when request non-existing article status code should be GONE`, async () => {
     const res = await request(app).get(`/api/articles/${MOCK_ID}`);
-
     expect(res.statusCode).toBe(GONE);
   });
 });
 
 describe(`post article`, () => {
   test(`when adding new article should return new id`, async () => {
-    const tempArticle = await request(app).post(`/api/articles/`)
-      .send(newArticle);
+    const tempArticle = await request(app).post(`/api/articles/`).send(newArticle);
+    const expectedArticle = Object.assign({}, newArticle);
+    expectedArticle.id = tempArticle.body.id;
 
-    const newArticleId = tempArticle.body.id;
+    const res = await request(app).get(`/api/articles/${expectedArticle.id}`);
 
-    const res = await request(app).get(`/api/articles/${newArticleId}`);
+    expect(res.body).toEqual(expectedArticle);
 
-    expect(res.body.title).toBe(newArticle.title);
-
-    deleteMockArticle(newArticleId);
+    deleteMockArticle(expectedArticle.id);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const res = await request(app).post(`/api/articles`)
       .send({title: `some title`});
-
     expect(res.statusCode).toBe(BAD_REQUEST);
+
+    const expectedResponse = {code: 1, message: `Not all fields for a new article have been submitted`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
 describe(`put article`, () => {
   test(`if article updated successfully status code should be CREATED`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).put(`/api/articles/${id}`)
-      .send(newArticle);
+    const resAfterPut = await request(app).put(`/api/articles/${tempId}`).send(newArticle);
+    expect(resAfterPut.statusCode).toBe(CREATED);
 
-    expect(res.statusCode).toBe(CREATED);
-
-    deleteMockArticle(id);
+    const resAfterGet = await request(app).get(`/api/articles/${tempId}`);
+    const expectedArticle = Object.assign({}, MOCK_ARTICLE);
+    expectedArticle.id = tempId;
+    expect(resAfterGet.body).toEqual(expectedArticle);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).put(`/api/articles/${id}`)
-      .send({title: `some title`});
-
+    const res = await request(app).put(`/api/articles/${tempId}`).send({title: `some title`});
     expect(res.statusCode).toBe(BAD_REQUEST);
 
-    deleteMockArticle(id);
+    const expectedResponse = {code: 1, message: `Not all fields for a new article have been submitted`};
+    expect(res.body).toEqual(expectedResponse);
   });
 
   test(`when change non-existing article status code should be GONE`, async () => {
-    const res = await request(app).put(`/api/articles/${MOCK_ID}`)
-      .send(newArticle);
-
+    const res = await request(app).put(`/api/articles/${MOCK_ID}`).send(newArticle);
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Article with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
@@ -153,79 +152,68 @@ describe(`delete article`, () => {
 
   test(`when delete non-existing article status code should be GONE`, async () => {
     const res = await request(app).delete(`/api/articles/${MOCK_ID}`);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Article with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
 describe(`get all comments`, () => {
   test(`for existing article status code should be OK and return all comments`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).get(`/api/articles/${id}/comments`);
+    const res = await request(app).get(`/api/articles/${tempId}/comments`);
 
-    expect(res.statusCode).toBe(OK);
-    expect(res.body[0]).toHaveProperty(`id`);
-    expect(res.body[0]).toHaveProperty(`text`);
-
-    deleteMockArticle(id);
+    expect(res.body).toEqual(expectedComments);
   });
 
   test(`for non-existing article status code should be GONE`, async () => {
     const res = await request(app).get(`/api/articles/${MOCK_ID}/comments`);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Article with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
 describe(`delete comment`, () => {
   test(`for exists article and comment when deleting
   comment successfully status code should be NO_CONTENT`, async () => {
-    const id = addMockArticle();
-    const res = await request(app)
-      .delete(`/api/articles/${id}/comments/${expectedComments[0].id}`);
+    const res = await request(app).delete(`/api/articles/${tempId}/comments/${expectedComments[0].id}`);
 
     expect(res.statusCode).toBe(NO_CONTENT);
-
-    deleteMockArticle(id);
   });
 
   test(`for exists article and non-exists comment status code should be GONE`, async () => {
-    const id = addMockArticle();
-    const res = await request(app)
-      .delete(`/api/articles/${id}/comments/${MOCK_ID}`);
-
+    const res = await request(app).delete(`/api/articles/${tempId}/comments/${MOCK_ID}`);
     expect(res.statusCode).toBe(GONE);
 
-    deleteMockArticle(id);
+    const expectedResponse = {code: GONE, message: `Comment with id ${MOCK_ID} isn't found for article with id ${tempId}`};
+    expect(res.body).toEqual(expectedResponse);
   });
 
   test(`for non-exists article and exists comment status code should be GONE`, async () => {
-    const res = await request(app)
-      .delete(`/api/articles/${MOCK_ID}/comments/${MOCK_ID}`);
-
+    const res = await request(app).delete(`/api/articles/${MOCK_ID}/comments/${MOCK_ID}`);
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Comment with id ${MOCK_ID} isn't found for article with id ${MOCK_ID}`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
 describe(`add comment`, () => {
   test(`when existing article adding new comment should return new id`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).post(`/api/articles/${id}/comments`)
-      .send(newComment);
+    const res = await request(app).post(`/api/articles/${tempId}/comments`).send(newComment);
 
     expect(res.statusCode).toBe(CREATED);
     expect(res.body).toHaveProperty(`id`);
-
-    deleteMockArticle(id);
   });
 
   test(`if send not all params status code should be BAD_REQUEST`, async () => {
-    const id = addMockArticle();
-    const res = await request(app).post(`/api/articles/${id}/comments`)
+    const res = await request(app).post(`/api/articles/${tempId}/comments`)
       .send({title: `some title`, another: `another title`});
-
     expect(res.statusCode).toBe(BAD_REQUEST);
 
-    deleteMockArticle(id);
+    const expectedResponse = {code: 2, message: `Not all fields for a new comment have been submitted`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });

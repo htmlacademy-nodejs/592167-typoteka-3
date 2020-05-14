@@ -117,7 +117,7 @@ router.delete(`/:articleId/comments/:commentId`, (req, res) => {
 
 router.post(`/:articleId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
-    res.status(400).send(`Not all fields for a new comment have been submitted`);
+    res.status(400).send({code: 2, message: `Not all fields for a new comment have been submitted`});
   } else {
     const id = commentService.add(req.body, req.params.articleId);
     res.status(201).send({id});
