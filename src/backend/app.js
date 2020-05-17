@@ -8,6 +8,9 @@ const logger = getLogger();
 const app = express();
 
 app.use((req, res, next) => {
+  res.on(`finish`, () => {
+    logger.info(`End request with status code ${res.statusCode}`);
+  });
   logger.debug(`Start request tot url ${req.url}`);
   next();
 });
