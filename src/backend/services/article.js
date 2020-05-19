@@ -6,7 +6,13 @@ const {ArticleNotFoundError} = require(`../errors/errors`);
 
 const findAll = () => articleRepository.findAll();
 
-const findById = (id) => articleRepository.findById(id);
+const findById = (id) => {
+  if (!articleRepository.exists(id)) {
+    throw new ArticleNotFoundError(id);
+  }
+
+  return articleRepository.findById(id);
+};
 
 const create = (newArticle) => articleRepository.save(newArticle);
 
@@ -15,7 +21,7 @@ const update = (newArticle, id) => {
     throw new ArticleNotFoundError(id);
   }
 
-  articleRepository.save(newArticle, id);
+  return articleRepository.save(newArticle, id);
 };
 
 const remove = (id) => {
@@ -24,6 +30,7 @@ const remove = (id) => {
   }
 
   articleRepository.remove(id);
+  return true;
 };
 
 const search = (queryString) => articleRepository.findByTitle(queryString);

@@ -4,11 +4,13 @@
   "description": "Типотека",
   "main": ".src/service/service.js",
   "scripts": {
-    "test": "npm run eslint",
+    "test": "npm run eslint && jest",
+    "test:rest": "jest src/backend/**/*.test.js",
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
-    "server": "nodemon src/service.js --server 8080",
-    "start-front-server": "nodemon src/frontend/index.js"
+    "start-front-server": "nodemon src/frontend/index.js",
+    "server:start": "LOG_LEVEL=error nodemon src/service.js --server 8080 > src/backend/logs/app.log",
+    "server:start:debug": "LOG_LEVEL=debug node src/service.js --server 8080 | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log"
   },
   "repository": {
     "type": "git",
@@ -23,12 +25,16 @@
   "devDependencies": {
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.5.2",
-    "nodemon": "2.0.2"
+    "jest": "25.4.0",
+    "nodemon": "2.0.2",
+    "pino-pretty": "4.0.0",
+    "supertest": "4.0.2"
   },
   "dependencies": {
     "chalk": "3.0.0",
     "express": "4.17.1",
     "nanoid": "2.1.11",
+    "pino": "6.2.1",
     "pug": "2.0.4"
   }
 }

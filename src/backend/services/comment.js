@@ -18,7 +18,7 @@ const remove = (articleId, commentId) => {
     throw new CommentNotFoundError(articleId, commentId);
   }
 
-  commentRepository.remove(articleId, commentId);
+  return commentRepository.remove(articleId, commentId);
 };
 
 const add = (newCommentText, articleId) => {
@@ -26,7 +26,7 @@ const add = (newCommentText, articleId) => {
     throw new ArticleNotFoundError(articleId);
   }
 
-  commentRepository.save(newCommentText.text, articleId);
+  return commentRepository.save(newCommentText.text, articleId);
 };
 
 
