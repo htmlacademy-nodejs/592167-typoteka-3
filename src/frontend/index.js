@@ -8,6 +8,8 @@ const app = express();
 app.set(`views`, `${__dirname}/templates`);
 app.set(`view engine`, `pug`);
 
+app.use(express.static(`${__dirname}/static`));
+
 initializeRoutes(app);
 
 const port = 8080;
