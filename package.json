@@ -9,8 +9,8 @@
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
     "start-front-server": "nodemon src/frontend/index.js",
-    "server:start": "LOG_LEVEL=error nodemon src/service.js --server 8080 > src/backend/logs/app.log",
-    "server:start:debug": "LOG_LEVEL=debug node src/service.js --server 8080 | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log"
+    "server:start": "LOG_LEVEL=error nodemon src/service.js --server 8081 > src/backend/logs/app.log",
+    "server:start:debug": "LOG_LEVEL=debug node src/service.js --server 8081 | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log"
   },
   "repository": {
     "type": "git",
