@@ -19,7 +19,6 @@ router.get(`/comments`, async (req, res) => {
   const articles = response.data;
   const amountOfArticles = Math.min(MAX_ARTICLES_COMMENTS, articles.length);
   const commentsOnArticles = articles.slice(0, amountOfArticles);
-  console.log(commentsOnArticles);
   res.render(`comments`);
 });
 

@@ -45,7 +45,6 @@ router.post(`/add`, async (req, res) => {
 
 router.get(`/edit/:id`, async (req, res) => {
   const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
-  // console.log(response.data);
   res.send(req.originalUrl)
 });
 
