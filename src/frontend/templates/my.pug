@@ -20,7 +20,7 @@ block content
               h1 Новая публикация
               .new-publication__date-form
                 h3 Дата публикации
-                form(action='#', method='POST')
+                form(action='#', method='get')
                   .new-publication__date-block
                     label(for='new-publication-date', aria-label='Календарь')
                     input#new-publication-date(type='text', name='login', placeholder='21.03.2019')
@@ -28,25 +28,25 @@ block content
             button.popup__button.button.button--popup-close(type='button', aria-label='Закрыть окно')
               | Закрыть окно
             .new-publication__form.form
-              form(action='#', method='get')
+              form#newArticleForm(action='/offers/add', method='POST', enctype='multipart/form-data')
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
-                      input(type='text', placeholder='Заголовок', required='')
+                      input(type='text', name='newArticleTitle', placeholder='Заголовок', required='')
                   .form__field.form__field--post-image
                     label
                       input#image-name-field(type='text', placeholder='Фотография', readonly='')
                     .form__image-loader.form__image-loader--publication
                       label
-                        input.visually-hidden(type='file')
+                        input.visually-hidden(type='file', name='newArticlePhoto')
                         | Обзор
                   a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
                 .form__wrapper.form__wrapper--text
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', placeholder='Анонс публикации')
+                      textarea(rows='1', name='newArticleAnnounce', placeholder='Анонс публикации')
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', placeholder='Полный текст публикации')
+                      textarea(rows='1', name='newArticleFullText', placeholder='Полный текст публикации')
         .modal__overlay
     include common/footer

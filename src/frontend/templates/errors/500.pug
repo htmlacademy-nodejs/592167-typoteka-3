@@ -2,7 +2,7 @@ extends ../common/layout
 
 block content
   .wrapper-color
-    include header/header
+    include ../common/header
     main
       h1.visually-hidden Ошибка 500
       section.error.error--500
@@ -10,7 +10,8 @@ block content
         p.error__text.text.text--big
           | Причин может быть много: сервер не выдержал нагрузку или в коде ошибка.
           | Попробуйте повторить попытку позже.
-        a.error__link.text.text--big(href='main.html') Вернуться на главную
-    include footer/footer
+        a.error__link.text.text--big(href='/') Вернуться на главную
+        label=err.message
+    include ../common/footer
 
 block scripts
