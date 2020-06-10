@@ -12,7 +12,7 @@ router.get(`/add`, (req, res) => {
 });
 router.get(`/edit/:id`, async (req, res) => {
   const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
-  console.log(response.data);
+  // console.log(response.data);
   res.send(req.originalUrl)
 });
 router.get(`/:id`, (req, res) => res.send(req.originalUrl));

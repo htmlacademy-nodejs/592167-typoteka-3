@@ -12,7 +12,7 @@ const initializeRoutes = (app) => {
 
   app.get(`/`, async (req, res) => {
     const response = await axios.get(`${BACKEND_URL}/api/articles`);
-    console.log(response.data);
+    // console.log(response.data);
     res.render(`main`);
   });
   app.get(`/register`, (req, res) => {
