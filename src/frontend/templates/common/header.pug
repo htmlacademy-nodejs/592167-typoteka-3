@@ -1,6 +1,6 @@
 header.header
-  a.header__logo.logo(href='#')
-    img.logo__image(src='img/icons/logo-image-only.svg', alt='логотип Тайпотеки')
+  a.header__logo.logo(href='/')
+    img.logo__image(src='/img/icons/logo-image-only.svg', alt='логотип Тайпотеки')
     span.logo__name Типотека
   button.button.button--colored.header__button-new Новая запись
   .header__dropdown
@@ -15,7 +15,7 @@ header.header
       li.navigation__item
         a(href='main-no-news.html') main-no-news.html --- Страница без новостей и комментов
       li.navigation__item
-        a(href='admin-my-publications-2.html') admin-my-publications-2.html --- Мои записи
+        a(href='/my') Мои записи
       li.navigation__item
         a(href='admin-categories.html') admin-categories.html --- Категории
       li.navigation__item
@@ -62,4 +62,4 @@ header.header
         a(href='post-user-2.html') post-user-2.html --- Страница поcта (для пользователя) с ошибкой отправки комментария
       li.navigation__item
         a(href='uikit.html') uikit.html --- UI KIT
-  a.header__search.button.button--search(href='#', aria-label='поиск по сайту')
+  a.header__search.button.button--search(href='/search', aria-label='поиск по сайту')

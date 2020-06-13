@@ -5,13 +5,21 @@ block content
     include common/header
     main
       section.search-page
-        .search-page__wrapper
+        .search-page__wrapper(class=searchResult.length === 0 ? 'search-page__wrapper--empty':'')
           h1 Поиск
           .search.search-page__form
-            form(action='#', method='get')
+            form(action='/search', method='get')
               label
-                input(type='text', placeholder='Что ищем?')
+                input(type='text', name='search', placeholder='Что ищем?')
               button.search__button.button.button--transparent(type='submit') Найти
+            if searchResult.length > 0
+              each item in searchResult
+                .search__result
+                  time.search__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+                  a.search__link
+                    | #{item.title}
+          if searchResult.length === 0
+            p.search-page__empty Ничего не нашлось
     include common/footer
 
 block scripts
