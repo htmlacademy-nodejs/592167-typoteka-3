@@ -115,7 +115,7 @@ insert into categories values (default, 'Железо'),
     const description = shuffle(announcement).slice(0, getRandomInt(Announce.MIN, Announce.MAX)).join(` `);
     articleList += `insert into articles values (
       default,
-      '${createDate}',
+      default,
       '${title}',
       '${description}',
       1);`;
