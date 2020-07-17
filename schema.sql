@@ -53,14 +53,16 @@ create unique index email_idx on users (email);
 create table articles (
     id bigserial primary key not null,
     regdate timestamptz not null default now(),
-    title varchar(100) not null,
+    updated_at timestamptz not null default now(),
+    title varchar(250) not null,
+    announce varchar(250) not null,
     description varchar(1000) not null,
     user_id integer not null references users
 );
 alter table articles owner to user_typoteka;
 
 -- Создает триггер set_timestamp
-create trigger set_timestamp
+create trigger set_timestamp_articles
 before update on articles
 for each row
 execute procedure trigger_set_timestamp();
@@ -76,11 +78,18 @@ execute procedure trigger_set_timestamp();
   --Создает таблицу comments
   create table comments (
      id bigserial primary key not null,
+     regdate timestamptz not null default now(),
      article_id integer not null references articles,
      user_id integer not null references users,
      comment text not null
   );
  alter table comments owner to user_typoteka;
+
+ -- Создает триггер set_timestamp
+create trigger set_timestamp_comments
+before update on comments
+for each row
+execute procedure trigger_set_timestamp();
 
 --Создает таблицу categories
 create table categories (

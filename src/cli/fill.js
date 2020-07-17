@@ -14,7 +14,7 @@ const FILE_NAME_FILL_DATABASE = `fill-db.sql`;
 
 const Announce = {
   MIN: 1,
-  MAX: 5,
+  MAX: 3,
 };
 
 const Categories = {
@@ -51,18 +51,11 @@ const addComments = (countArticles) => {
   let comments = `\n-- Добавляет комментарии
 insert into comments values `;
   for (let i = 1; i <= countArticles; i++) {
-    comments += `(default, ${i}, 2, 'comment text${i}')`;
+    comments += `(default, default, ${i}, 2, 'comment text${i}')`;
     comments += `${i === countArticles ? `;` : `,`}\n`;
   }
 
   return comments;
-};
-
-const getRandomDate = () => {
-  const day = new Date();
-  const threeMonth = 90;
-  day.setDate(day.getDate() - getRandomInt(0, threeMonth));
-  return day;
 };
 
 const writeDataToFile = async (fileName, content) => {
@@ -111,12 +104,14 @@ insert into categories values (default, 'Железо'),
       articleList += `\n`;
     }
     const title = titles[getRandomInt(0, titles.length - 2)];
-    const createDate = getRandomDate().toLocaleString();
+    const announce = announcement[getRandomInt(Announce.MIN, Announce.MAX)];
     const description = shuffle(announcement).slice(0, getRandomInt(Announce.MIN, Announce.MAX)).join(` `);
     articleList += `insert into articles values (
       default,
       default,
+      default,
       '${title}',
+      '${announce}',
       '${description}',
       1);`;
   }
