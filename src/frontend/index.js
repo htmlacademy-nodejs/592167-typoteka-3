@@ -2,6 +2,7 @@
 
 const express = require(`express`);
 const formidableMiddleware = require(`express-formidable`);
+require(`dotenv`).config();
 
 const {initializeRoutes} = require(`./routes/index`);
 
@@ -20,7 +21,7 @@ app.use(formidableMiddleware({
 
 initializeRoutes(app);
 
-const port = 8080;
+const port = process.env.FRONT_SERVER_PORT;
 app.listen(port, () => {
   console.log(`Сервер запущен на порту: ${port}`);
 });

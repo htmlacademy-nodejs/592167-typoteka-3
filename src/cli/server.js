@@ -2,13 +2,13 @@
 
 const {getLogger} = require(`../backend/logger`);
 const logger = getLogger();
+require(`dotenv`).config();
 
 const app = require(`../backend/app`);
 const DEFAULT_PORT = 3000;
 
-const startServer = async (args) => {
-  const [customPort] = args;
-  const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
+const startServer = async () => {
+  const port = process.env.SERVER_PORT || DEFAULT_PORT;
 
   app.listen(port, () => {
     logger.info(`Server start on: ${port}`);
