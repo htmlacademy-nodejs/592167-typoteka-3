@@ -11,9 +11,8 @@ const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log(`Connect`);
   } catch (err) {
-    console.log(`No connect`);
+    process.exit();
   }
 };
 

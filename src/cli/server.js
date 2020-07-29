@@ -5,12 +5,14 @@ const logger = getLogger();
 require(`dotenv`).config();
 
 const app = require(`../backend/app`);
+const {testConnection} = require(`../backend/db/db-connect`);
 const DEFAULT_PORT = 3000;
 
 const startServer = async () => {
   const port = process.env.SERVER_PORT || DEFAULT_PORT;
 
   app.listen(port, () => {
+    testConnection();
     logger.info(`Server start on: ${port}`);
   }).on(`error`, (err) => {
     logger.error(`Server can't start. Error: ${err}`);
