@@ -1,6 +1,6 @@
 'use strict';
 
-model.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model{ }
   User.init({
     id: {
