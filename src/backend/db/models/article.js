@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class Announcement extends sequelize.Sequelize.Model{ }
-  Announcement.init({
+  class Article extends sequelize.Sequelize.Model{ }
+  Article.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -13,16 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    announce: {
+      type: DataTypes.STRING(250),
+      allowNull: false,
+    },
     description: {
       type: DataTypes.STRING(1000),
-      allowNull: false,
-    },
-    sum: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    typeId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
     userId: {
@@ -35,5 +31,5 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
   });
 
-  return Announcement;
+  return Article;
 };

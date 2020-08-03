@@ -16,8 +16,8 @@ const User = require(`./models/user`)(sequelize, Sequelize);
 const Category = require(`./models/category`)(sequelize, Sequelize);
 const Image = require(`./models/image`)(sequelize, Sequelize);
 const Comment = require(`./models/comment`)(sequelize, Sequelize);
-const AnnouncementsToCategory = require(`./models/announcements-to-category`)(sequelize, Sequelize);
-const Announcement = require(`./models/announcement`)(sequelize, Sequelize);
+const AnnouncementsToCategory = require(`./models/articles-to-category`)(sequelize, Sequelize);
+const Announcement = require(`./models/article`)(sequelize, Sequelize);
 
 const initDb = async () => {
   await sequelize.sync({force: true});
