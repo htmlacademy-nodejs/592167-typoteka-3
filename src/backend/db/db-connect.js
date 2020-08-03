@@ -11,13 +11,13 @@ const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER
   dialect: `${process.env.DIALECT}`
 });
 
-const Type = require(`./models/type`)(sequelize, Sequelize);
 const User = require(`./models/user`)(sequelize, Sequelize);
 const Category = require(`./models/category`)(sequelize, Sequelize);
 const Image = require(`./models/image`)(sequelize, Sequelize);
 const Comment = require(`./models/comment`)(sequelize, Sequelize);
-const AnnouncementsToCategory = require(`./models/articles-to-category`)(sequelize, Sequelize);
-const Announcement = require(`./models/article`)(sequelize, Sequelize);
+const ArticlesToCategory = require(`./models/articles-to-category`)(sequelize, Sequelize);
+const UserRole = require(`./models/user_role`)(sequelize, Sequelize);
+const Article = require(`./models/article`)(sequelize, Sequelize);
 
 const initDb = async () => {
   await sequelize.sync({force: true});
@@ -27,8 +27,8 @@ const initDb = async () => {
 const testConnection = async () => {
   try {
     logger.info(`Establishing a connection to the server.`);
-    // await initDb();
-    await sequelize.authenticate();
+    await initDb();
+    // await sequelize.authenticate();
     logger.info(`The connection to the server has been established.`);
   } catch (err) {
     console.error(`Failed to establish connection for the reason: ${err}`);
