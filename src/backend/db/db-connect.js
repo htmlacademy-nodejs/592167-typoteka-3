@@ -22,6 +22,46 @@ const ArticlesToCategory = require(`./models/articles-to-category`)(sequelize, S
 const UserRole = require(`./models/user_role`)(sequelize, Sequelize);
 const Article = require(`./models/article`)(sequelize, Sequelize);
 
+User.belongsTo(UserRole, {
+  foreignKey: `roleId`,
+  as: `userRoles`,
+});
+
+Article.belongsTo(User, {
+  foreignKey: `userId`,
+  as: `users`,
+});
+
+Comment.belongsTo(User, {
+  foreignKey: `userId`,
+  as: `users`,
+});
+
+User.hasMany(Comment, {
+  foreignKey: `userId`,
+  as: `comments`,
+});
+
+Article.hasMany(Comment, {
+  foreignKey: `articleId`,
+  as: `comments`,
+});
+
+Article.hasMany(Image, {
+  foreignKey: `articleId`,
+  as: `images`,
+});
+
+Article.hasMany(ArticlesToCategory, {
+  foreignKey: `articleId`,
+  as: `articlesToCategories`,
+});
+
+Category.hasMany(ArticlesToCategory, {
+  foreignKey: `categoryId`,
+  as: `articlesToCategories`,
+});
+
 const initDb = async () => {
   await sequelize.sync({force: true});
   console.info(`Структура БД успешно создана`);
