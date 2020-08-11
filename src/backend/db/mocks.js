@@ -36,7 +36,7 @@ const categories = [
   {category: `Публицистика`},
   {category: `Кино`},
   {category: `Деревья`},
-]
+];
 
 const articles = [
   {
