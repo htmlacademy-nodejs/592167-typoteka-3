@@ -6,6 +6,9 @@ require(`dotenv`).config();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
+const {roles, users, categories, articles,
+  articlesToCategories, images, comments} = require(`./mocks`);
+
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.USER_PASSWORD}`, {
   host: `${process.env.DB_HOST}`,
   dialect: `${process.env.DIALECT}`
@@ -22,6 +25,14 @@ const Article = require(`./models/article`)(sequelize, Sequelize);
 const initDb = async () => {
   await sequelize.sync({force: true});
   console.info(`Структура БД успешно создана`);
+
+  await UserRole.bulkCreate(roles);
+  await User.bulkCreate(users);
+  await Category.bulkCreate(categories);
+  await Article.bulkCreate(articles);
+  await ArticlesToCategory.bulkCreate(articlesToCategories);
+  await Image.bulkCreate(images);
+  await Comment.bulkCreate(comments);
 };
 
 const testConnection = async () => {
