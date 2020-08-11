@@ -6,9 +6,6 @@ require(`dotenv`).config();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
-const {roles, users, categories, articles,
-  articlesToCategories, images, comments} = require(`./mocks`);
-
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.USER_PASSWORD}`, {
   host: `${process.env.DB_HOST}`,
   dialect: `${process.env.DIALECT}`
@@ -62,24 +59,23 @@ Category.hasMany(ArticlesToCategory, {
   as: `articlesToCategories`,
 });
 
-const initDb = async () => {
+const initDb = async (dbData) => {
   await sequelize.sync({force: true});
   console.info(`Структура БД успешно создана`);
 
-  await UserRole.bulkCreate(roles);
-  await User.bulkCreate(users);
-  await Category.bulkCreate(categories);
-  await Article.bulkCreate(articles);
-  await ArticlesToCategory.bulkCreate(articlesToCategories);
-  await Image.bulkCreate(images);
-  await Comment.bulkCreate(comments);
+  await UserRole.bulkCreate(dbData.roles);
+  await User.bulkCreate(dbData.users);
+  await Category.bulkCreate(dbData.categories);
+  await Article.bulkCreate(dbData.articles);
+  await ArticlesToCategory.bulkCreate(dbData.articlesToCategories);
+  await Image.bulkCreate(dbData.images);
+  await Comment.bulkCreate(dbData.comments);
 };
 
-const testConnection = async () => {
+const connectDb = async () => {
   try {
     logger.info(`Establishing a connection to the server.`);
-    await initDb();
-    // await sequelize.authenticate();
+    await sequelize.authenticate();
     logger.info(`The connection to the server has been established.`);
   } catch (err) {
     console.error(`Failed to establish connection for the reason: ${err}`);
@@ -89,5 +85,6 @@ const testConnection = async () => {
 };
 
 module.exports = {
-  testConnection,
+  connectDb,
+  initDb,
 };
