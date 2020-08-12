@@ -13,9 +13,9 @@ const articleService = require(`../services/article`);
 const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
 
-router.get(`/`, (req, res) => {
+router.get(`/`, async (req, res) => {
   try {
-    res.send(articleService.findAll());
+    res.send(await articleService.findAll());
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));

@@ -85,6 +85,16 @@ const connectDb = async () => {
 };
 
 module.exports = {
+  db: {
+    User,
+    Category,
+    Image,
+    Comment,
+    ArticlesToCategory,
+    UserRole,
+    Article,
+  },
   connectDb,
   initDb,
+  sequelize,
 };

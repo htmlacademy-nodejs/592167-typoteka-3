@@ -4,7 +4,7 @@ const articleRepository = require(`../repositories/article`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 
 
-const findAll = () => articleRepository.findAll();
+const findAll = async () => await articleRepository.findAll();
 
 const findById = (id) => {
   if (!articleRepository.exists(id)) {

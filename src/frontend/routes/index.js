@@ -13,8 +13,9 @@ const initializeRoutes = (app) => {
   app.get(`/`, async (req, res) => {
     const response = await axios.get(`${BACKEND_URL}/api/articles`);
     const articles = response.data;
-    const comments = articles[0].comments;
-    res.render(`main`, {comments});
+    // const comments = articles[0].comments;
+    // res.render(`main`, {comments});
+    res.send(articles);
   });
 
   app.get(`/register`, (req, res) => {
