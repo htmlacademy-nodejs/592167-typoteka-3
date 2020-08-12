@@ -5,7 +5,7 @@ const fs = require(`fs`).promises;
 const {getLogger} = require(`../backend/logger`);
 const logger = getLogger();
 
-const {getRandomInt} = require(`../utils`);
+const {getRandomInt, shuffle} = require(`../utils`);
 
 const {initDb} = require(`../backend/db/db-connect`);
 
@@ -66,15 +66,10 @@ const getArticles = (countArticles, announcements, titles) => {
 
 const getArticlesToCategories = (countArticles) => {
   const articlesToCategories = [];
+  const categoriesKey = [1, 2, 3, 4, 5];
   for (let i = 1; i <= countArticles; i++) {
-    const categoriesCount = getRandomInt(ArticlesToCategories.MIN, ArticlesToCategories.MAX);
-    for (let j = 1; j <= categoriesCount; j++) {
-      const articleToCategory = {
-        articleId: i,
-        categoryId: j,
-      }
-      articlesToCategories.push(articleToCategory);
-    }
+    const articleToCategory = shuffle(categoriesKey).slice(0, getRandomInt(ArticlesToCategories.MIN, ArticlesToCategories.MAX));
+    articlesToCategories.push(articleToCategory);
   }
 
   return articlesToCategories;
@@ -163,6 +158,7 @@ module.exports = {
       articlesToCategories: getArticlesToCategories(countArticles),
       images: getImages(countArticles),
       comments: getComments(countArticles, commentsList),
+      countArticles: countArticles,
     };
 
     initDb(dbData);
