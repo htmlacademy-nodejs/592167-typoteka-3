@@ -15,7 +15,7 @@ const User = require(`./models/user`)(sequelize, Sequelize);
 const Category = require(`./models/category`)(sequelize, Sequelize);
 const Image = require(`./models/image`)(sequelize, Sequelize);
 const Comment = require(`./models/comment`)(sequelize, Sequelize);
-const ArticlesToCategory = require(`./models/articles-to-category`)(sequelize, Sequelize);
+// const ArticlesToCategory = require(`./models/articles-to-category`)(sequelize, Sequelize);
 const UserRole = require(`./models/user_role`)(sequelize, Sequelize);
 const Article = require(`./models/article`)(sequelize, Sequelize);
 
@@ -49,14 +49,28 @@ Article.hasMany(Image, {
   as: `images`,
 });
 
-Article.hasMany(ArticlesToCategory, {
+// Article.hasMany(ArticlesToCategory, {
+//   foreignKey: `articleId`,
+//   as: `articlesToCategories`,
+// });
+//
+// Category.hasMany(ArticlesToCategory, {
+//   foreignKey: `categoryId`,
+//   as: `articlesToCategories`,
+// });
+
+Article.belongsToMany(Category, {
+  through: `ArticlesToCategories`,
+  as: `categories`,
   foreignKey: `articleId`,
-  as: `articlesToCategories`,
+  timestamps: true,
+  paranoid: true,
 });
 
-Category.hasMany(ArticlesToCategory, {
+Category.belongsToMany(Article, {
+  through: `ArticlesToCategories`,
+  as: `articles`,
   foreignKey: `categoryId`,
-  as: `articlesToCategories`,
 });
 
 const initDb = async (dbData) => {
@@ -67,9 +81,24 @@ const initDb = async (dbData) => {
   await User.bulkCreate(dbData.users);
   await Category.bulkCreate(dbData.categories);
   await Article.bulkCreate(dbData.articles);
-  await ArticlesToCategory.bulkCreate(dbData.articlesToCategories);
+  // await ArticlesToCategory.bulkCreate(dbData.articlesToCategories);
   await Image.bulkCreate(dbData.images);
   await Comment.bulkCreate(dbData.comments);
+
+
+
+  for (let i = 0; i < dbData.countArticles; i++) {
+    const categories = await Category.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.in]: dbData.countArticles[i]
+        }
+      },
+    });
+
+    const article = await Article.findByPk(i + 1);
+    await article.addCategories(categories);
+  }
 };
 
 const connectDb = async () => {
@@ -90,7 +119,7 @@ module.exports = {
     Category,
     Image,
     Comment,
-    ArticlesToCategory,
+    // ArticlesToCategory,
     UserRole,
     Article,
   },
