@@ -53,6 +53,16 @@ router.get(`/comments`, async (req, res) => {
   }
 });
 
+router.get(`/mostDiscussed`, async (req, res) => {
+  try {
+    res.send(await articleService.getMostDiscussed());
+    logger.info(`End request with status code ${res.statusCode}`);
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(500).send({code: 500, message: `Internal service error`});
+  }
+});
+
 router.get(`/:articleId`, (req, res) => {
   try {
     res.send(articleService.findById(req.params.articleId));

@@ -37,6 +37,12 @@ const getLastComments = async () => await db.Comment.findAll({
   limit: 3,
 });
 
+const getMostDiscussed = async () => await db.Article.findAll({
+  attributes: [`announce`],
+  as: `articles`,
+  limit: 4,
+});
+
 const findById = (id) => articles.find((el) => el.id === id);
 
 const exists = (id) => findById(id) !== undefined;
@@ -73,4 +79,5 @@ module.exports = {
   remove,
   findByTitle,
   getLastComments,
+  getMostDiscussed,
 };

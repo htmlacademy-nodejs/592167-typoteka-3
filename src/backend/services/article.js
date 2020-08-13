@@ -8,6 +8,8 @@ const findAll = async () => await articleRepository.findAll();
 
 const getLastComments = async () => await articleRepository.getLastComments();
 
+const getMostDiscussed = async () => await articleRepository.getMostDiscussed();
+
 const findById = (id) => {
   if (!articleRepository.exists(id)) {
     throw new ArticleNotFoundError(id);
@@ -46,4 +48,5 @@ module.exports = {
   findAll,
   findById,
   getLastComments,
+  getMostDiscussed,
 };
