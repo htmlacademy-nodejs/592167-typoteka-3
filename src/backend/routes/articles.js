@@ -15,7 +15,37 @@ const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`)
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(await articleService.findAll());
+    const articles = await articleService.findAll();
+    const preparedListArticles = articles.slice(0).map((it) => {
+      it.categories = it.categories.split(`, `);
+      return it;
+    });
+    res.send(preparedListArticles);
+    logger.info(`End request with status code ${res.statusCode}`);
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(500).send({code: 500, message: `Internal service error`});
+  }
+});
+
+router.get(`/previews`, async (req, res) => {
+  try {
+    const articles = await articleService.findAll();
+    const preparedListArticles = articles.slice(0).map((it) => {
+      it.categories = it.categories.split(`, `);
+      return it;
+    });
+    res.send(preparedListArticles);
+    logger.info(`End request with status code ${res.statusCode}`);
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(500).send({code: 500, message: `Internal service error`});
+  }
+});
+
+router.get(`/comments`, async (req, res) => {
+  try {
+    res.send(await articleService.getMostDiscussedComments());
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));

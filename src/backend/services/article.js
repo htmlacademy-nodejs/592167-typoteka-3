@@ -6,6 +6,8 @@ const {ArticleNotFoundError} = require(`../errors/errors`);
 
 const findAll = async () => await articleRepository.findAll();
 
+const getMostDiscussedComments = async () => await articleRepository.getMostDiscussedComments();
+
 const findById = (id) => {
   if (!articleRepository.exists(id)) {
     throw new ArticleNotFoundError(id);
@@ -43,4 +45,5 @@ module.exports = {
   search,
   findAll,
   findById,
+  getMostDiscussedComments,
 };
