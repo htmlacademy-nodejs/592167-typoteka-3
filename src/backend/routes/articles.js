@@ -45,7 +45,7 @@ router.get(`/previews`, async (req, res) => {
 
 router.get(`/comments`, async (req, res) => {
   try {
-    res.send(await articleService.getMostDiscussedComments());
+    res.send(await articleService.getLastComments());
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));

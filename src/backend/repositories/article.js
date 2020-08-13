@@ -30,7 +30,7 @@ const findAll = async () => {
   return await sequelize.query(sql, {type});
 };
 
-const getMostDiscussedComments = async () => await db.Comment.findAll({
+const getLastComments = async () => await db.Comment.findAll({
   attributes: [`comment`],
   as: `comments`,
   order: [[`createdAt`, `DESC`]],
@@ -72,5 +72,5 @@ module.exports = {
   save,
   remove,
   findByTitle,
-  getMostDiscussedComments,
+  getLastComments,
 };
