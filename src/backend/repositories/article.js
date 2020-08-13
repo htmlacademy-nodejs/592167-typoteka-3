@@ -23,7 +23,7 @@ const findAll = async () => {
                       inner join "Categories" c
                                  on atc."categoryId" = c.id
                group by a.id, a.title, a.description, a."createdAt"
-               order by a."createdAt" desc limit 1;`;
+               order by a."createdAt" desc;`;
 
   const type = sequelize.QueryTypes.SELECT;
 
