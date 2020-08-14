@@ -38,9 +38,20 @@ const getLastComments = async () => await db.Comment.findAll({
 });
 
 const getMostDiscussed = async () => await db.Article.findAll({
-  attributes: [`announce`],
-  as: `articles`,
-  limit: 4,
+
+  // as: `articles`,
+  // order: [[sequelize.literal(`comments`), `DESC`]],
+  // limit: 4,
+  attributes: [
+    `announce`, sequelize.fn(`count`, sequelize.col(`comment`))
+  ],
+  include: {
+    model: db.Comment,
+    attributes: [],
+    required: true,
+    as: `comments`
+  },
+  group: [`"Article".id`]
 });
 
 const findById = (id) => articles.find((el) => el.id === id);
