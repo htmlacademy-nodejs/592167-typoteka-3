@@ -37,22 +37,19 @@ const getLastComments = async () => await db.Comment.findAll({
   limit: 3,
 });
 
-const getMostDiscussed = async () => await db.Article.findAll({
+const getMostDiscussed = async () => {
+  const sql = `select a.id, a.announce, count(c.comment) as comments
+               from "Articles" a
+                      inner join "Comments" C
+                                 on a.id = C."articleId"
+               group by a.id, a.announce
+               order by comments desc
+               limit 4;`;
 
-  // as: `articles`,
-  // order: [[sequelize.literal(`comments`), `DESC`]],
-  // limit: 4,
-  attributes: [
-    `announce`, sequelize.fn(`count`, sequelize.col(`comment`))
-  ],
-  include: {
-    model: db.Comment,
-    attributes: [],
-    required: true,
-    as: `comments`
-  },
-  group: [`"Article".id`]
-});
+  const type = sequelize.QueryTypes.SELECT;
+
+  return await sequelize.query(sql, {type});
+}
 
 const findById = (id) => articles.find((el) => el.id === id);
 
