@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require(`sequelize`);
+const Operator = Sequelize.Op;
 require(`dotenv`).config();
 
 const {getLogger} = require(`../logger`);
@@ -113,4 +114,5 @@ module.exports = {
   connectDb,
   initDb,
   sequelize,
+  Operator,
 };

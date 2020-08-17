@@ -37,7 +37,7 @@ const remove = (id) => {
   return true;
 };
 
-const search = (queryString) => articleRepository.findByTitle(queryString);
+const search = async (queryString) => await articleRepository.findByTitle(queryString);
 
 
 module.exports = {

@@ -3,7 +3,7 @@
 const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
-const {db, sequelize} = require(`../db/db-connect`);
+const {db, sequelize, Operator} = require(`../db/db-connect`);
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
 let articles = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
@@ -73,9 +73,15 @@ const remove = (id) => {
   articles = deleteItemFromArray(articles, id);
 };
 
-const findByTitle = (queryString) => {
-  return articles.filter((el) => el.title.toUpperCase()
-    .includes(queryString.toUpperCase()));
+const findByTitle = async (queryString) => {
+  return await db.Article.findAll({
+    attributes: [`title`],
+    where: {
+      title: {
+        [Operator.substring]: queryString,
+      },
+    },
+  });
 };
 
 
