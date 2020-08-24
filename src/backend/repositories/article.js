@@ -6,6 +6,8 @@ const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
+const COMMENTS_COUNT_FOR_MAINPAGE = 3;
+const LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS = 4;
 let articles = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -34,7 +36,7 @@ const getLastComments = async () => await db.Comment.findAll({
   attributes: [`comment`],
   as: `comments`,
   order: [[`createdAt`, `DESC`]],
-  limit: 3,
+  limit: COMMENTS_COUNT_FOR_MAINPAGE,
 });
 
 const getMostDiscussed = async () => {
@@ -44,12 +46,12 @@ const getMostDiscussed = async () => {
                                  on a.id = C."articleId"
                group by a.id, a.announce
                order by comments desc
-               limit 4;`;
+               limit ${LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS};`;
 
   const type = sequelize.QueryTypes.SELECT;
 
   return await sequelize.query(sql, {type});
-}
+};
 
 const findById = (id) => articles.find((el) => el.id === id);
 
