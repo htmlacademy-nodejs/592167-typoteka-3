@@ -9,7 +9,6 @@ const {BACKEND_URL} = require(`../../constants`);
 router.get(`/`, async (req, res) => {
   const response = await axios.get(`${BACKEND_URL}/api/articles`);
   const articles = response.data;
-  console.log(articles);
   res.render(`my`, {articles});
 });
 
