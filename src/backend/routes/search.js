@@ -10,9 +10,9 @@ const router = new Router();
 
 const articleService = require(`../services/article`);
 
-router.get(`/`, (req, res) => {
+router.get(`/`, async (req, res) => {
   try {
-    res.send(articleService.search(req.query.query));
+    res.send(await articleService.search(req.query.query));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});

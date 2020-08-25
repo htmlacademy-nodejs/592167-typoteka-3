@@ -11,10 +11,18 @@ const initializeRoutes = (app) => {
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, async (req, res) => {
-    const response = await axios.get(`${BACKEND_URL}/api/articles`);
-    const articles = response.data;
-    const comments = articles[0].comments;
-    res.render(`main`, {comments});
+    const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previews`);
+    const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
+    const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
+    const previews = resPreviews.data;
+    const comments = resComments.data;
+    const mostDiscussed = resMostDiscussed.data;
+    const mainPage = {
+      previews,
+      comments,
+      mostDiscussed,
+    };
+    res.render(`main`, {mainPage});
   });
 
   app.get(`/register`, (req, res) => {

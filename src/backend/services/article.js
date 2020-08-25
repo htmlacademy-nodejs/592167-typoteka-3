@@ -4,7 +4,11 @@ const articleRepository = require(`../repositories/article`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 
 
-const findAll = () => articleRepository.findAll();
+const findAll = async () => await articleRepository.findAll();
+
+const getLastComments = async () => await articleRepository.getLastComments();
+
+const getMostDiscussed = async () => await articleRepository.getMostDiscussed();
 
 const findById = (id) => {
   if (!articleRepository.exists(id)) {
@@ -33,7 +37,7 @@ const remove = (id) => {
   return true;
 };
 
-const search = (queryString) => articleRepository.findByTitle(queryString);
+const search = async (queryString) => await articleRepository.findByTitle(queryString);
 
 
 module.exports = {
@@ -43,4 +47,6 @@ module.exports = {
   search,
   findAll,
   findById,
+  getLastComments,
+  getMostDiscussed,
 };

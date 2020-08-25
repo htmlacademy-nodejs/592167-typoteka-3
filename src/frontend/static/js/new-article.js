@@ -10,11 +10,15 @@ buttonNewArticle.addEventListener(`click`, () => {
   newArticleModal.classList.remove(`invisible-block`);
 });
 
-buttonPopupClose.addEventListener(`click`, () => {
-  newArticleModal.classList.add(`invisible-block`);
-});
+if (buttonPopupClose) {
+  buttonPopupClose.addEventListener(`click`, () => {
+    newArticleModal.classList.add(`invisible-block`);
+  });
+}
 
-buttonSubmitForm.addEventListener(`click`, () => {
-  newArticleForm.submit();
-  newArticleModal.classList.add(`invisible-block`);
-});
+if (buttonSubmitForm) {
+  buttonSubmitForm.addEventListener(`click`, () => {
+    newArticleForm.submit();
+    newArticleModal.classList.add(`invisible-block`);
+  });
+}
