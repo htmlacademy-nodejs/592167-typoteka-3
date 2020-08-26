@@ -2,6 +2,7 @@
 
 const axios = require(`axios`);
 const {BACKEND_URL} = require(`../../constants`);
+const {cutString} = require(`../../utils`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
@@ -19,9 +20,18 @@ const initializeRoutes = (app) => {
   app.get(`/`, async (req, res) => {
     const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previewsForMainPage`);
     const previews = resPreviews.data;
+    previews.map((it) => {
+      const dataCreate = new Date(it.createdAt);
+      it.createdAt = createDateForPreview(dataCreate);
+      return it;
+    });
 
     const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
     const mostDiscussed = resMostDiscussed.data;
+    mostDiscussed.map((it) => {
+      it.announce = cutString(it.announce);
+      return it;
+    });
 
     const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
     const comments = resComments.data;
@@ -29,11 +39,7 @@ const initializeRoutes = (app) => {
     const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     const categories = resCategories.data;
 
-    previews.map((it) => {
-      const dataCreate = new Date(it.createdAt);
-      it.createdAt = createDateForPreview(dataCreate);
-      return it;
-    });
+
     const mainPage = {
       previews,
       comments,
