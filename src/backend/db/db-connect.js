@@ -114,5 +114,6 @@ module.exports = {
   connectDb,
   initDb,
   sequelize,
+  Sequelize,
   Operator,
 };

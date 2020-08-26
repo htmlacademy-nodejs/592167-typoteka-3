@@ -9,6 +9,7 @@ const findAll = async () => await articleRepository.findAll();
 const getLastComments = async () => await articleRepository.getLastComments();
 
 const getMostDiscussed = async () => await articleRepository.getMostDiscussed();
+const getPreviewsForMainPage = async () => await articleRepository.getPreviewsForMainPage();
 
 const findById = (id) => {
   if (!articleRepository.exists(id)) {
@@ -49,4 +50,5 @@ module.exports = {
   findById,
   getLastComments,
   getMostDiscussed,
+  getPreviewsForMainPage,
 };
