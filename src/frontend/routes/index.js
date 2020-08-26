@@ -17,12 +17,18 @@ const initializeRoutes = (app) => {
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, async (req, res) => {
-    const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previews`);
-    const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
-    const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
+    const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previewsForMainPage`);
     const previews = resPreviews.data;
-    const comments = resComments.data;
+
+    const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
     const mostDiscussed = resMostDiscussed.data;
+
+    const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
+    const comments = resComments.data;
+
+    const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+    const categories = resCategories.data;
+
     previews.map((it) => {
       const dataCreate = new Date(it.createdAt);
       it.createdAt = createDateForPreview(dataCreate);
@@ -32,6 +38,7 @@ const initializeRoutes = (app) => {
       previews,
       comments,
       mostDiscussed,
+      categories,
     };
     res.render(`main`, {mainPage});
   });

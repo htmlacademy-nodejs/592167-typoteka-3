@@ -31,9 +31,9 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-router.get(`/previews`, async (req, res) => {
+router.get(`/previewsForMainPage`, async (req, res) => {
   try {
-    const articles = await articleService.findAll();
+    const articles = await articleService.getPreviewsForMainPage();
     const preparedListArticles = articles.slice(0).map((it) => {
       it.categories = it.categories.split(`, `);
       return it;

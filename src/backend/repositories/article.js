@@ -8,6 +8,7 @@ const {db, sequelize, Operator} = require(`../db/db-connect`);
 const {MOCK_FILE_NAME} = require(`../../constants`);
 const COMMENTS_COUNT_FOR_MAINPAGE = 3;
 const LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS = 4;
+const LIMIT_ANNOUNCEMENTS_FOR_MAIN_PAGE = 8;
 let articles = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -50,6 +51,26 @@ const getMostDiscussed = async () => {
 
   const type = sequelize.QueryTypes.SELECT;
 
+  return await sequelize.query(sql, {type});
+};
+
+const getPreviewsForMainPage = async () => {
+  const sql = `select a.id,
+                      a.title,
+                      a.announce,
+                      a."createdAt",
+                      (select image from "Images" im where im."articleId" = a.id limit 1),
+                      (select count(*) as comments from "Comments" cm where cm."articleId" = a.id),
+                      string_agg(c.category, ', ') as categories
+               from "Articles" a
+                      inner join "ArticlesToCategories" atc
+                                 on a.id = atc."articleId"
+                      inner join "Categories" c
+                                 on atc."categoryId" = c.id
+               group by a.id, a.title, a.description, a."createdAt"
+               order by a."createdAt" desc
+               limit ${LIMIT_ANNOUNCEMENTS_FOR_MAIN_PAGE};`;
+  const type = sequelize.QueryTypes.SELECT;
   return await sequelize.query(sql, {type});
 };
 
@@ -96,4 +117,5 @@ module.exports = {
   findByTitle,
   getLastComments,
   getMostDiscussed,
+  getPreviewsForMainPage,
 };
