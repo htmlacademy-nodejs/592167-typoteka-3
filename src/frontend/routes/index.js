@@ -6,6 +6,12 @@ const {BACKEND_URL} = require(`../../constants`);
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
+const createDateForPreview = (date) => {
+  const createDate = new Date(date);
+  const tempMonth = (createDate.getMonth() + 1) < 10 ? `0${createDate.getMonth() + 1}` : `${createDate.getMonth()}`;
+  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+};
+
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
@@ -17,6 +23,11 @@ const initializeRoutes = (app) => {
     const previews = resPreviews.data;
     const comments = resComments.data;
     const mostDiscussed = resMostDiscussed.data;
+    previews.map((it) => {
+      const dataCreate = new Date(it.createdAt);
+      it.createdAt = createDateForPreview(dataCreate);
+      return it;
+    });
     const mainPage = {
       previews,
       comments,
