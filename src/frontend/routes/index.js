@@ -35,6 +35,10 @@ const initializeRoutes = (app) => {
 
     const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
     const comments = resComments.data;
+    comments.map((it) => {
+      it.comment = cutString(it.comment);
+      return it;
+    });
 
     const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     const categories = resCategories.data;
