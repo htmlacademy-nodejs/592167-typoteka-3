@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
 const myRoutes = require(`./my`);
@@ -43,12 +43,21 @@ const initializeRoutes = (app) => {
     const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     const categories = resCategories.data;
 
+    const tempCount = Math.floor(previews.length / DEFAULT.PREVIEWS_COUNT);
+    const paginationCount = (previews.length % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
+    const paginationStep = Array(paginationCount).fill({}).map((it, i) => {
+      return {
+        step: i + 1,
+        offset: Number.parseInt(req.params.start, 10) === i + 1,
+      };
+    });
 
     const mainPage = {
       previews,
       comments,
       mostDiscussed,
       categories,
+      paginationStep,
     };
     res.render(`main`, {mainPage});
   });
