@@ -43,14 +43,22 @@ const initializeRoutes = (app) => {
     const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     const categories = resCategories.data;
 
-    const tempCount = Math.floor(previews.length / DEFAULT.PREVIEWS_COUNT);
-    const paginationCount = (previews.length % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
-    const paginationStep = Array(paginationCount).fill({}).map((it, i) => {
-      return {
-        step: i + 1,
-        offset: Number.parseInt(req.params.start, 10) === i + 1,
-      };
-    });
+    // const resCountAllCategories = await axios.get(`${BACKEND_URL}/api/countAllCategories`);
+    // const countAllCategories = resCountAllCategories.data;
+    const countAllCategories = 6;
+
+    let paginationStep = [];
+    if (countAllCategories > DEFAULT.PREVIEWS_COUNT) {
+      const tempCount = Math.floor(previews.length / DEFAULT.PREVIEWS_COUNT);
+      const paginationCount = (previews.length % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
+      paginationStep = Array(paginationCount).fill({}).map((it, i) => {
+        return {
+          step: i + 1,
+          offset: Number.parseInt(req.params.start, 10) === i + 1,
+        };
+      });
+    }
+
 
     const mainPage = {
       previews,
