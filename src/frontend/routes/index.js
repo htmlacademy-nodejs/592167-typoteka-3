@@ -9,7 +9,7 @@ const offersRoutes = require(`./offers`);
 
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
-  const tempMonth = (createDate.getMonth() + 1) < 10 ? `0${createDate.getMonth() + 1}` : `${createDate.getMonth()}`;
+  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
   return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
 };
 
@@ -18,54 +18,55 @@ const initializeRoutes = (app) => {
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, async (req, res) => {
-    const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previewsForMainPage`);
-    const previews = resPreviews.data;
-    previews.map((it) => {
+    let queryString = ``;
+    if (Object.keys(req.query).length === 0) {
+      queryString = `?start=1&count=8&offer=desc`;
+    } else {
+      queryString = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
+    }
+    const resAllElements = await axios.get(`${BACKEND_URL}/api/articles${queryString}`);
+    const allElements = resAllElements.data;
+
+    allElements.previews.map((it) => {
       const dataCreate = new Date(it.createdAt);
       it.createdAt = createDateForPreview(dataCreate);
+      it.categories = it.categories.split(`, `);
       return it;
     });
 
-    const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
-    const mostDiscussed = resMostDiscussed.data;
-    mostDiscussed.map((it) => {
-      it.announce = cutString(it.announce);
-      return it;
-    });
-
-    const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
-    const comments = resComments.data;
-    comments.map((it) => {
+    allElements.lastComments.map((it) => {
       it.comment = cutString(it.comment);
       return it;
     });
 
-    const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
-    const categories = resCategories.data;
-
-    // const resCountAllCategories = await axios.get(`${BACKEND_URL}/api/countAllCategories`);
-    // const countAllCategories = resCountAllCategories.data;
-    const countAllCategories = 6;
+    allElements.mostDiscussed.map((it) => {
+      it.announce = cutString(it.announce);
+      return it;
+    });
 
     let paginationStep = [];
-    if (countAllCategories > DEFAULT.PREVIEWS_COUNT) {
-      const tempCount = Math.floor(previews.length / DEFAULT.PREVIEWS_COUNT);
-      const paginationCount = (previews.length % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
+    if (allElements.pagination > DEFAULT.PREVIEWS_COUNT) {
+      const tempCount = Math.floor(allElements.pagination / DEFAULT.PREVIEWS_COUNT);
+      const paginationCount = (allElements.pagination % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
       paginationStep = Array(paginationCount).fill({}).map((it, i) => {
         return {
           step: i + 1,
-          offset: Number.parseInt(req.params.start, 10) === i + 1,
+          offset: Number.parseInt(req.query.start, 10) === i + 1,
         };
       });
     }
 
+    console.log(req.params.start);
+    console.log(paginationStep);
 
+    const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
     const mainPage = {
-      previews,
-      comments,
-      mostDiscussed,
-      categories,
+      previews: allElements.previews,
+      comments: allElements.lastComments,
+      mostDiscussed: allElements.mostDiscussed,
+      categories: allElements.categories,
       paginationStep,
+      paginationVisible,
     };
     res.render(`main`, {mainPage});
   });

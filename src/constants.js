@@ -8,6 +8,9 @@ const ExitCode = {
 const DEFAULT = {
   COMMAND: `--help`,
   PREVIEWS_COUNT: 8,
+  OFFSET: 0,
+  ORDER: `DESC`,
+  LIMIT: 8,
 };
 
 const HttpCode = {
