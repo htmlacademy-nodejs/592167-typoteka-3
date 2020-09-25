@@ -3,6 +3,7 @@
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
+const {COMMENTS_COUNT_FOR_MAIN_PAGE} = require(`../../constants`);
 
 
 const findAll = async () => await articleRepository.findAll();
@@ -11,13 +12,13 @@ const getLastComments = async () => await articleRepository.getLastComments();
 
 const getMostDiscussed = async () => {
   const res = await articleRepository.getMostDiscussed();
-  return res.slice(0, 4);
+  return res.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
 };
 
 const getPreviewsForMainPage = async (queryParams) => {
   const response = await articleRepository.getPreviewsForMainPage(queryParams);
   const comments = await articleRepository.getCommentsForArticle();
-  const articleInfo = Array(response.length).fill({}).map((it, i) => {
+  return Array(response.length).fill({}).map((it, i) => {
     const el = {
       id: response[i].id,
       title: response[i].title,
@@ -31,7 +32,6 @@ const getPreviewsForMainPage = async (queryParams) => {
     el.countComment = isArticleId ? isArticleId.dataValues.count : 0;
     return el;
   });
-  return articleInfo;
 };
 
 const findById = (id) => {
@@ -75,15 +75,13 @@ const getAllElementsForMainPage = async (queryParams) => {
   const lastComments = await getLastComments();
   const pagination = await getCountAllArticles();
 
-  const allElementsForMainPage = {
+  return {
     categories,
     mostDiscussed,
     previews,
     lastComments,
     pagination,
   };
-
-  return allElementsForMainPage;
 };
 
 const testSelect = async () => {
