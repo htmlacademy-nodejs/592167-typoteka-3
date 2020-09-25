@@ -19,10 +19,6 @@ const KEYS_COUNT_NEW_ANNONCEMENTS = 6;
 router.get(`/`, async (req, res) => {
   try {
     const articles = await articleService.getAllElementsForMainPage(req.query);
-    // const preparedListArticles = articles.slice(0).map((it) => {
-    //   it.categories = it.categories.split(`, `);
-    //   return it;
-    // });
     res.send(articles);
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
