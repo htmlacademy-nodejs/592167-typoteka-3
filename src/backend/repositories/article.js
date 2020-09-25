@@ -5,8 +5,8 @@ const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
-const {MOCK_FILE_NAME, DEFAULT} = require(`../../constants`);
-const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
+const {MOCK_FILE_NAME, DEFAULT, COMMENTS_COUNT_FOR_MAIN_PAGE} = require(`../../constants`);
+// const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
 // const LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS = 4;
 // const LIMIT_ANNOUNCEMENTS_FOR_MAIN_PAGE = 8;
 let articles = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];

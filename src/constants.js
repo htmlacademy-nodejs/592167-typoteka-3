@@ -26,6 +26,7 @@ const HttpCode = {
 };
 
 const USER_ARGV_INDEX = 2;
+const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
 const MOCK_FILE_NAME = `mock.json`;
 const BACKEND_URL = `http://localhost:8081`;
 
@@ -37,4 +38,5 @@ module.exports = {
   MOCK_FILE_NAME,
   BACKEND_URL,
   DEFAULT,
+  COMMENTS_COUNT_FOR_MAIN_PAGE,
 };
