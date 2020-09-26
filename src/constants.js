@@ -5,6 +5,14 @@ const ExitCode = {
   ERROR: 1,
 };
 
+const DEFAULT = {
+  COMMAND: `--help`,
+  PREVIEWS_COUNT: 8,
+  OFFSET: 0,
+  ORDER: `DESC`,
+  LIMIT: 8,
+};
+
 const HttpCode = {
   OK: 200,
   CREATED: 201,
@@ -17,8 +25,8 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
+const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
 const MOCK_FILE_NAME = `mock.json`;
 const BACKEND_URL = `http://localhost:8081`;
 
@@ -26,8 +34,9 @@ const BACKEND_URL = `http://localhost:8081`;
 module.exports = {
   ExitCode,
   HttpCode,
-  DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
   BACKEND_URL,
+  DEFAULT,
+  COMMENTS_COUNT_FOR_MAIN_PAGE,
 };

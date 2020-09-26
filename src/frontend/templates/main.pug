@@ -10,34 +10,11 @@ block content
       section.main-page__theme-list
         h2.visually-hidden Список тем
         ul.themes
-          li.themes__item
-            a.themes__item-link(href='#')
-              | Автомобили
-              sup 88
-          li.themes__item
-            a.themes__item-link(href='#')
-              | Удаленная работа
-              sup 13
-          li.themes__item
-            a.themes__item-link(href='#')
-              | Бизнес
-              sup 13
-          li.themes__item
-            a.themes__item-link(href='#')
-              | Путешествия
-              sup 13
-          li.themes__item
-            a.themes__item-link.themes__item-link--padding(href='#')
-              | Дизайн и обустройство
-              sup 13
-          li.themes__item
-            a.themes__item-link(href='#')
-              | Производство игрушек
-              sup 22
-          li.themes__item
-            a.themes__item-link(href='#')
-              | UX &amp; UI
-              sup 22
+          each category in mainPage.categories
+            li.themes__item
+              a.themes__item-link(href='#')
+                | #{category.category}
+                sup #{category.count}
       .main-page__section-flex
         section.main-page__hot.hot
           h2.hot__name
@@ -48,7 +25,7 @@ block content
               li.hot__list-item
                 a.hot__list-link(href='#')
                   | #{discuss.announce}
-                  sup.hot__link-sup #{discuss.comments}
+                  sup.hot__link-sup #{discuss.count}
         section.main-page__last.last
           h2.last__name
             | Последние комментарии
@@ -71,7 +48,7 @@ block content
                     a.preview__breadcrumbs-link(href='#') #{category}
               .preview__background
                 img.preview__background-image(src='/img/skyscraper@1x.jpg', width='460', height='240', srcset='/img/skyscraper@1x.jpg 1x, /img/skyscraper@2x.jpg 2x', alt='Фотография небоскреба')
-              time.preview__time(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+              time.preview__time(datetime='2019-03-21T20:33') #{preview.createdAt}
               h3.preview__name
                 a.preview__name-link(href='#') #{preview.title}
               p.preview__text
@@ -80,4 +57,19 @@ block content
                 | Комментарии
                 span.preview__cloud
                 b.preview__comment-count #{preview.comments}
+        .preview__toggle-wrapper(hidden = mainPage.paginationVisible)
+          ul.preview__pagination.pagination
+            li
+              a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
+                | Назад
+            each pagination in mainPage.paginationStep
+              li.pagination__item
+                if pagination.offset
+                  a() #{pagination.step}
+                else
+                  a(href=`/?start=${pagination.step}&count=8&offer=desc`) #{pagination.step}
+
+            li
+              a.pagination__button.button.button--forward(href=`#`)
+                | Вперед
     include common/footer

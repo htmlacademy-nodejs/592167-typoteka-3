@@ -12,7 +12,7 @@ const categoriesService = require(`../services/categories`);
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(categoriesService.getCategories());
+    res.send(await categoriesService.getCategories());
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});

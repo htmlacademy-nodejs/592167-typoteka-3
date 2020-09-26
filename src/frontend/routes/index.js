@@ -1,26 +1,72 @@
 'use strict';
 
 const axios = require(`axios`);
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT} = require(`../../constants`);
+const {cutString} = require(`../../utils`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
+
+const createDateForPreview = (date) => {
+  const createDate = new Date(date);
+  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
+  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+};
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
 
   app.get(`/`, async (req, res) => {
-    const resPreviews = await axios.get(`${BACKEND_URL}/api/articles/previews`);
-    const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/articles/mostDiscussed`);
-    const resComments = await axios.get(`${BACKEND_URL}/api/articles/comments`);
-    const previews = resPreviews.data;
-    const comments = resComments.data;
-    const mostDiscussed = resMostDiscussed.data;
+    let queryString = ``;
+    if (Object.keys(req.query).length === 0) {
+      queryString = `?start=1&count=8&offer=desc`;
+    } else {
+      queryString = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
+    }
+    const resAllElements = await axios.get(`${BACKEND_URL}/api/articles${queryString}`);
+    const allElements = resAllElements.data;
+
+    allElements.previews.map((it) => {
+      const dataCreate = new Date(it.createdAt);
+      it.createdAt = createDateForPreview(dataCreate);
+      it.categories = it.categories.split(`, `);
+      return it;
+    });
+
+    allElements.lastComments.map((it) => {
+      it.comment = cutString(it.comment);
+      return it;
+    });
+
+    allElements.mostDiscussed.map((it) => {
+      it.announce = cutString(it.announce);
+      return it;
+    });
+
+    let paginationStep = [];
+    if (allElements.pagination > DEFAULT.PREVIEWS_COUNT) {
+      const tempCount = Math.floor(allElements.pagination / DEFAULT.PREVIEWS_COUNT);
+      const paginationCount = (allElements.pagination % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
+      paginationStep = Array(paginationCount).fill({}).map((it, i) => {
+        return {
+          step: i + 1,
+          offset: Number.parseInt(req.query.start, 10) === i + 1,
+        };
+      });
+    }
+
+    console.log(req.params.start);
+    console.log(paginationStep);
+
+    const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
     const mainPage = {
-      previews,
-      comments,
-      mostDiscussed,
+      previews: allElements.previews,
+      comments: allElements.lastComments,
+      mostDiscussed: allElements.mostDiscussed,
+      categories: allElements.categories,
+      paginationStep,
+      paginationVisible,
     };
     res.render(`main`, {mainPage});
   });

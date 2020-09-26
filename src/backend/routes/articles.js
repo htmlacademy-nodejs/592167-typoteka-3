@@ -18,12 +18,8 @@ const KEYS_COUNT_NEW_ANNONCEMENTS = 6;
 
 router.get(`/`, async (req, res) => {
   try {
-    const articles = await articleService.findAll();
-    const preparedListArticles = articles.slice(0).map((it) => {
-      it.categories = it.categories.split(`, `);
-      return it;
-    });
-    res.send(preparedListArticles);
+    const articles = await articleService.getAllElementsForMainPage(req.query);
+    res.send(articles);
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
@@ -31,9 +27,10 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-router.get(`/previews`, async (req, res) => {
+router.get(`/previewsForMainPage`, async (req, res) => {
   try {
-    const articles = await articleService.findAll();
+    console.log(req.params, req.query);
+    const articles = await articleService.getPreviewsForMainPage(req.query);
     const preparedListArticles = articles.slice(0).map((it) => {
       it.categories = it.categories.split(`, `);
       return it;
@@ -63,6 +60,31 @@ router.get(`/mostDiscussed`, async (req, res) => {
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+  }
+});
+
+router.get(`/countAllArticles`, async (req, res) => {
+  try {
+    res.send(await articleService.getCountAllArticles());
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
+  }
+});
+
+router.get(`/testSelect`, async (req, res) => {
+  try {
+    res.send(await articleService.testSelect());
+  } catch (err) {
+    logger.error(err);
+  }
+});
+
+router.get(`/testCategory`, async (req, res) => {
+  try {
+    res.send(await articleService.testCategory());
+  } catch (err) {
+    logger.error(err);
   }
 });
 

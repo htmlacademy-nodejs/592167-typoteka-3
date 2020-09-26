@@ -5,9 +5,7 @@ const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
-const {MOCK_FILE_NAME} = require(`../../constants`);
-const COMMENTS_COUNT_FOR_MAINPAGE = 3;
-const LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS = 4;
+const {MOCK_FILE_NAME, DEFAULT, COMMENTS_COUNT_FOR_MAIN_PAGE} = require(`../../constants`);
 let articles = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 
@@ -36,22 +34,62 @@ const getLastComments = async () => await db.Comment.findAll({
   attributes: [`comment`],
   as: `comments`,
   order: [[`createdAt`, `DESC`]],
-  limit: COMMENTS_COUNT_FOR_MAINPAGE,
+  limit: COMMENTS_COUNT_FOR_MAIN_PAGE,
 });
 
-const getMostDiscussed = async () => {
-  const sql = `select a.id, a.announce, count(c.comment) as comments
-               from "Articles" a
-                      inner join "Comments" C
-                                 on a.id = C."articleId"
-               group by a.id, a.announce
-               order by comments desc
-               limit ${LIMIT_MOST_DISCUSSED_ANNOUNCEMENTS};`;
+const getMostDiscussed = async () => await db.Article.findAll({
+  attributes: [`id`, `announce`, [sequelize.fn(`count`, sequelize.col(`comments.id`)), `count`]],
+  include: [{
+    model: db.Comment,
+    as: `comments`,
+    attributes: [],
+    required: false,
+  }],
+  group: [`Article.id`],
+  order: [[`count`, `desc`]],
+});
 
-  const type = sequelize.QueryTypes.SELECT;
-
-  return await sequelize.query(sql, {type});
+const getPreviewsForMainPage = async (queryParams) => {
+  const {start, count, offer} = queryParams;
+  let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
+  selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
+  const selectionCount = Number.parseInt(count, 10) || DEFAULT.LIMIT;
+  const order = `${offer ? offer : DEFAULT.ORDER}`;
+  return await db.Article.findAll({
+    attributes: [`id`, `title`, `announce`, `createdAt`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`category`],
+      },
+      {
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      }],
+    order: [
+      [`createdAt`, `${order}`]
+    ],
+    offset: selectionOffset,
+    limit: selectionCount,
+  });
 };
+
+const getCountAllArticles = async () => await db.Article.findAll({
+  attributes: [
+    [sequelize.fn(`count`, sequelize.col(`id`)), `articlesCount`],
+  ],
+});
+
+const getCommentsForArticle = async () => await db.Comment.findAll({
+  attributes: [`articleId`,
+    [sequelize.fn(`count`, sequelize.col(`articleId`)), `count`],
+  ],
+  group: `articleId`,
+  order: [`articleId`],
+});
 
 const findById = (id) => articles.find((el) => el.id === id);
 
@@ -86,6 +124,18 @@ const findByTitle = async (queryString) => {
   });
 };
 
+const testSelect = async () => await db.Article.findAll({
+  attributes: [`id`, `announce`, [sequelize.fn(`count`, sequelize.col(`comments.id`)), `count`]],
+  include: [{
+    model: db.Comment,
+    as: `comments`,
+    attributes: [],
+    required: false,
+  }],
+  group: [`Article.id`],
+  order: [[`count`, `desc`]],
+});
+
 
 module.exports = {
   findAll,
@@ -96,4 +146,8 @@ module.exports = {
   findByTitle,
   getLastComments,
   getMostDiscussed,
+  getPreviewsForMainPage,
+  getCountAllArticles,
+  testSelect,
+  getCommentsForArticle,
 };

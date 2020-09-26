@@ -2,6 +2,7 @@
 
 const nanoid = require(`nanoid`);
 
+const MAX_LENGHT_ANNOUNCE = 100;
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -34,10 +35,15 @@ const deleteItemFromArray = (array, id) => {
   return [...beforeIdx, ...afterIdx];
 };
 
+const cutString = (data) => {
+  return data.length > MAX_LENGHT_ANNOUNCE ? `${data.slice(0, MAX_LENGHT_ANNOUNCE)}...` : data;
+};
+
 
 module.exports = {
   getRandomInt,
   shuffle,
   deleteItemFromArray,
   getNewId,
+  cutString,
 };
