@@ -2,12 +2,14 @@
 
 const fs = require(`fs`).promises;
 const axios = require(`axios`);
-const { BACKEND_URL } = require(`../../constants`);
+const {BACKEND_URL} = require(`../../constants`);
 
 const {Router} = require(`express`);
 const router = new Router();
 
-router.get(`/category/:id`, (req, res) => res.send(req.originalUrl));
+router.get(`/category/:id`, async (req, res) => {
+  res.render(`articles-by-category`);
+});
 
 router.get(`/add`, (req, res) => {
   res.render(`new-post`);
@@ -15,7 +17,7 @@ router.get(`/add`, (req, res) => {
 
 router.post(`/add`, async (req, res) => {
   try {
-    const {type, size, path, name} = req.files.newArticlePhoto;
+    const {type, size, path} = req.files.newArticlePhoto;
     const allowTypes = [`image/jpeg`, `image/png`];
 
     const newArticles = {
@@ -39,15 +41,17 @@ router.post(`/add`, async (req, res) => {
 
     return res.redirect(`/my`);
   } catch (err) {
-    res.render(`errors/500`, {err});
+    return res.render(`errors/500`, {err});
   }
 });
 
 router.get(`/edit/:id`, async (req, res) => {
-  const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
-  res.send(req.originalUrl)
+  // const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
+  res.send(req.originalUrl);
 });
 
-router.get(`/:id`, (req, res) => res.send(req.originalUrl));
+router.get(`/:id`, async (req, res) => {
+  res.render(`post`);
+});
 
 module.exports = router;

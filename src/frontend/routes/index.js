@@ -5,7 +5,8 @@ const {BACKEND_URL, DEFAULT} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
 const myRoutes = require(`./my`);
-const offersRoutes = require(`./offers`);
+const articlesRoutes = require(`./articles`);
+const errorsRoutes = require(`./errors`);
 
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
@@ -15,7 +16,8 @@ const createDateForPreview = (date) => {
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
-  app.use(`/offers`, offersRoutes);
+  app.use(`/articles`, articlesRoutes);
+  app.use(`/errors`, errorsRoutes);
 
   app.get(`/`, async (req, res) => {
     let queryString = ``;
@@ -56,8 +58,8 @@ const initializeRoutes = (app) => {
       });
     }
 
-    console.log(req.params.start);
-    console.log(paginationStep);
+    // console.log(req.params.start);
+    // console.log(paginationStep);
 
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
     const mainPage = {

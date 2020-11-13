@@ -29,7 +29,7 @@ router.get(`/`, async (req, res) => {
 
 router.get(`/previewsForMainPage`, async (req, res) => {
   try {
-    console.log(req.params, req.query);
+    // console.log(req.params, req.query);
     const articles = await articleService.getPreviewsForMainPage(req.query);
     const preparedListArticles = articles.slice(0).map((it) => {
       it.categories = it.categories.split(`, `);
