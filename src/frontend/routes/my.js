@@ -12,5 +12,9 @@ router.get(`/`, async (req, res) => {
   res.render(`my`, {articles});
 });
 
+router.get(`/comments`, (req, res) => {
+  res.render(`comments`);
+});
+
 
 module.exports = router;
