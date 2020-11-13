@@ -7,6 +7,7 @@ const {cutString} = require(`../../utils`);
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
 const errorsRoutes = require(`./errors`);
+const categoriesRoutes = require(`./categories`);
 
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
@@ -18,6 +19,7 @@ const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/articles`, articlesRoutes);
   app.use(`/errors`, errorsRoutes);
+  app.use(`/categories`, categoriesRoutes);
 
   app.get(`/`, async (req, res) => {
     let queryString = ``;
