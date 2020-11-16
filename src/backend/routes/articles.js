@@ -74,7 +74,7 @@ router.get(`/countAllArticles`, async (req, res) => {
 
 router.get(`/testSelect`, async (req, res) => {
   try {
-    res.send(await articleService.testSelect());
+    res.send(await articleService.testSelect(1));
   } catch (err) {
     logger.error(err);
   }
@@ -85,6 +85,15 @@ router.get(`/testCategory`, async (req, res) => {
     res.send(await articleService.testCategory());
   } catch (err) {
     logger.error(err);
+  }
+});
+
+router.get(`/categories/:id`, async (req, res) => {
+  try {
+    res.send(await articleService.getArticlesForCategory(req.params.id));
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
   }
 });
 

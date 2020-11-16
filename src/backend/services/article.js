@@ -6,6 +6,12 @@ const {ArticleNotFoundError} = require(`../errors/errors`);
 const {COMMENTS_COUNT_FOR_MAIN_PAGE} = require(`../../constants`);
 
 
+const createDateForPreview = (date) => {
+  const createDate = new Date(date);
+  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
+  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+};
+
 const findAll = async () => await articleRepository.findAll();
 
 const getLastComments = async () => await articleRepository.getLastComments();
@@ -84,12 +90,42 @@ const getAllElementsForMainPage = async (queryParams) => {
   };
 };
 
-const testSelect = async () => {
-  const response = await categoryServices.getCategories();
-  return response;
+const testSelect = async (categoryId) => {
+  return await articleRepository.testSelect(categoryId);
 };
 
 const testCategory = async () => await categoryServices.getCategories();
+
+const getArticlesForCategory = async (categoryId) => {
+  console.log(categoryId);
+  let categoriesList = await categoryServices.getCategories();
+  categoriesList = categoriesList.map((cat) => {
+    return {
+      id: cat.id,
+      category: cat.category,
+      count: cat.dataValues.count,
+      active: cat.id === Number.parseInt(categoryId, 10),
+    };
+  });
+  const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId);
+  const articleIdList = resArticleIdList.map((el) => el.id);
+  const resArticles = await articleRepository.getArticlesForCategory(articleIdList);
+  const articles = Array(resArticles.length).fill({}).map((el, i) => {
+    const dataCreate = new Date(resArticles[i].createdAt);
+    return {
+      id: resArticles[i].id,
+      title: resArticles[i].title,
+      announce: resArticles[i].announce,
+      categories: resArticles[i].categories.map((it) => it.category),
+      image: resArticles[i].image,
+      createdAt: createDateForPreview(dataCreate),
+    };
+  });
+
+  const categoryActive = categoriesList.find((catList) => catList.active === true).category;
+  return {categoriesList, articles, categoryActive};
+  // return articles;
+};
 
 
 module.exports = {
@@ -106,4 +142,5 @@ module.exports = {
   getAllElementsForMainPage,
   testSelect,
   testCategory,
+  getArticlesForCategory,
 };

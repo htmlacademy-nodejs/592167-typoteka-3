@@ -7,9 +7,6 @@ const {BACKEND_URL} = require(`../../constants`);
 const {Router} = require(`express`);
 const router = new Router();
 
-router.get(`/category/:id`, async (req, res) => {
-  res.render(`articles-by-category`);
-});
 
 router.get(`/add`, (req, res) => {
   res.render(`new-post`);
@@ -52,6 +49,12 @@ router.get(`/edit/:id`, async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   res.render(`post`);
+});
+
+router.get(`/category/:id`, async (req, res) => {
+  const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}`);
+  const articlesByCategory = resArticlesForCategory.data;
+  res.render(`articles-by-category`, {articlesByCategory});
 });
 
 module.exports = router;

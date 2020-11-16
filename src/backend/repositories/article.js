@@ -124,17 +124,63 @@ const findByTitle = async (queryString) => {
   });
 };
 
-const testSelect = async () => await db.Article.findAll({
-  attributes: [`id`, `announce`, [sequelize.fn(`count`, sequelize.col(`comments.id`)), `count`]],
-  include: [{
-    model: db.Comment,
-    as: `comments`,
-    attributes: [],
-    required: false,
-  }],
-  group: [`Article.id`],
-  order: [[`count`, `desc`]],
-});
+const getArticleIdListByCategoryId = async (categoryId) => {
+  return await db.Article.findAll({
+    attributes: [`id`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [],
+        where: {
+          id: categoryId
+        }
+      }],
+  });
+};
+
+const getArticlesForCategory = async (categoryIdList) => {
+  console.log(categoryIdList);
+  return await db.Article.findAll({
+    attributes: [`id`, `title`, `announce`, `createdAt`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`category`],
+      },
+      {
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      }],
+    where: {
+      id: {
+        [Operator.in]: categoryIdList,
+      }
+    },
+    order: [
+      [`createdAt`, `DESC`]
+    ],
+  });
+};
+
+
+const testSelect = async (categoryId) => {
+  return await db.Article.findAll({
+    attributes: [`id`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [],
+        where: {
+          id: categoryId
+        }
+      }],
+  });
+};
 
 
 module.exports = {
@@ -150,4 +196,6 @@ module.exports = {
   getCountAllArticles,
   testSelect,
   getCommentsForArticle,
+  getArticlesForCategory,
+  getArticleIdListByCategoryId,
 };
