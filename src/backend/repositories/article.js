@@ -140,20 +140,24 @@ const getArticleIdListByCategoryId = async (categoryId) => {
 };
 
 const getArticlesForCategory = async (categoryIdList) => {
-  console.log(categoryIdList);
   return await db.Article.findAll({
     attributes: [`id`, `title`, `announce`, `createdAt`],
     include: [
       {
         model: db.Category,
         as: `categories`,
-        attributes: [`category`],
+        attributes: [`id`, `category`],
       },
       {
         model: db.Image,
         as: `images`,
         attributes: [`image`],
         limit: 1,
+      },
+      {
+        model: db.Comment,
+        as: `comments`,
+        attributes: [`comment`],
       }],
     where: {
       id: {

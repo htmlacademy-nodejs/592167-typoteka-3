@@ -97,7 +97,6 @@ const testSelect = async (categoryId) => {
 const testCategory = async () => await categoryServices.getCategories();
 
 const getArticlesForCategory = async (categoryId) => {
-  console.log(categoryId);
   let categoriesList = await categoryServices.getCategories();
   categoriesList = categoriesList.map((cat) => {
     return {
@@ -112,13 +111,20 @@ const getArticlesForCategory = async (categoryId) => {
   const resArticles = await articleRepository.getArticlesForCategory(articleIdList);
   const articles = Array(resArticles.length).fill({}).map((el, i) => {
     const dataCreate = new Date(resArticles[i].createdAt);
+    const categories = resArticles[i].categories.map((it) => {
+      return {
+        id: it.id,
+        category: it.category,
+      };
+    });
     return {
       id: resArticles[i].id,
       title: resArticles[i].title,
       announce: resArticles[i].announce,
-      categories: resArticles[i].categories.map((it) => it.category),
-      image: resArticles[i].image,
+      categories,
+      image: (resArticles[i].images.length > 0 && resArticles[i].images[0].image) ? resArticles[i].images[0].image : ``,
       createdAt: createDateForPreview(dataCreate),
+      comments: resArticles[i].comments.length,
     };
   });
 
