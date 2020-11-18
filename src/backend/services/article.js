@@ -23,6 +23,7 @@ const getMostDiscussed = async () => {
 
 const getPreviewsForMainPage = async (queryParams) => {
   const response = await articleRepository.getPreviewsForMainPage(queryParams);
+  console.log(response);
   const comments = await articleRepository.getCommentsForArticle();
   return Array(response.length).fill({}).map((it, i) => {
     const el = {
@@ -30,7 +31,7 @@ const getPreviewsForMainPage = async (queryParams) => {
       title: response[i].title,
       announce: response[i].announce,
       createdAt: response[i].createdAt,
-      image: response[i].images[0].image,
+      image: (response[i].images.length > 0 && response[i].images[0].image) ? response[i].images[0].image : ``,
     };
     const categories = response[i].categories.map((cat) => cat.category);
     el.categories = categories.join(`, `);
