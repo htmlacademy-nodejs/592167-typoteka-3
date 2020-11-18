@@ -22,10 +22,8 @@ const initializeRoutes = (app) => {
   app.use(`/categories`, categoriesRoutes);
 
   app.get(`/`, async (req, res) => {
-    let queryString = ``;
-    if (Object.keys(req.query).length === 0) {
-      queryString = `?start=1&count=8&offer=desc`;
-    } else {
+    let queryString = `?start=1&count=8&offer=desc`;
+    if (Object.keys(req.query).length !== 0) {
       queryString = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
     }
     const resAllElements = await axios.get(`${BACKEND_URL}/api/articles${queryString}`);
@@ -34,7 +32,7 @@ const initializeRoutes = (app) => {
     allElements.previews.map((it) => {
       const dataCreate = new Date(it.createdAt);
       it.createdAt = createDateForPreview(dataCreate);
-      it.categories = it.categories.split(`, `);
+      // it.categories = it.categories.split(`, `);
       return it;
     });
 

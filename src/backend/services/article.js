@@ -33,10 +33,15 @@ const getPreviewsForMainPage = async (queryParams) => {
       createdAt: response[i].createdAt,
       image: (response[i].images.length > 0 && response[i].images[0].image) ? response[i].images[0].image : ``,
     };
-    const categories = response[i].categories.map((cat) => cat.category);
-    el.categories = categories.join(`, `);
+    el.categories = response[i].categories.map((cat) => {
+      return {
+        id: cat.id,
+        category: cat.category,
+      };
+    });
     const isArticleId = comments.find((com) => com.articleId === i + 1);
     el.countComment = isArticleId ? isArticleId.dataValues.count : 0;
+    console.log(el);
     return el;
   });
 };

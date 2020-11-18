@@ -61,7 +61,7 @@ const getPreviewsForMainPage = async (queryParams) => {
       {
         model: db.Category,
         as: `categories`,
-        attributes: [`category`],
+        attributes: [`id`, `category`],
       },
       {
         model: db.Image,
