@@ -31,8 +31,7 @@ const findAll = async () => {
 };
 
 const getLastComments = async () => await db.Comment.findAll({
-  attributes: [`comment`],
-  as: `comments`,
+  attributes: [`comment`, `articleId`],
   order: [[`createdAt`, `DESC`]],
   limit: COMMENTS_COUNT_FOR_MAIN_PAGE,
 });
@@ -170,6 +169,32 @@ const getArticlesForCategory = async (categoryIdList) => {
   });
 };
 
+const getArticleById = async (id) => await db.Article.findAll({
+  attributes: [`id`, `title`, `announce`, `createdAt`],
+  include: [{
+    model: db.Image,
+    as: `images`,
+    attributes: [`image`],
+    limit: 1,
+  }, {
+    model: db.Comment,
+    as: `comments`,
+    attributes: [`comment`, `createdAt`],
+    include: {
+      model: db.User,
+      as: `users`,
+      attributes: [`firstName`, `lastName`],
+    }
+  }, {
+    model: db.Category,
+    as: `categories`,
+    attributes: [`id`, `category`],
+  }],
+  where: {
+    id
+  },
+});
+
 
 const testSelect = async (categoryId) => {
   return await db.Article.findAll({
@@ -202,4 +227,5 @@ module.exports = {
   getCommentsForArticle,
   getArticlesForCategory,
   getArticleIdListByCategoryId,
+  getArticleById,
 };

@@ -97,9 +97,9 @@ router.get(`/categories/:id`, async (req, res) => {
   }
 });
 
-router.get(`/:articleId`, (req, res) => {
+router.get(`/:articleId`, async (req, res) => {
   try {
-    res.send(articleService.findById(req.params.articleId));
+    res.send(await articleService.getArticleById(req.params.articleId));
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));

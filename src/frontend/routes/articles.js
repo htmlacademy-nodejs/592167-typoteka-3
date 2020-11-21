@@ -48,7 +48,13 @@ router.get(`/edit/:id`, async (req, res) => {
 });
 
 router.get(`/:id`, async (req, res) => {
-  res.render(`post`);
+  try {
+    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
+    const article = resGetArticle.data;
+    return res.render(`post`, {article});
+  } catch (err) {
+    return res.render(`error/500`, {err});
+  }
 });
 
 router.get(`/category/:id`, async (req, res) => {

@@ -46,6 +46,7 @@ const getPreviewsForMainPage = async (queryParams) => {
   });
 };
 
+
 const findById = (id) => {
   if (!articleRepository.exists(id)) {
     throw new ArticleNotFoundError(id);
@@ -139,6 +140,31 @@ const getArticlesForCategory = async (categoryId) => {
   // return articles;
 };
 
+const getArticleById = async (id) => {
+  const tempArticle = await articleRepository.getArticleById(id);
+  const firstLine = tempArticle.shift();
+  return {
+    title: firstLine.title,
+    image: firstLine.images[0] ? firstLine.images[0].image : ``,
+    createdAt: createDateForPreview(firstLine.createdAt),
+    categories: firstLine.categories.map((el) => {
+      return {
+        id: el.id,
+        category: el.category,
+      };
+    }),
+    announce: firstLine.announce,
+    comments: firstLine.comments.map((el) => {
+      return {
+        comment: el.comment,
+        createdAt: createDateForPreview(el.createdAt),
+        user: `${el.users.firstName} ${el.users.lastName}`,
+      };
+    }),
+    authorization: true,
+  };
+};
+
 
 module.exports = {
   create,
@@ -155,4 +181,5 @@ module.exports = {
   testSelect,
   testCategory,
   getArticlesForCategory,
+  getArticleById
 };
