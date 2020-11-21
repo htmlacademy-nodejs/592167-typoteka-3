@@ -16,7 +16,11 @@ const findAll = async () => db.Category.findAll({
   group: [`Category.id`, `Category.category`],
 });
 
+const categoriesOnly = async () => db.Category.findAll({
+  attributes: [`id`, `category`],
+});
 
 module.exports = {
   findAll,
+  categoriesOnly,
 };
