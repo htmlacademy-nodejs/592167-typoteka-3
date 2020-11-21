@@ -165,6 +165,17 @@ const getArticleById = async (id) => {
   };
 };
 
+const getMyArticles = async (userId) => {
+  const response = await articleRepository.getMyArticles(userId);
+  return Array(response.length).fill({}).map((el, i) => {
+    return {
+      id: response[i].id,
+      title: response[i].title,
+      createdAt: createDateForPreview(response[i].createdAt),
+    };
+  });
+};
+
 
 module.exports = {
   create,
@@ -181,5 +192,6 @@ module.exports = {
   testSelect,
   testCategory,
   getArticlesForCategory,
-  getArticleById
+  getArticleById,
+  getMyArticles,
 };

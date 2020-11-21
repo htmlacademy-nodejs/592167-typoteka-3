@@ -12,6 +12,7 @@ const logger = getLogger();
 const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
 const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
+const {MOCK_USER_ID} = require(`../../constants`);
 
 const KEYS_COUNT_NEW_ANNONCEMENTS = 6;
 
@@ -66,6 +67,15 @@ router.get(`/mostDiscussed`, async (req, res) => {
 router.get(`/countAllArticles`, async (req, res) => {
   try {
     res.send(await articleService.getCountAllArticles());
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
+  }
+});
+
+router.get(`/myArticles`, async (req, res) => {
+  try {
+    res.send(await articleService.getMyArticles(MOCK_USER_ID));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});

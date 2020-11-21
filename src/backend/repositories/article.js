@@ -195,6 +195,13 @@ const getArticleById = async (id) => await db.Article.findAll({
   },
 });
 
+const getMyArticles = async (userId) => await db.Article.findAll({
+  attributes: [`id`, `title`, `createdAt`],
+  where: {
+    userId,
+  }
+});
+
 
 const testSelect = async (categoryId) => {
   return await db.Article.findAll({
@@ -228,4 +235,5 @@ module.exports = {
   getArticlesForCategory,
   getArticleIdListByCategoryId,
   getArticleById,
+  getMyArticles,
 };
