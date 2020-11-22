@@ -4,6 +4,11 @@ const articleRepository = require(`../repositories/article`);
 const commentRepository = require(`../repositories/comment`);
 const {CommentNotFoundError, ArticleNotFoundError} = require(`../errors/errors`);
 
+const createDateForPreview = (date) => {
+  const createDate = new Date(date);
+  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
+  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+};
 
 const getByArticleId = (articleId) => {
   if (!articleRepository.exists(articleId)) {
@@ -29,9 +34,23 @@ const add = (newCommentText, articleId) => {
   return commentRepository.save(newCommentText.text, articleId);
 };
 
+const getCommentsByUser = async (userId) => {
+  const commentsList = await commentRepository.getCommentsByUser(userId);
+  return Array(commentsList.length).fill({}).map((el, i) => {
+    return {
+      articleId: commentsList[i].comments.id,
+      comment: commentsList[i].comment,
+      createdAt: createDateForPreview(commentsList[i].createdAt),
+      title: commentsList[i].comments.title,
+      userName: `${commentsList[i].users.firstName} ${commentsList[i].users.lastName}`,
+    };
+  });
+};
+
 
 module.exports = {
   getByArticleId,
   remove,
   add,
+  getCommentsByUser,
 };

@@ -2,6 +2,7 @@
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const articleRepository = require(`./article`);
+const {db} = require(`../db/db-connect`);
 
 const exists = (commentId) => {
   const found = articleRepository.findAll()
@@ -29,10 +30,27 @@ const remove = (articleId, commentId) => {
   article.comments = deleteItemFromArray(comments, commentId);
 };
 
+const getCommentsByUser = async (userId) => db.Comment.findAll({
+  attributes: [`comment`, `createdAt`],
+  include: [{
+    model: db.Article,
+    as: `comments`,
+    attributes: [`id`, `title`],
+  }, {
+    model: db.User,
+    as: `users`,
+    attributes: [`firstName`, `lastName`],
+  }],
+  where: {
+    userId,
+  },
+});
+
 
 module.exports = {
   exists,
   findByArticleId,
   save,
   remove,
+  getCommentsByUser,
 };

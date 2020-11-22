@@ -44,6 +44,11 @@ Article.hasMany(Comment, {
   as: `comments`,
 });
 
+Comment.belongsTo(Article, {
+  foreignKey: `articleId`,
+  as: `comments`,
+});
+
 Article.hasMany(Image, {
   foreignKey: `articleId`,
   as: `images`,
