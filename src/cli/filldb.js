@@ -84,7 +84,7 @@ const getImages = (countArticles) => {
     for (let j = 1; j <= imageCount; j++) {
       const image = {
         articleId: i,
-        image: ImagesName[getRandomInt(Images.MIN, Images.MAX)],
+        image: `${ImagesName[getRandomInt(Images.MIN, Images.MAX)]}.jpg`,
       };
       images.push(image);
     }
