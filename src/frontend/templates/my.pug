@@ -7,7 +7,7 @@ block content
       section.main-page__notes.notes
         h1.notes__title Мои записи
         ul.notes__list
-          each article in articles
+          each article in myArticles.articles
             li.notes__list-item
               time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdAt}
               a.notes__item-text(href=`/articles/${article.id}`) #{article.title}
@@ -28,7 +28,7 @@ block content
             button.popup__button.button.button--popup-close(type='button', aria-label='Закрыть окно')
               | Закрыть окно
             .new-publication__form.form
-              form#newArticleForm(action='/offers/add', method='POST', enctype='multipart/form-data')
+              form#newArticleForm(action='http://localhost:8081/api/articles/add', method='POST', enctype='multipart/form-data')
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
@@ -40,6 +40,10 @@ block content
                       label
                         input.visually-hidden(type='file', name='newArticlePhoto')
                         | Обзор
+                  each category in myArticles.categories
+                    div(class=`new-publication__checkbox new-publication__checkbox--${category.category}`)
+                      input(type='checkbox', id=`checkbox-${category.category}`, name=`checkbox-category`, value=`${category.id}`)
+                      label(for=`checkbox-${category.category}`) #{category.category}
                   a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
                 .form__wrapper.form__wrapper--text
                   .form__field.form__field--publication-text

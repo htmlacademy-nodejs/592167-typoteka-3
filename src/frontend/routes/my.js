@@ -8,8 +8,8 @@ const {BACKEND_URL, MOCK_USER_ID} = require(`../../constants`);
 
 router.get(`/`, async (req, res) => {
   const response = await axios.get(`${BACKEND_URL}/api/articles/myArticles`);
-  const articles = response.data;
-  res.render(`my`, {articles});
+  const myArticles = response.data;
+  res.render(`my`, {myArticles});
 });
 
 router.get(`/comments`, async (req, res) => {

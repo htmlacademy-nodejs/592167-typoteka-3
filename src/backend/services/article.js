@@ -3,7 +3,7 @@
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
-const {COMMENTS_COUNT_FOR_MAIN_PAGE} = require(`../../constants`);
+const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
 
 
 const createDateForPreview = (date) => {
@@ -23,7 +23,6 @@ const getMostDiscussed = async () => {
 
 const getPreviewsForMainPage = async (queryParams) => {
   const response = await articleRepository.getPreviewsForMainPage(queryParams);
-  console.log(response);
   const comments = await articleRepository.getCommentsForArticle();
   return Array(response.length).fill({}).map((it, i) => {
     const el = {
@@ -39,9 +38,9 @@ const getPreviewsForMainPage = async (queryParams) => {
         category: cat.category,
       };
     });
-    const isArticleId = comments.find((com) => com.articleId === i + 1);
+    const isArticleId = comments.find((com) => com.articleId === el.id);
+    console.log(response);
     el.countComment = isArticleId ? isArticleId.dataValues.count : 0;
-    console.log(el);
     return el;
   });
 };
@@ -55,7 +54,31 @@ const findById = (id) => {
   return articleRepository.findById(id);
 };
 
-const create = (newArticle) => articleRepository.save(newArticle);
+const create = async (data) => {
+  // console.log(data);
+  // {
+  //   newArticleTitle: 'ещё один заголовок',
+  //   'checkbox-Железо': 'on',
+  //   'checkbox-Публицистика': 'on',
+  //   'checkbox-Кино': 'on',
+  //   newArticleAnnounce: 'анонс для публикации',
+  //   newArticleFullText: 'А тут будет текст для публикации',
+  //   image: 'b9f0f0e668f9e11beab1bef15b201ceb.jpg'
+  // }
+  const newArticle = {
+    'title': data.newArticleTitle,
+    'announce': data.newArticleAnnounce,
+    'description': data.newArticleFullText,
+    'userId': MOCK_USER_ID,
+  };
+
+  newArticle.categories = data[`checkbox-category`].map((el) => Number.parseInt(el, 10));
+
+  const image = {
+    image: data.image,
+  };
+  return articleRepository.save(newArticle, image);
+};
 
 const update = (newArticle, id) => {
   if (!articleRepository.exists(id)) {
@@ -167,13 +190,15 @@ const getArticleById = async (id) => {
 
 const getMyArticles = async (userId) => {
   const response = await articleRepository.getMyArticles(userId);
-  return Array(response.length).fill({}).map((el, i) => {
+  const categories = await categoryServices.getCategories();
+  const articles = Array(response.length).fill({}).map((el, i) => {
     return {
       id: response[i].id,
       title: response[i].title,
       createdAt: createDateForPreview(response[i].createdAt),
     };
   });
+  return {articles, categories};
 };
 
 

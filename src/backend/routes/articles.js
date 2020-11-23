@@ -3,6 +3,8 @@
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
 const {StatusCode} = require(`http-status-codes`);
+const multer = require(`multer`);
+const md5 = require(`md5`);
 
 const router = new Router();
 
@@ -15,6 +17,38 @@ const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`)
 const {MOCK_USER_ID} = require(`../../constants`);
 
 const KEYS_COUNT_NEW_ANNONCEMENTS = 6;
+
+const UPLOAD_DIR = `${__dirname}/../../static/upload`;
+
+const MimeTypeExtension = {
+  'image/png': `png`,
+  'image/jpeg': `jpg`,
+  'image/jpg': `jpg`,
+};
+
+const maxFileSize = 5 * 1024 * 1024;
+
+// Подготовка хранилища для сохранения файлов
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+  filename: (req, file, cb) => {
+    const fileExtention = MimeTypeExtension[file.mimetype];
+    cb(null, `${md5(Date.now())}.${fileExtention}`);
+  },
+});
+
+// Функция определяющая допустимые файлы для загрузки
+const fileFilter = (req, file, cb) => {
+  const allowTypes = Object.keys(MimeTypeExtension);
+  const isValid = allowTypes.includes(file.mimetype);
+  cb(null, isValid);
+};
+
+const upload = multer({
+  storage, fileFilter, limits: {
+    fileSize: maxFileSize,
+  }
+});
 
 
 router.get(`/`, async (req, res) => {
@@ -133,6 +167,18 @@ router.post(`/`, (req, res) => {
       logger.error(chalk.red(err));
       res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
     }
+  }
+});
+
+router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
+  try {
+    const data = req.body;
+    data.image = req.file.filename;
+
+    await articleService.create(data);
+    res.redirect(`http://localhost:8080/my`);
+  } catch (err) {
+    res.send(`some error`);
   }
 });
 

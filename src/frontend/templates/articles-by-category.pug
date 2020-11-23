@@ -28,7 +28,7 @@ block content
                     li.preview__breadcrumbs-item
                       a.preview__breadcrumbs-link(href=`/articles/category/${category.id}`) #{category.category}
                 .preview__background
-                  img.preview__background-image(src=`/img/${article.image}@1x.jpg`, width='460', height='240', srcset=`/img/${article.image}@1x.jpg 1x, /img/${article.image}@2x.jpg 2x`, alt='Фотография небоскреба')
+                  img.preview__background-image(src=`/upload/${article.image}`, width='460', height='240', srcset=`/upload/${article.image}`, alt='Фотография небоскреба')
                 time.preview__time(datetime='2019-03-21T20:33') #{article.createdAt}
                 h3.preview__name
                   a.preview__name-link(href='#') #{article.title}

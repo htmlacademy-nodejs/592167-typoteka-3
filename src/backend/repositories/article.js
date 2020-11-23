@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
+const {deleteItemFromArray} = require(`../../utils`);
 
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
@@ -94,18 +94,18 @@ const findById = (id) => articles.find((el) => el.id === id);
 
 const exists = (id) => findById(id) !== undefined;
 
-const save = (newArticle, id) => {
-  if (id) {
-    const article = findById(id);
-    const newContent = deleteItemFromArray(articles, id);
-    const tempArticle = Object.assign({}, article, newArticle);
-    newContent.push(tempArticle);
-    articles = newContent;
-  } else {
-    newArticle.id = getNewId();
-    articles.push(newArticle);
-  }
-  return newArticle.id;
+const save = async (newArticle, image) => {
+  const temp = await db.Article.create(newArticle);
+
+  image.articleId = temp.id;
+  await db.Image.create(image);
+
+  newArticle.categories.forEach(async (el) => {
+    const category = await db.Category.findByPk(el);
+    await temp.addCategories(category);
+  });
+
+  return temp;
 };
 
 const remove = (id) => {
