@@ -178,7 +178,7 @@ router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
     await articleService.create(data);
     res.redirect(`http://localhost:8080/my`);
   } catch (err) {
-    res.send(`some error`);
+    res.send(err);
   }
 });
 

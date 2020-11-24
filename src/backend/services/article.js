@@ -72,7 +72,12 @@ const create = async (data) => {
     'userId': MOCK_USER_ID,
   };
 
-  newArticle.categories = data[`checkbox-category`].map((el) => Number.parseInt(el, 10));
+  newArticle.categories = [];
+  if (Array.isArray(data[`checkbox-category`])) {
+    newArticle.categories = data[`checkbox-category`].map((el) => Number.parseInt(el, 10));
+  } else {
+    newArticle.categories.push(data[`checkbox-category`]);
+  }
 
   const image = {
     image: data.image,
