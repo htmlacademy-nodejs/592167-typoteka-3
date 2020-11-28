@@ -13,10 +13,8 @@ const logger = getLogger();
 
 const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
-const {ArticleNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
+const {ArticleNotFoundError} = require(`../errors/errors`);
 const {MOCK_USER_ID} = require(`../../constants`);
-
-const KEYS_COUNT_NEW_ANNONCEMENTS = 6;
 
 const UPLOAD_DIR = `${__dirname}/../../static/upload`;
 
@@ -155,21 +153,6 @@ router.get(`/:articleId`, async (req, res) => {
   }
 });
 
-router.post(`/`, (req, res) => {
-  if (Object.keys(req.body).length !== KEYS_COUNT_NEW_ANNONCEMENTS) {
-    res.status(StatusCode.BAD_REQUEST).send({code: 1, message: `Not all fields for a new article have been submitted`});
-  } else {
-    try {
-      const id = articleService.create(req.body);
-      res.status(StatusCode. CREATED).send({id});
-      logger.info(`End request with status code ${res.statusCode}`);
-    } catch (err) {
-      logger.error(chalk.red(err));
-      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-    }
-  }
-});
-
 router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
   try {
     const data = req.body;
@@ -182,77 +165,106 @@ router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
   }
 });
 
-router.put(`/:articleId`, (req, res) => {
-  if (Object.keys(req.body).length !== KEYS_COUNT_NEW_ANNONCEMENTS) {
-    res.status(StatusCode.BAD_REQUEST).send({code: 1, message: `Not all fields for a new article have been submitted`});
-  } else {
-    try {
-      const id = articleService.update(req.body, req.params.articleId);
-      res.status(StatusCode.CREATED).send({id});
-      logger.info(`End request with status code ${res.statusCode}`);
-    } catch (err) {
-      logger.error(chalk.red(err));
-      if (err instanceof ArticleNotFoundError) {
-        res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
-      } else {
-        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-      }
-    }
-  }
-});
-
-router.delete(`/:articleId`, (req, res) => {
+router.post(`/:articleId/comments`, async (req, res) => {
   try {
-    articleService.remove(req.params.articleId);
-    res.status(StatusCode.NO_CONTENT).end();
+    const data = req.body;
+    data.articleId = req.params.articleId;
+    commentService.add(data);
+    res.redirect(`http://localhost:8080/articles/${req.params.articleId}`);
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    if (err instanceof ArticleNotFoundError) {
-      res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
-    } else {
-      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-    }
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
+  // if (Object.keys(req.body).length !== 1) {
+  //   res.status(StatusCode.BAD_REQUEST).send({code: 2, message: `Not all fields for a new comment have been submitted`});
+  // } else {
+  //   const id = commentService.add(req.body, req.params.articleId);
+  //   res.status(StatusCode.CREATED).send({id});
+  //   logger.info(`End request with status code ${res.statusCode}`);
+  // }
 });
 
-router.get(`/:articleId/comments`, (req, res) => {
-  try {
-    res.send(commentService.getByArticleId(req.params.articleId));
-    logger.info(`End request with status code ${res.statusCode}`);
-  } catch (err) {
-    logger.error(chalk.red(err));
-    if (err instanceof ArticleNotFoundError) {
-      res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
-    } else {
-      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-    }
-  }
-});
+// router.post(`/`, (req, res) => {
+//   if (Object.keys(req.body).length !== KEYS_COUNT_NEW_ANNONCEMENTS) {
+//     res.status(StatusCode.BAD_REQUEST).send({code: 1, message: `Not all fields for a new article have been submitted`});
+//   } else {
+//     try {
+//       const id = articleService.create(req.body);
+//       res.status(StatusCode. CREATED).send({id});
+//       logger.info(`End request with status code ${res.statusCode}`);
+//     } catch (err) {
+//       logger.error(chalk.red(err));
+//       res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     }
+//   }
+// });
 
-router.delete(`/:articleId/comments/:commentId`, (req, res) => {
-  try {
-    commentService.remove(req.params.articleId, req.params.commentId);
-    res.status(StatusCode.NO_CONTENT).end();
-    logger.info(`End request with status code ${res.statusCode}`);
-  } catch (err) {
-    logger.error(chalk.red(err));
-    if (err instanceof CommentNotFoundError) {
-      res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
-    } else {
-      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-    }
-  }
-});
 
-router.post(`/:articleId/comments`, (req, res) => {
-  if (Object.keys(req.body).length !== 1) {
-    res.status(StatusCode.BAD_REQUEST).send({code: 2, message: `Not all fields for a new comment have been submitted`});
-  } else {
-    const id = commentService.add(req.body, req.params.articleId);
-    res.status(StatusCode.CREATED).send({id});
-    logger.info(`End request with status code ${res.statusCode}`);
-  }
-});
+// router.put(`/:articleId`, (req, res) => {
+//   if (Object.keys(req.body).length !== KEYS_COUNT_NEW_ANNONCEMENTS) {
+//     res.status(StatusCode.BAD_REQUEST).send({code: 1, message: `Not all fields for a new article have been submitted`});
+//   } else {
+//     try {
+//       const id = articleService.update(req.body, req.params.articleId);
+//       res.status(StatusCode.CREATED).send({id});
+//       logger.info(`End request with status code ${res.statusCode}`);
+//     } catch (err) {
+//       logger.error(chalk.red(err));
+//       if (err instanceof ArticleNotFoundError) {
+//         res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
+//       } else {
+//         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//       }
+//     }
+//   }
+// });
+
+// router.delete(`/:articleId`, (req, res) => {
+//   try {
+//     articleService.remove(req.params.articleId);
+//     res.status(StatusCode.NO_CONTENT).end();
+//     logger.info(`End request with status code ${res.statusCode}`);
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     if (err instanceof ArticleNotFoundError) {
+//       res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
+//     } else {
+//       res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     }
+//   }
+// });
+
+// router.get(`/:articleId/comments`, (req, res) => {
+//   try {
+//     res.send(`we are here`);
+//     // res.send(commentService.getByArticleId(req.params.articleId));
+//     logger.info(`End request with status code ${res.statusCode}`);
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     // if (err instanceof ArticleNotFoundError) {
+//     //   res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
+//     // } else {
+//     //   res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     // }
+//   }
+// });
+
+// router.delete(`/:articleId/comments/:commentId`, (req, res) => {
+//   try {
+//     commentService.remove(req.params.articleId, req.params.commentId);
+//     res.status(StatusCode.NO_CONTENT).end();
+//     logger.info(`End request with status code ${res.statusCode}`);
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     if (err instanceof CommentNotFoundError) {
+//       res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
+//     } else {
+//       res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     }
+//   }
+// });
+
 
 module.exports = router;

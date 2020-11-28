@@ -2,6 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
+const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
 
@@ -171,16 +172,14 @@ const getArticlesForCategory = async (categoryId) => {
 const getArticleById = async (id) => {
   const tempArticle = await articleRepository.getArticleById(id);
   const firstLine = tempArticle.shift();
+  const categoriesForArticle = firstLine.categories.map((el) => el.id);
+  const categories = await categoryRepository.getCategoryById(categoriesForArticle);
   return {
+    articleId: firstLine.id,
     title: firstLine.title,
     image: firstLine.images[0] ? firstLine.images[0].image : ``,
     createdAt: createDateForPreview(firstLine.createdAt),
-    categories: firstLine.categories.map((el) => {
-      return {
-        id: el.id,
-        category: el.category,
-      };
-    }),
+    categories,
     announce: firstLine.announce,
     comments: firstLine.comments.map((el) => {
       return {

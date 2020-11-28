@@ -1,6 +1,6 @@
 'use strict';
 
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
+const {deleteItemFromArray} = require(`../../utils`);
 const articleRepository = require(`./article`);
 const {db} = require(`../db/db-connect`);
 
@@ -13,16 +13,17 @@ const exists = (commentId) => {
 
 const findByArticleId = (articleId) => articleRepository.findById(articleId).comments;
 
-const save = (newCommentText, articleId) => {
-  const article = articleRepository.findById(articleId);
-  const newComment = {
-    id: getNewId(),
-    text: newCommentText
-  };
-  article.comments.push(newComment);
-
-  return newComment.id;
-};
+const save = (newComment) => db.Comment.create(newComment);
+// {
+//   const article = articleRepository.findById(articleId);
+//   const newComment = {
+//     id: getNewId(),
+//     text: newCommentText
+//   };
+//   article.comments.push(newComment);
+//
+//   return newComment.id;
+// };
 
 const remove = (articleId, commentId) => {
   const article = articleRepository.findById(articleId);

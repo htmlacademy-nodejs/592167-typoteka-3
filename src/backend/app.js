@@ -16,6 +16,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
 initializeRoutes(app);
 app.use((req, res) => {
   res.status(404).send({code: 404, message: `Page not found`});

@@ -3,6 +3,7 @@
 const articleRepository = require(`../repositories/article`);
 const commentRepository = require(`../repositories/comment`);
 const {CommentNotFoundError, ArticleNotFoundError} = require(`../errors/errors`);
+const {MOCK_USER_ID} = require(`../../constants`);
 
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
@@ -26,12 +27,18 @@ const remove = (articleId, commentId) => {
   return commentRepository.remove(articleId, commentId);
 };
 
-const add = (newCommentText, articleId) => {
-  if (!articleRepository.exists(articleId)) {
-    throw new ArticleNotFoundError(articleId);
-  }
-
-  return commentRepository.save(newCommentText.text, articleId);
+const add = (data) => {
+  const newComment = {
+    articleId: data.articleId,
+    userId: MOCK_USER_ID,
+    comment: data.comment,
+  };
+  return commentRepository.save(newComment);
+  // if (!articleRepository.exists(articleId)) {
+  //   throw new ArticleNotFoundError(articleId);
+  // }
+  //
+  // return commentRepository.save(newCommentText.text, articleId);
 };
 
 const getCommentsByUser = async (userId) => {
