@@ -141,7 +141,7 @@ router.get(`/categories/:id`, async (req, res) => {
 
 router.get(`/:articleId`, async (req, res) => {
   try {
-    res.send(await articleService.getArticleById(req.params.articleId));
+    res.send(await articleService.getArticleById(req.params.articleId, req.query.extension));
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
@@ -183,6 +183,18 @@ router.post(`/:articleId/comments`, async (req, res) => {
   //   res.status(StatusCode.CREATED).send({id});
   //   logger.info(`End request with status code ${res.statusCode}`);
   // }
+});
+
+router.post(`/edit/:articleId`, upload.single(`editArticlePhoto`), async (req, res) => {
+  try {
+    const data = req.body;
+    data.image = req.file.filename;
+
+    await articleService.edit(data, req.params.articleId);
+    res.redirect(`http://localhost:8080/articles/${req.params.articleId}`);
+  } catch (err) {
+    res.send(``);
+  }
 });
 
 // router.post(`/`, (req, res) => {

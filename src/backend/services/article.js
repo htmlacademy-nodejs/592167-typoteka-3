@@ -86,6 +86,24 @@ const create = async (data) => {
   return articleRepository.save(newArticle, image);
 };
 
+const edit = async (data, articleId) => {
+  const newArticle = {
+    'title': data.newArticleTitle,
+    'announce': data.newArticleAnnounce,
+    'description': data.newArticleFullText,
+    'userId': MOCK_USER_ID,
+  };
+
+  newArticle.categories = [];
+  if (Array.isArray(data[`checkbox-category`])) {
+    newArticle.categories = data[`checkbox-category`].map((el) => Number.parseInt(el, 10));
+  } else {
+    newArticle.categories.push(data[`checkbox-category`]);
+  }
+
+  return await articleRepository.edit(newArticle, articleId);
+};
+
 const update = (newArticle, id) => {
   if (!articleRepository.exists(id)) {
     throw new ArticleNotFoundError(id);
@@ -169,27 +187,39 @@ const getArticlesForCategory = async (categoryId) => {
   // return articles;
 };
 
-const getArticleById = async (id) => {
+const getArticleById = async (id, extension) => {
   const tempArticle = await articleRepository.getArticleById(id);
   const firstLine = tempArticle.shift();
   const categoriesForArticle = firstLine.categories.map((el) => el.id);
-  const categories = await categoryRepository.getCategoryById(categoriesForArticle);
-  return {
+
+  const article = {
     articleId: firstLine.id,
     title: firstLine.title,
     image: firstLine.images[0] ? firstLine.images[0].image : ``,
     createdAt: createDateForPreview(firstLine.createdAt),
-    categories,
     announce: firstLine.announce,
-    comments: firstLine.comments.map((el) => {
+    description: firstLine.description,
+    authorization: true,
+  };
+
+  if (extension === `post-info`) {
+    article.comments = firstLine.comments.map((el) => {
       return {
         comment: el.comment,
         createdAt: createDateForPreview(el.createdAt),
         user: `${el.users.firstName} ${el.users.lastName}`,
       };
-    }),
-    authorization: true,
-  };
+    });
+    article.categories = await categoryRepository.getCategoryById(categoriesForArticle);
+  } else if (extension === `edit`) {
+    const resCategories = await categoryRepository.findAll();
+    article.categories = resCategories.map((el) => {
+      el.dataValues.isChecked = categoriesForArticle.includes(el.id);
+      return el;
+    });
+  }
+
+  return article;
 };
 
 const getMyArticles = async (userId) => {
@@ -208,6 +238,7 @@ const getMyArticles = async (userId) => {
 
 module.exports = {
   create,
+  edit,
   update,
   remove,
   search,

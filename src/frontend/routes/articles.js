@@ -43,13 +43,14 @@ router.post(`/add`, async (req, res) => {
 });
 
 router.get(`/edit/:id`, async (req, res) => {
-  // const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
-  res.render(`new-post`);
+  const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=edit`);
+  const article = response.data;
+  res.render(`new-post`, {article});
 });
 
 router.get(`/:id`, async (req, res) => {
   try {
-    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}`);
+    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=post-info`);
     const article = resGetArticle.data;
     return res.render(`post`, {article});
   } catch (err) {

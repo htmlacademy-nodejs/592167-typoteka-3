@@ -23,9 +23,9 @@ block content
               .post__picture
                 img(src=`/upload/${article.image}`, alt='пейзаж море, скалы, пляж')
             .post__text
-              h3 Бирюзовое доверие
+              h3 #{article.announce}
               p
-                | #{article.announce}
+                | #{article.description}
         .post__wrapper.post__wrapper--comments
           section.post__comments.comments
             if article.comments.length > 0
