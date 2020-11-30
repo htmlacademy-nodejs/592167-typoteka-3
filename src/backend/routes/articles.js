@@ -14,7 +14,7 @@ const logger = getLogger();
 const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
-const {MOCK_USER_ID} = require(`../../constants`);
+const {MOCK_USER_ID, FRONTEND_URL} = require(`../../constants`);
 
 const UPLOAD_DIR = `${__dirname}/../../static/upload`;
 
@@ -159,7 +159,7 @@ router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
     data.image = req.file.filename;
 
     await articleService.create(data);
-    res.redirect(`http://localhost:8080/my`);
+    res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
     res.send(err);
   }
@@ -170,7 +170,7 @@ router.post(`/:articleId/comments`, async (req, res) => {
     const data = req.body;
     data.articleId = req.params.articleId;
     commentService.add(data);
-    res.redirect(`http://localhost:8080/articles/${req.params.articleId}`);
+    res.redirect(`${FRONTEND_URL}/articles/${req.params.articleId}`);
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
@@ -191,7 +191,7 @@ router.post(`/edit/:articleId`, upload.single(`editArticlePhoto`), async (req, r
     data.image = req.file.filename;
 
     await articleService.edit(data, req.params.articleId);
-    res.redirect(`http://localhost:8080/articles/${req.params.articleId}`);
+    res.redirect(`${FRONTEND_URL}/articles/${req.params.articleId}`);
   } catch (err) {
     res.send(``);
   }

@@ -11,6 +11,8 @@ const router = new Router();
 
 const categoriesService = require(`../services/categories`);
 
+const {FRONTEND_URL} = require(`../../constants`);
+
 router.get(`/`, async (req, res) => {
   try {
     res.send(await categoriesService.getCategories(req.query.categoriesList));
@@ -20,11 +22,21 @@ router.get(`/`, async (req, res) => {
   }
 });
 
+router.post(`/add`, async (req, res) => {
+  try {
+    await categoriesService.create(req.body);
+    res.redirect(`${FRONTEND_URL}/categories`);
+  } catch (err) {
+    logger.error(err);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+  }
+});
+
 router.post(`/edit/:categoryId`, async (req, res) => {
   try {
     console.log(req.body);
     await categoriesService.edit(req.body, req.params.categoryId);
-    res.redirect(`http://localhost:8080/categories`);
+    res.redirect(`${FRONTEND_URL}/categories`);
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});

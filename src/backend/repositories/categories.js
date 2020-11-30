@@ -39,6 +39,8 @@ const getCategoryById = (categories) => db.Category.findAll({
   },
 });
 
+const create = (data) => db.Category.create(data);
+
 const edit = (data, categoryId) => db.Category.update(data, {
   where: {
     id: categoryId,
@@ -49,5 +51,6 @@ module.exports = {
   findAll,
   categoriesOnly,
   getCategoryById,
+  create,
   edit,
 };

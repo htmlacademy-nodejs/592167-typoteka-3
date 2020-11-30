@@ -30,6 +30,7 @@ const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
 const MOCK_FILE_NAME = `mock.json`;
 const MOCK_USER_ID = 1;
 const BACKEND_URL = `http://localhost:8081`;
+const FRONTEND_URL = `http://localhost:8080`;
 
 
 module.exports = {
@@ -38,6 +39,7 @@ module.exports = {
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
   BACKEND_URL,
+  FRONTEND_URL,
   DEFAULT,
   COMMENTS_COUNT_FOR_MAIN_PAGE,
   MOCK_USER_ID,
