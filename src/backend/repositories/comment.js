@@ -45,6 +45,7 @@ const getCommentsByUser = async (userId) => db.Comment.findAll({
   where: {
     userId,
   },
+  order: [[`createdAt`, `desc`]],
 });
 
 
