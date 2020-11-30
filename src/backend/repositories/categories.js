@@ -39,8 +39,15 @@ const getCategoryById = (categories) => db.Category.findAll({
   },
 });
 
+const edit = (data, categoryId) => db.Category.update(data, {
+  where: {
+    id: categoryId,
+  },
+});
+
 module.exports = {
   findAll,
   categoriesOnly,
   getCategoryById,
+  edit,
 };

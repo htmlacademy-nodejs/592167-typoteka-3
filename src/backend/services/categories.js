@@ -10,6 +10,11 @@ const getCategories = async (queryString) => {
   }
 };
 
+const edit = async (data, categoryId) => {
+  return categoriesRepository.edit(data, categoryId);
+};
+
 module.exports = {
   getCategories,
+  edit,
 };
