@@ -2,7 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const commentRepository = require(`../repositories/comment`);
-const {CommentNotFoundError, ArticleNotFoundError} = require(`../errors/errors`);
+const {ArticleNotFoundError} = require(`../errors/errors`);
 const {MOCK_USER_ID} = require(`../../constants`);
 
 const createDateForPreview = (date) => {
@@ -19,13 +19,15 @@ const getByArticleId = (articleId) => {
   return commentRepository.findByArticleId(articleId);
 };
 
-const remove = (articleId, commentId) => {
-  if (!commentRepository.exists(commentId)) {
-    throw new CommentNotFoundError(articleId, commentId);
-  }
+// const remove = (articleId, commentId) => {
+//   if (!commentRepository.exists(commentId)) {
+//     throw new CommentNotFoundError(articleId, commentId);
+//   }
+//
+//   return commentRepository.remove(articleId, commentId);
+// };
 
-  return commentRepository.remove(articleId, commentId);
-};
+const remove = async (commentId) => await commentRepository.remove(commentId);
 
 const add = (data) => {
   const newComment = {
@@ -45,6 +47,7 @@ const getCommentsByUser = async (userId) => {
   const commentsList = await commentRepository.getCommentsByUser(userId);
   return Array(commentsList.length).fill({}).map((el, i) => {
     return {
+      id: commentsList[i].id,
       articleId: commentsList[i].comments.id,
       comment: commentsList[i].comment,
       createdAt: createDateForPreview(commentsList[i].createdAt),

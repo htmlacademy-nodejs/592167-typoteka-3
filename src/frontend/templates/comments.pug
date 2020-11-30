@@ -17,6 +17,6 @@ block content
                 | #{comment.comment}
               p.publication__text-strong
                 | #{comment.title}
-              button.publication__button.button.button--close-item(type='button')
+              button.publication__button.button.button--close-item(type='button', data-commentId=`${comment.id}`)
                 span.visually-hidden Закрыть строку списка
     include common/footer

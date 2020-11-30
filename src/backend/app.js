@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require(`express`);
+const cors = require(`cors`);
 const {initializeRoutes} = require(`./routes/index`);
 const {getLogger} = require(`./logger`);
 const logger = getLogger();
@@ -14,6 +15,19 @@ app.use((req, res, next) => {
   logger.debug(`Start request tot url ${req.url}`);
   next();
 });
+
+// app.use((req, res, next) => {
+//   // console.log(`middleware is work`);
+//   // console.log(req.headers);
+//   if (req.headers[`origin`] === `http://localhost:8080`) {
+//     // console.log(`домен совпадает`);
+//     res.headers[`Access-Control-Allow-Origin`] = `*`;
+//   }
+//   next();
+// });
+app.use(cors({
+  origin: `http://localhost:8080`,
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

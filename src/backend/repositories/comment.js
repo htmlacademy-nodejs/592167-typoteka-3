@@ -1,6 +1,5 @@
 'use strict';
 
-const {deleteItemFromArray} = require(`../../utils`);
 const articleRepository = require(`./article`);
 const {db} = require(`../db/db-connect`);
 
@@ -25,14 +24,20 @@ const save = (newComment) => db.Comment.create(newComment);
 //   return newComment.id;
 // };
 
-const remove = (articleId, commentId) => {
-  const article = articleRepository.findById(articleId);
-  const comments = article.comments;
-  article.comments = deleteItemFromArray(comments, commentId);
-};
+// const remove = (articleId, commentId) => {
+//   const article = articleRepository.findById(articleId);
+//   const comments = article.comments;
+//   article.comments = deleteItemFromArray(comments, commentId);
+// };
+
+const remove = async (commentId) => db.Comment.destroy({
+  where: {
+    id: commentId,
+  },
+});
 
 const getCommentsByUser = async (userId) => db.Comment.findAll({
-  attributes: [`comment`, `createdAt`],
+  attributes: [`id`, `comment`, `createdAt`],
   include: [{
     model: db.Article,
     as: `comments`,

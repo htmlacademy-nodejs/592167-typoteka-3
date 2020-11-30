@@ -1,5 +1,7 @@
 'use strict';
 
+const BACKEND_URL = `http://localhost:8081`;
+
 // eslint-disable-next-line no-undef
 const buttonNewArticle = document.querySelector(`.header__button-new`);
 // eslint-disable-next-line no-undef
@@ -11,7 +13,9 @@ const newArticleForm = document.querySelector(`#newArticleForm`);
 // eslint-disable-next-line no-undef
 const buttonSubmitForm = document.querySelector(`.new-publication__button`);
 // eslint-disable-next-line no-undef
-const buttonsDelete = document.querySelectorAll(`.js-delete-category`);
+const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
+// eslint-disable-next-line no-undef
+const buttonsDeleteComment = document.querySelectorAll(`.button--close-item`);
 
 buttonNewArticle.addEventListener(`click`, () => {
   newArticleModal.classList.remove(`invisible-block`);
@@ -30,10 +34,9 @@ if (buttonSubmitForm) {
   });
 }
 
-if (buttonsDelete) {
-  for (let i = 0; i < buttonsDelete.length; i++) {
-    buttonsDelete[i].addEventListener(`click`, (evt) => {
-      // console.log(evt.target.parentElement.action);
+if (buttonsDeleteCategory) {
+  for (let i = 0; i < buttonsDeleteCategory.length; i++) {
+    buttonsDeleteCategory[i].addEventListener(`click`, (evt) => {
       const form = evt.target.parentElement;
       let removeUrl = form.action.slice(0, -4);
       removeUrl = `${removeUrl}delete`;
@@ -41,8 +44,25 @@ if (buttonsDelete) {
       form.submit();
     });
   }
-  // buttonsDelete.addEventListener(`click`, (evt) => {
-  //   console.log(evt.target.parentElement());
-  // });
-  console.log(buttonsDelete);
+}
+
+if (buttonsDeleteComment) {
+  for (let btnCategory of buttonsDeleteComment) {
+    btnCategory.addEventListener(`click`, (evt) => {
+      const commentId = evt.target.getAttribute(`data-commentId`);
+      // eslint-disable-next-line no-undef
+      fetch(`${BACKEND_URL}/api/comments/delete/${commentId}`, {
+        mode: `cors`,
+        headers: {
+          'Access-Control-Allow-Origin': `*`,
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.isDelete) {
+            // eslint-disable-next-line no-undef
+            location.reload();
+          }
+        });
+    });
+  }
 }
