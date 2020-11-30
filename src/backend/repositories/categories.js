@@ -39,9 +39,15 @@ const getCategoryById = (categories) => db.Category.findAll({
   },
 });
 
-const create = (data) => db.Category.create(data);
+const create = async (data) => await db.Category.create(data);
 
-const edit = (data, categoryId) => db.Category.update(data, {
+const edit = async (data, categoryId) => await db.Category.update(data, {
+  where: {
+    id: categoryId,
+  },
+});
+
+const remove = async (categoryId) => await db.Category.destroy({
   where: {
     id: categoryId,
   },
@@ -53,4 +59,5 @@ module.exports = {
   getCategoryById,
   create,
   edit,
+  remove,
 };

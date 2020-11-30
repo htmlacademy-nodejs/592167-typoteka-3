@@ -15,10 +15,10 @@ block content
         ul.category__list
           each category in categories
             li.category__list-item
-              form(action=`http://localhost:8081/api/categories/edit/${category.id}`, method='POST')
+              form(action=`http://localhost:8081/api/categories/edit/${category.id}?extension=edit`, method='POST')
                 input(type='text', id=`modify-form-category-${category.id}`, name='category', value=`${category.category}`)
                 label(for='modify-form-category-1')
                   span.visually-hidden Редактировать категорию
                 button.category__button.button.button--category(type='submit') Сохранить
-                button.category__button.button.button--category(type='button') Удалить
+                button.category__button.button.button--category.js-delete-category(type='button') Удалить
     include common/footer

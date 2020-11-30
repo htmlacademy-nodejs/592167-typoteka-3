@@ -14,7 +14,10 @@ const create = (data) => {
   return categoriesRepository.create(data);
 };
 
-const edit = async (data, categoryId) => {
+const edit = async (data, categoryId, extension) => {
+  if (extension === `delete`) {
+    return categoriesRepository.remove(categoryId);
+  }
   return categoriesRepository.edit(data, categoryId);
 };
 

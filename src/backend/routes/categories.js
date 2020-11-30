@@ -34,8 +34,7 @@ router.post(`/add`, async (req, res) => {
 
 router.post(`/edit/:categoryId`, async (req, res) => {
   try {
-    console.log(req.body);
-    await categoriesService.edit(req.body, req.params.categoryId);
+    await categoriesService.edit(req.body, req.params.categoryId, req.query.extension);
     res.redirect(`${FRONTEND_URL}/categories`);
   } catch (err) {
     logger.error(chalk.red(err));
@@ -43,13 +42,13 @@ router.post(`/edit/:categoryId`, async (req, res) => {
   }
 });
 
-router.post(`/remove/:categoryId`, async (req, res) => {
-  try {
-    res.send(`/remove/:categoryId`);
-  } catch (err) {
-    logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-  }
-});
+// router.get(`/remove/:categoryId`, async (req, res) => {
+//   try {
+//     res.send(`/remove/:categoryId`);
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//   }
+// });
 
 module.exports = router;
