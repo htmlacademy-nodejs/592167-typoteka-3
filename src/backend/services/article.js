@@ -121,7 +121,16 @@ const remove = (id) => {
   return true;
 };
 
-const search = async (queryString) => await articleRepository.findByTitle(queryString);
+const search = async (queryString) => {
+  const resArticle = await articleRepository.findByTitle(queryString);
+  return Array(resArticle.length).fill({}).map((el, i) => {
+    return {
+      id: resArticle[i].id,
+      title: resArticle[i].title,
+      createdAt: createDateForPreview(resArticle[i].createdAt),
+    };
+  });
+};
 
 const getCountAllArticles = async () => {
   const resCount = await articleRepository.getCountAllArticles();

@@ -173,7 +173,7 @@ const remove = (id) => {
 
 const findByTitle = async (queryString) => {
   return await db.Article.findAll({
-    attributes: [`title`],
+    attributes: [`id`, `title`, `createdAt`],
     where: {
       title: {
         [Operator.substring]: queryString,

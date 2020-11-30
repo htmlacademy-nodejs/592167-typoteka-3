@@ -13,11 +13,11 @@ block content
                 input(type='text', name='search', placeholder='Что ищем?')
               button.search__button.button.button--transparent(type='submit') Найти
             if searchResult.length > 0
-              each item in searchResult
+              each article in searchResult
                 .search__result
-                  time.search__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
-                  a.search__link
-                    | #{item.title}
+                  time.search__date(datetime='2019-03-21T20:33') #{article.createdAt}
+                  a.search__link(href=`/articles/${article.id}`)
+                    | #{article.title}
           if searchResult.length === 0
             p.search-page__empty Ничего не нашлось
     include common/footer
