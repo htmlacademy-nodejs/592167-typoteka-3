@@ -8,9 +8,11 @@ const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
 
 
 const createDateForPreview = (date) => {
+  console.log(date);
   const createDate = new Date(date);
-  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
-  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+  const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
+  const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
+  return `${tempDay}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
 };
 
 const findAll = async () => await articleRepository.findAll();
