@@ -16,6 +16,23 @@ const buttonSubmitForm = document.querySelector(`.new-publication__button`);
 const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
 // eslint-disable-next-line no-undef
 const buttonsDeleteComment = document.querySelectorAll(`.button--close-item`);
+// eslint-disable-next-line no-undef
+const editArticlesList = document.querySelectorAll(`.notes__item-text`);
+
+// Набор полей для модального окна
+// eslint-disable-next-line no-undef
+const newArticleTitle = document.querySelector(`#newArticleTitle`);
+// eslint-disable-next-line no-undef
+const articleCreateAt = document.querySelector(`#new-publication-date`);
+// eslint-disable-next-line no-undef
+const imageNameField = document.querySelector(`#image-name-field`);
+// eslint-disable-next-line no-undef
+const newArticleAnnounce = document.querySelector(`#newArticleAnnounce`);
+// eslint-disable-next-line no-undef
+const newArticleFullText = document.querySelector(`#newArticleFullText`);
+// eslint-disable-next-line no-undef
+const newPublicationCheckbox = document.querySelectorAll(`.new-publication__checkbox`);
+
 
 buttonNewArticle.addEventListener(`click`, () => {
   newArticleModal.classList.remove(`invisible-block`);
@@ -23,6 +40,16 @@ buttonNewArticle.addEventListener(`click`, () => {
 
 if (buttonPopupClose) {
   buttonPopupClose.addEventListener(`click`, () => {
+    newArticleTitle.value = ``;
+    articleCreateAt.value = ``;
+    imageNameField.value = ``;
+    newArticleAnnounce.value = ``;
+    newArticleFullText.value = ``;
+    for (let category of newPublicationCheckbox) {
+      const checkboxCategory = category.querySelector(`input`);
+      checkboxCategory.checked = false;
+    }
+
     newArticleModal.classList.add(`invisible-block`);
   });
 }
@@ -66,3 +93,42 @@ if (buttonsDeleteComment) {
     });
   }
 }
+
+const fillArticleModal = (data) => {
+  newArticleTitle.value = data.title;
+  articleCreateAt.value = data.createdAt.slice(0, 10);
+  imageNameField.value = data.image;
+  newArticleAnnounce.value = data.announce;
+  newArticleFullText.value = data.description;
+  for (let [idx, category] of newPublicationCheckbox.entries()) {
+    const categoryLabel = category.querySelector(`label`);
+    if (data.categories[idx].isChecked) {
+      categoryLabel.click();
+    }
+  }
+
+  newArticleModal.classList.remove(`invisible-block`);
+};
+
+if (editArticlesList) {
+  for (let articleLink of editArticlesList) {
+    articleLink.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      const articleId = evt.target.getAttribute(`data-articleId`);
+      // eslint-disable-next-line no-undef
+      fetch(`${BACKEND_URL}/api/articles/${articleId}?extension=isFetch`, {
+        mode: `cors`,
+        headers: {
+          'Access-Control-Allow-Origin': `*`,
+        },
+      }).then((response) => {
+        return response.json();
+      }).then((data) => {
+        fillArticleModal(data);
+      }).catch((err) => {
+        console.error(err);
+      });
+    });
+  }
+}
+

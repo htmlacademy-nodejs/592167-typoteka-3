@@ -141,7 +141,11 @@ router.get(`/categories/:id`, async (req, res) => {
 
 router.get(`/:articleId`, async (req, res) => {
   try {
-    res.send(await articleService.getArticleById(req.params.articleId, req.query.extension));
+    if (req.query.extension === `isFetch`) {
+      res.json(await articleService.getArticleById(req.params.articleId, `edit`));
+    } else {
+      res.send(await articleService.getArticleById(req.params.articleId, req.query.extension));
+    }
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));

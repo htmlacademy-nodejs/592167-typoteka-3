@@ -10,7 +10,7 @@ block content
           each article in myArticles.articles
             li.notes__list-item
               time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdAt}
-              a.notes__item-text(href=`/articles/${article.id}`) #{article.title}
+              a.notes__item-text(href=`/articles/${article.id}`, data-articleId=`${article.id}`) #{article.title}
               button.notes__button.button.button--close-item(type='button')
                 span.visually-hidden Закрыть строку списка
       section#newArticleModal.modal.modal--flex.invisible-block
@@ -32,13 +32,13 @@ block content
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
-                      input(type='text', name='newArticleTitle', placeholder='Заголовок', required='')
+                      input(type='text', name='newArticleTitle', id='newArticleTitle', placeholder='Заголовок', required='')
                   .form__field.form__field--post-image
                     label
                       input#image-name-field(type='text', placeholder='Фотография', readonly='')
                     .form__image-loader.form__image-loader--publication
                       label
-                        input.visually-hidden(type='file', name='newArticlePhoto')
+                        input.visually-hidden(type='file', name='newArticlePhoto', id='newArticlePhoto')
                         | Обзор
                   each category in myArticles.categories
                     div(class=`new-publication__checkbox new-publication__checkbox--${category.category}`)
@@ -48,9 +48,9 @@ block content
                 .form__wrapper.form__wrapper--text
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', name='newArticleAnnounce', placeholder='Анонс публикации')
+                      textarea(rows='1', name='newArticleAnnounce', id='newArticleAnnounce', placeholder='Анонс публикации')
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', name='newArticleFullText', placeholder='Полный текст публикации')
+                      textarea(rows='1', name='newArticleFullText', id='newArticleFullText', placeholder='Полный текст публикации')
         .modal__overlay
     include common/footer
