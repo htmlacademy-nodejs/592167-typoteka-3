@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
-const {deleteItemFromArray} = require(`../../utils`);
+// const {deleteItemFromArray} = require(`../../utils`);
 
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
@@ -167,8 +167,65 @@ const edit = async (newArticle, articleId) => {
 //   },
 // });
 
-const remove = (id) => {
-  articles = deleteItemFromArray(articles, id);
+// const remove = (id) => {
+//   articles = deleteItemFromArray(articles, id);
+// };
+
+const remove = async (articleId) => {
+  try {
+    await db.Comment.destroy({
+      where: {
+        articleId,
+      },
+    });
+
+    await db.Image.destroy({
+      where: {
+        articleId,
+      },
+    });
+
+    const temp = await db.Article.findOne({
+      attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
+      include: [{
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      }, {
+        model: db.Comment,
+        as: `comments`,
+        attributes: [`comment`, `createdAt`],
+        include: {
+          model: db.User,
+          as: `users`,
+          attributes: [`firstName`, `lastName`],
+        }
+      }, {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`id`, `category`],
+      }],
+      where: {
+        id: articleId,
+      },
+    });
+
+    const currentCategoriesList = temp.categories.map((el) => el.dataValues.id);
+
+    currentCategoriesList.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await temp.removeCategories(category);
+    });
+
+    return await db.Article.destroy({
+      where: {
+        id: articleId,
+      },
+    });
+  } catch (err) {
+    return err.message;
+  }
 };
 
 const findByTitle = async (queryString) => {

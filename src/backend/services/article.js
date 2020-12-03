@@ -114,14 +114,16 @@ const update = (newArticle, id) => {
   return articleRepository.save(newArticle, id);
 };
 
-const remove = (id) => {
-  if (!articleRepository.exists(id)) {
-    throw new ArticleNotFoundError(id);
-  }
+// const remove = (id) => {
+//   if (!articleRepository.exists(id)) {
+//     throw new ArticleNotFoundError(id);
+//   }
+//
+//   articleRepository.remove(id);
+//   return true;
+// };
 
-  articleRepository.remove(id);
-  return true;
-};
+const remove = async (articleId) => await articleRepository.remove(articleId);
 
 const search = async (queryString) => {
   const resArticle = await articleRepository.findByTitle(queryString);

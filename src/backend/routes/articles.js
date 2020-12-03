@@ -56,7 +56,10 @@ router.get(`/`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
 });
 
@@ -72,7 +75,10 @@ router.get(`/previewsForMainPage`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
 });
 
@@ -82,7 +88,10 @@ router.get(`/comments`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
 });
 
@@ -92,7 +101,10 @@ router.get(`/mostDiscussed`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
 });
 
@@ -101,7 +113,10 @@ router.get(`/countAllArticles`, async (req, res) => {
     res.send(await articleService.getCountAllArticles());
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
   }
 });
 
@@ -110,7 +125,10 @@ router.get(`/myArticles`, async (req, res) => {
     res.send(await articleService.getMyArticles(MOCK_USER_ID));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
   }
 });
 
@@ -135,7 +153,10 @@ router.get(`/categories/:id`, async (req, res) => {
     res.send(await articleService.getArticlesForCategory(req.params.id));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal server error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
   }
 });
 
@@ -152,7 +173,10 @@ router.get(`/:articleId`, async (req, res) => {
     if (err instanceof ArticleNotFoundError) {
       res.status(StatusCode.GONE).send({code: StatusCode.GONE, message: err.message});
     } else {
-      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+        code: StatusCode.INTERNAL_SERVER_ERROR,
+        message: `Internal service error`
+      });
     }
   }
 });
@@ -178,7 +202,10 @@ router.post(`/:articleId/comments`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
   // if (Object.keys(req.body).length !== 1) {
   //   res.status(StatusCode.BAD_REQUEST).send({code: 2, message: `Not all fields for a new comment have been submitted`});
@@ -189,15 +216,25 @@ router.post(`/:articleId/comments`, async (req, res) => {
   // }
 });
 
-router.post(`/edit/:articleId`, upload.single(`editArticlePhoto`), async (req, res) => {
+router.post(`/edit/:articleId`, upload.single(`newArticlePhoto`), async (req, res) => {
   try {
     const data = req.body;
     data.image = req.file.filename;
 
     await articleService.edit(data, req.params.articleId);
-    res.redirect(`${FRONTEND_URL}/articles/${req.params.articleId}`);
+    res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
     res.send(``);
+  }
+});
+
+router.get(`/delete/:articleId`, async (req, res) => {
+  try {
+    await articleService.remove(req.params.articleId);
+    return res.json({isDelete: true});
+  } catch (err) {
+    logger.error(err);
+    return res.json({isDeleted: `${err.message}`});
   }
 });
 

@@ -15,9 +15,11 @@ const buttonSubmitForm = document.querySelector(`.new-publication__button`);
 // eslint-disable-next-line no-undef
 const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
 // eslint-disable-next-line no-undef
-const buttonsDeleteComment = document.querySelectorAll(`.button--close-item`);
+const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
 // eslint-disable-next-line no-undef
 const editArticlesList = document.querySelectorAll(`.notes__item-text`);
+// eslint-disable-next-line no-undef
+const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
 
 // Набор полей для модального окна
 // eslint-disable-next-line no-undef
@@ -35,6 +37,7 @@ const newPublicationCheckbox = document.querySelectorAll(`.new-publication__chec
 
 
 buttonNewArticle.addEventListener(`click`, () => {
+  newArticleForm.action = `${BACKEND_URL}/api/articles/add`;
   newArticleModal.classList.remove(`invisible-block`);
 });
 
@@ -94,7 +97,29 @@ if (buttonsDeleteComment) {
   }
 }
 
+if (buttonsDeleteArticle) {
+  for (let btnArticle of buttonsDeleteArticle) {
+    btnArticle.addEventListener(`click`, (evt) => {
+      const articleId = evt.target.getAttribute(`data-articleId`);
+      // eslint-disable-next-line no-undef
+      fetch(`${BACKEND_URL}/api/articles/delete/${articleId}`, {
+        mode: `cors`,
+        headers: {
+          'Access-Control-Allow-Origin': `*`,
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.isDelete) {
+            // eslint-disable-next-line no-undef
+            location.reload();
+          }
+        });
+    });
+  }
+}
+
 const fillArticleModal = (data) => {
+  newArticleForm.action = `${BACKEND_URL}/api/articles/edit/${data.articleId}`;
   newArticleTitle.value = data.title;
   articleCreateAt.value = data.createdAt.slice(0, 10);
   imageNameField.value = data.image;

@@ -11,7 +11,7 @@ block content
             li.notes__list-item
               time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdAt}
               a.notes__item-text(href=`/articles/${article.id}`, data-articleId=`${article.id}`) #{article.title}
-              button.notes__button.button.button--close-item(type='button')
+              button.notes__button.button.button--close-item(type='button', data-articleId=`${article.id}`)
                 span.visually-hidden Закрыть строку списка
       section#newArticleModal.modal.modal--flex.invisible-block
         .popup.popup--new-publication.popup--flex
