@@ -156,35 +156,13 @@ const edit = async (newArticle, articleId) => {
 
     return temp;
   } catch (err) {
-    console.log(`error message`);
     return err.message;
   }
 };
 
-// const removeAllCategoriesByArticleId = (articleId) => db.ArticlesToCategories.destroy({
-//   where: {
-//     articleId,
-//   },
-// });
-
-// const remove = (id) => {
-//   articles = deleteItemFromArray(articles, id);
-// };
 
 const remove = async (articleId) => {
   try {
-    await db.Comment.destroy({
-      where: {
-        articleId,
-      },
-    });
-
-    await db.Image.destroy({
-      where: {
-        articleId,
-      },
-    });
-
     const temp = await db.Article.findOne({
       attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
       include: [{
@@ -211,12 +189,32 @@ const remove = async (articleId) => {
       },
     });
 
+    await db.Comment.destroy({
+      where: {
+        articleId,
+      },
+    });
+
+    await db.Image.destroy({
+      where: {
+        articleId,
+      },
+    });
+
     const currentCategoriesList = temp.categories.map((el) => el.dataValues.id);
 
     currentCategoriesList.forEach(async (el) => {
       const category = await db.Category.findByPk(el);
       await temp.removeCategories(category);
     });
+
+    if (temp.images && temp.images[0]) {
+      try {
+        fs.unlinkSync(`${__dirname}/../../static/upload/${temp.images[0].dataValues.image}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
     return await db.Article.destroy({
       where: {
