@@ -5,6 +5,10 @@ block content
     include common/header
     main.main-page.main-page--padding
       section.main-page__notes.notes
+        //.ErrorsByAdd
+        //  each error in myArticles.errorList
+        //    p
+        //      | #{error}
         h1.notes__title Мои записи
         ul.notes__list
           each article in myArticles.articles
@@ -24,7 +28,7 @@ block content
                   .new-publication__date-block
                     label(for='new-publication-date', aria-label='Календарь')
                     input#new-publication-date(type='text', name='login', placeholder='21.03.2019')
-              button.new-publication__button.button.button--colored(type='submit') Опубликовать
+              button.new-publication__button.button.button--colored(type='button') Опубликовать
             button.popup__button.button.button--popup-close(type='button', aria-label='Закрыть окно')
               | Закрыть окно
             .new-publication__form.form
@@ -32,7 +36,7 @@ block content
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
-                      input(type='text', name='newArticleTitle', id='newArticleTitle', placeholder='Заголовок', required='')
+                      input(type='text', name='newArticleTitle', id='newArticleTitle', placeholder='Заголовок', required='', minlength=30, maxlength=250)
                   .form__field.form__field--post-image
                     label
                       input#image-name-field(type='text', placeholder='Фотография', readonly='')
@@ -48,9 +52,10 @@ block content
                 .form__wrapper.form__wrapper--text
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', name='newArticleAnnounce', id='newArticleAnnounce', placeholder='Анонс публикации')
+                      textarea(rows='1', name='newArticleAnnounce', id='newArticleAnnounce', placeholder='Анонс публикации', required='', minlength=30, maxlength=250)
                   .form__field.form__field--publication-text
                     label
-                      textarea(rows='1', name='newArticleFullText', id='newArticleFullText', placeholder='Полный текст публикации')
+                      textarea(rows='1', name='newArticleFullText', id='newArticleFullText', placeholder='Полный текст публикации', required='', maxlength=1000)
+                button#submitMainForm(type=`submit`)
         .modal__overlay
     include common/footer

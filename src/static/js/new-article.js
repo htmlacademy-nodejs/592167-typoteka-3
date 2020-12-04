@@ -11,7 +11,9 @@ const buttonPopupClose = document.querySelector(`.button--popup-close`);
 // eslint-disable-next-line no-undef
 const newArticleForm = document.querySelector(`#newArticleForm`);
 // eslint-disable-next-line no-undef
-const buttonSubmitForm = document.querySelector(`.new-publication__button`);
+const buttonSubmitForm = document.querySelector(`#submitMainForm`);
+// eslint-disable-next-line no-undef
+const buttonSubmitFake = document.querySelector(`.new-publication__button`);
 // eslint-disable-next-line no-undef
 const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
 // eslint-disable-next-line no-undef
@@ -57,10 +59,10 @@ if (buttonPopupClose) {
   });
 }
 
-if (buttonSubmitForm) {
-  buttonSubmitForm.addEventListener(`click`, () => {
-    newArticleForm.submit();
-    newArticleModal.classList.add(`invisible-block`);
+if (buttonSubmitFake) {
+  buttonSubmitFake.addEventListener(`click`, () => {
+    buttonSubmitForm.click();
+    // newArticleModal.classList.add(`invisible-block`);
   });
 }
 

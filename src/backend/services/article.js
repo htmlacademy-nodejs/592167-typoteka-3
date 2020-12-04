@@ -6,6 +6,11 @@ const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
 
+const checkArticle = require(`../validation-schemas/article-shema`);
+
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
+
 
 const createDateForPreview = (date) => {
   console.log(date);
@@ -58,16 +63,6 @@ const findById = (id) => {
 };
 
 const create = async (data) => {
-  // console.log(data);
-  // {
-  //   newArticleTitle: 'ещё один заголовок',
-  //   'checkbox-Железо': 'on',
-  //   'checkbox-Публицистика': 'on',
-  //   'checkbox-Кино': 'on',
-  //   newArticleAnnounce: 'анонс для публикации',
-  //   newArticleFullText: 'А тут будет текст для публикации',
-  //   image: 'b9f0f0e668f9e11beab1bef15b201ceb.jpg'
-  // }
   const newArticle = {
     'title': data.newArticleTitle,
     'announce': data.newArticleAnnounce,
@@ -85,7 +80,12 @@ const create = async (data) => {
   const image = {
     image: data.image,
   };
-  return articleRepository.save(newArticle, image);
+
+  checkArticle.validateAsync(newArticle)
+    .then((response) => {
+      return articleRepository.save(response, image);
+    })
+    .catch((err) => logger.error(err));
 };
 
 const edit = async (data, articleId) => {
