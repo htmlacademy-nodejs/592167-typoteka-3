@@ -62,7 +62,6 @@ if (buttonPopupClose) {
 if (buttonSubmitFake) {
   buttonSubmitFake.addEventListener(`click`, () => {
     buttonSubmitForm.click();
-    // newArticleModal.classList.add(`invisible-block`);
   });
 }
 

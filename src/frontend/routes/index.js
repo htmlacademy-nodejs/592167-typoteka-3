@@ -32,7 +32,6 @@ const initializeRoutes = (app) => {
     allElements.previews.map((it) => {
       const dataCreate = new Date(it.createdAt);
       it.createdAt = createDateForPreview(dataCreate);
-      // it.categories = it.categories.split(`, `);
       return it;
     });
 
@@ -57,9 +56,6 @@ const initializeRoutes = (app) => {
         };
       });
     }
-
-    // console.log(req.params.start);
-    // console.log(paginationStep);
 
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
     const mainPage = {

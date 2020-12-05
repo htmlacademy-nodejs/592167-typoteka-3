@@ -42,13 +42,5 @@ router.post(`/edit/:categoryId`, async (req, res) => {
   }
 });
 
-// router.get(`/remove/:categoryId`, async (req, res) => {
-//   try {
-//     res.send(`/remove/:categoryId`);
-//   } catch (err) {
-//     logger.error(chalk.red(err));
-//     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
-//   }
-// });
 
 module.exports = router;

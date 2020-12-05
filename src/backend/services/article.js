@@ -114,14 +114,6 @@ const update = (newArticle, id) => {
   return articleRepository.save(newArticle, id);
 };
 
-// const remove = (id) => {
-//   if (!articleRepository.exists(id)) {
-//     throw new ArticleNotFoundError(id);
-//   }
-//
-//   articleRepository.remove(id);
-//   return true;
-// };
 
 const remove = async (articleId) => await articleRepository.remove(articleId);
 
@@ -197,7 +189,6 @@ const getArticlesForCategory = async (categoryId) => {
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
   return {categoriesList, articles, categoryActive};
-  // return articles;
 };
 
 const getArticleById = async (id, extension) => {

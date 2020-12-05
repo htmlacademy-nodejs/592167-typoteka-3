@@ -16,15 +16,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use((req, res, next) => {
-//   // console.log(`middleware is work`);
-//   // console.log(req.headers);
-//   if (req.headers[`origin`] === `http://localhost:8080`) {
-//     // console.log(`домен совпадает`);
-//     res.headers[`Access-Control-Allow-Origin`] = `*`;
-//   }
-//   next();
-// });
 app.use(cors({
   origin: `http://localhost:8080`,
 }));

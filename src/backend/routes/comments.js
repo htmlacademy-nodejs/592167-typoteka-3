@@ -9,7 +9,6 @@ const logger = getLogger();
 const router = new Router();
 const commentsService = require(`../services/comment`);
 
-// const {FRONTEND_URL} = require(`../../constants`);
 
 router.get(`/:userId`, async (req, res) => {
   try {

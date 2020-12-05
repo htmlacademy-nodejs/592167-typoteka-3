@@ -24,14 +24,6 @@ const getByArticleId = (articleId) => {
   return commentRepository.findByArticleId(articleId);
 };
 
-// const remove = (articleId, commentId) => {
-//   if (!commentRepository.exists(commentId)) {
-//     throw new CommentNotFoundError(articleId, commentId);
-//   }
-//
-//   return commentRepository.remove(articleId, commentId);
-// };
-
 const remove = async (commentId) => await commentRepository.remove(commentId);
 
 const add = (data) => {
@@ -46,11 +38,6 @@ const add = (data) => {
       return await commentRepository.save(response);
     })
     .catch((err) => logger.error(err));
-  // if (!articleRepository.exists(articleId)) {
-  //   throw new ArticleNotFoundError(articleId);
-  // }
-  //
-  // return commentRepository.save(newCommentText.text, articleId);
 };
 
 const getCommentsByUser = async (userId) => {

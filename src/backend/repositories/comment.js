@@ -13,22 +13,6 @@ const exists = (commentId) => {
 const findByArticleId = (articleId) => articleRepository.findById(articleId).comments;
 
 const save = (newComment) => db.Comment.create(newComment);
-// {
-//   const article = articleRepository.findById(articleId);
-//   const newComment = {
-//     id: getNewId(),
-//     text: newCommentText
-//   };
-//   article.comments.push(newComment);
-//
-//   return newComment.id;
-// };
-
-// const remove = (articleId, commentId) => {
-//   const article = articleRepository.findById(articleId);
-//   const comments = article.comments;
-//   article.comments = deleteItemFromArray(comments, commentId);
-// };
 
 const remove = async (commentId) => db.Comment.destroy({
   where: {
