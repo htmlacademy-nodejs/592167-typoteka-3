@@ -5,6 +5,11 @@ const commentRepository = require(`../repositories/comment`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 const {MOCK_USER_ID} = require(`../../constants`);
 
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
+
+const checkComment = require(`../validation-schemas/comment-shema`);
+
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
   const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
@@ -35,7 +40,12 @@ const add = (data) => {
     userId: MOCK_USER_ID,
     comment: data.comment,
   };
-  return commentRepository.save(newComment);
+
+  checkComment.validateAsync(newComment)
+    .then(async (response) => {
+      return await commentRepository.save(response);
+    })
+    .catch((err) => logger.error(err));
   // if (!articleRepository.exists(articleId)) {
   //   throw new ArticleNotFoundError(articleId);
   // }
