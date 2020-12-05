@@ -56,6 +56,6 @@ block content
                   .form__field.form__field--publication-text
                     label
                       textarea(rows='1', name='newArticleFullText', id='newArticleFullText', placeholder='Полный текст публикации', required='', maxlength=1000)
-                button#submitMainForm(type=`submit`)
+                button#submitMainForm.visually-hidden(type=`submit`)
         .modal__overlay
     include common/footer

@@ -82,8 +82,8 @@ const create = async (data) => {
   };
 
   checkArticle.validateAsync(newArticle)
-    .then((response) => {
-      return articleRepository.save(response, image);
+    .then(async (response) => {
+      return await articleRepository.save(response, image);
     })
     .catch((err) => logger.error(err));
 };
