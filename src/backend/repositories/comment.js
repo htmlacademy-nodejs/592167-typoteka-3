@@ -1,7 +1,7 @@
 'use strict';
 
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const articleRepository = require(`./article`);
+const {db} = require(`../db/db-connect`);
 
 const exists = (commentId) => {
   const found = articleRepository.findAll()
@@ -12,22 +12,30 @@ const exists = (commentId) => {
 
 const findByArticleId = (articleId) => articleRepository.findById(articleId).comments;
 
-const save = (newCommentText, articleId) => {
-  const article = articleRepository.findById(articleId);
-  const newComment = {
-    id: getNewId(),
-    text: newCommentText
-  };
-  article.comments.push(newComment);
+const save = (newComment) => db.Comment.create(newComment);
 
-  return newComment.id;
-};
+const remove = async (commentId) => db.Comment.destroy({
+  where: {
+    id: commentId,
+  },
+});
 
-const remove = (articleId, commentId) => {
-  const article = articleRepository.findById(articleId);
-  const comments = article.comments;
-  article.comments = deleteItemFromArray(comments, commentId);
-};
+const getCommentsByUser = async (userId) => db.Comment.findAll({
+  attributes: [`id`, `comment`, `createdAt`],
+  include: [{
+    model: db.Article,
+    as: `comments`,
+    attributes: [`id`, `title`],
+  }, {
+    model: db.User,
+    as: `users`,
+    attributes: [`firstName`, `lastName`],
+  }],
+  where: {
+    userId,
+  },
+  order: [[`createdAt`, `desc`]],
+});
 
 
 module.exports = {
@@ -35,4 +43,5 @@ module.exports = {
   findByArticleId,
   save,
   remove,
+  getCommentsByUser,
 };

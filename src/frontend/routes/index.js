@@ -5,7 +5,9 @@ const {BACKEND_URL, DEFAULT} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
 const myRoutes = require(`./my`);
-const offersRoutes = require(`./offers`);
+const articlesRoutes = require(`./articles`);
+const errorsRoutes = require(`./errors`);
+const categoriesRoutes = require(`./categories`);
 
 const createDateForPreview = (date) => {
   const createDate = new Date(date);
@@ -15,13 +17,13 @@ const createDateForPreview = (date) => {
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
-  app.use(`/offers`, offersRoutes);
+  app.use(`/articles`, articlesRoutes);
+  app.use(`/errors`, errorsRoutes);
+  app.use(`/categories`, categoriesRoutes);
 
   app.get(`/`, async (req, res) => {
-    let queryString = ``;
-    if (Object.keys(req.query).length === 0) {
-      queryString = `?start=1&count=8&offer=desc`;
-    } else {
+    let queryString = `?start=1&count=8&offer=desc`;
+    if (Object.keys(req.query).length !== 0) {
       queryString = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
     }
     const resAllElements = await axios.get(`${BACKEND_URL}/api/articles${queryString}`);
@@ -30,7 +32,6 @@ const initializeRoutes = (app) => {
     allElements.previews.map((it) => {
       const dataCreate = new Date(it.createdAt);
       it.createdAt = createDateForPreview(dataCreate);
-      it.categories = it.categories.split(`, `);
       return it;
     });
 
@@ -55,9 +56,6 @@ const initializeRoutes = (app) => {
         };
       });
     }
-
-    console.log(req.params.start);
-    console.log(paginationStep);
 
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
     const mainPage = {

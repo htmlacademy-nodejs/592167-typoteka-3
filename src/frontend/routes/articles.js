@@ -1,0 +1,36 @@
+'use strict';
+
+const axios = require(`axios`);
+const {BACKEND_URL} = require(`../../constants`);
+
+const {Router} = require(`express`);
+const router = new Router();
+
+
+router.get(`/add`, (req, res) => {
+  res.render(`new-post`);
+});
+
+router.get(`/edit/:id`, async (req, res) => {
+  const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=edit`);
+  const article = response.data;
+  res.render(`new-post`, {article});
+});
+
+router.get(`/:id`, async (req, res) => {
+  try {
+    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=post-info`);
+    const article = resGetArticle.data;
+    return res.render(`post`, {article});
+  } catch (err) {
+    return res.render(`error/500`, {err});
+  }
+});
+
+router.get(`/category/:id`, async (req, res) => {
+  const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}`);
+  const articlesByCategory = resArticlesForCategory.data;
+  res.render(`articles-by-category`, {articlesByCategory});
+});
+
+module.exports = router;

@@ -26,9 +26,11 @@ const ArticlesToCategories = {
 };
 
 const Images = {
-  MIN: 1,
-  MAX: 3,
+  MIN: 0,
+  MAX: 2,
 };
+
+const ImagesName = [`forest`, `sea`, `skyscraper`];
 
 const Comments = {
   MIN: 0,
@@ -52,10 +54,10 @@ const getArticles = (countArticles, announcements, titles) => {
     const announce = announcements[getRandomInt(0, announcements.length - 2)];
     const userId = getRandomInt(UserRoles.MIN, UserRoles.MAX);
     const article = {
-      title: title,
-      announce: announce,
+      title,
+      announce,
       description: `${title} ${announce}`,
-      userId: userId,
+      userId,
     };
 
     articles.push(article);
@@ -82,7 +84,7 @@ const getImages = (countArticles) => {
     for (let j = 1; j <= imageCount; j++) {
       const image = {
         articleId: i,
-        image: `image${j}`,
+        image: `${ImagesName[getRandomInt(Images.MIN, Images.MAX)]}.jpg`,
       };
       images.push(image);
     }
@@ -106,7 +108,7 @@ const getComments = (countArticles, commentsList) => {
   }
 
   return comments;
-}
+};
 
 module.exports = {
   name: `--filldb`,
@@ -158,7 +160,7 @@ module.exports = {
       articlesToCategories: getArticlesToCategories(countArticles),
       images: getImages(countArticles),
       comments: getComments(countArticles, commentsList),
-      countArticles: countArticles,
+      countArticles,
     };
 
     initDb(dbData);

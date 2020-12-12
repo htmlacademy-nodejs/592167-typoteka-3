@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
@@ -31,8 +30,7 @@ const findAll = async () => {
 };
 
 const getLastComments = async () => await db.Comment.findAll({
-  attributes: [`comment`],
-  as: `comments`,
+  attributes: [`comment`, `articleId`],
   order: [[`createdAt`, `DESC`]],
   limit: COMMENTS_COUNT_FOR_MAIN_PAGE,
 });
@@ -61,7 +59,7 @@ const getPreviewsForMainPage = async (queryParams) => {
       {
         model: db.Category,
         as: `categories`,
-        attributes: [`category`],
+        attributes: [`id`, `category`],
       },
       {
         model: db.Image,
@@ -95,27 +93,145 @@ const findById = (id) => articles.find((el) => el.id === id);
 
 const exists = (id) => findById(id) !== undefined;
 
-const save = (newArticle, id) => {
-  if (id) {
-    const article = findById(id);
-    const newContent = deleteItemFromArray(articles, id);
-    const tempArticle = Object.assign({}, article, newArticle);
-    newContent.push(tempArticle);
-    articles = newContent;
-  } else {
-    newArticle.id = getNewId();
-    articles.push(newArticle);
+const save = async (newArticle, image) => {
+  try {
+    const temp = await db.Article.create(newArticle);
+
+    image.articleId = temp.id;
+    await db.Image.create(image);
+
+    newArticle.categories.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await temp.addCategories(category);
+    });
+
+    return temp;
+  } catch (err) {
+    return err;
   }
-  return newArticle.id;
 };
 
-const remove = (id) => {
-  articles = deleteItemFromArray(articles, id);
+const edit = async (newArticle, articleId) => {
+  try {
+    const temp = await db.Article.findOne({
+      attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
+      include: [{
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      }, {
+        model: db.Comment,
+        as: `comments`,
+        attributes: [`comment`, `createdAt`],
+        include: {
+          model: db.User,
+          as: `users`,
+          attributes: [`firstName`, `lastName`],
+        }
+      }, {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`id`, `category`],
+      }],
+      where: {
+        id: articleId,
+      },
+    });
+
+    await db.Article.update(newArticle, {
+      where: {
+        id: articleId,
+      },
+    });
+
+    const currentCategoriesList = temp.categories.map((el) => el.dataValues.id);
+
+    currentCategoriesList.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await temp.removeCategories(category);
+    });
+
+    newArticle.categories.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await temp.addCategories(category);
+    });
+
+    return temp;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+
+const remove = async (articleId) => {
+  try {
+    const temp = await db.Article.findOne({
+      attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
+      include: [{
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      }, {
+        model: db.Comment,
+        as: `comments`,
+        attributes: [`comment`, `createdAt`],
+        include: {
+          model: db.User,
+          as: `users`,
+          attributes: [`firstName`, `lastName`],
+        }
+      }, {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`id`, `category`],
+      }],
+      where: {
+        id: articleId,
+      },
+    });
+
+    await db.Comment.destroy({
+      where: {
+        articleId,
+      },
+    });
+
+    await db.Image.destroy({
+      where: {
+        articleId,
+      },
+    });
+
+    const currentCategoriesList = temp.categories.map((el) => el.dataValues.id);
+
+    currentCategoriesList.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await temp.removeCategories(category);
+    });
+
+    if (temp.images && temp.images[0]) {
+      try {
+        fs.unlinkSync(`${__dirname}/../../static/upload/${temp.images[0].dataValues.image}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return await db.Article.destroy({
+      where: {
+        id: articleId,
+      },
+    });
+  } catch (err) {
+    return err.message;
+  }
 };
 
 const findByTitle = async (queryString) => {
   return await db.Article.findAll({
-    attributes: [`title`],
+    attributes: [`id`, `title`, `createdAt`],
     where: {
       title: {
         [Operator.substring]: queryString,
@@ -124,17 +240,100 @@ const findByTitle = async (queryString) => {
   });
 };
 
-const testSelect = async () => await db.Article.findAll({
-  attributes: [`id`, `announce`, [sequelize.fn(`count`, sequelize.col(`comments.id`)), `count`]],
+const getArticleIdListByCategoryId = async (categoryId) => {
+  return await db.Article.findAll({
+    attributes: [`id`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [],
+        where: {
+          id: categoryId
+        }
+      }],
+  });
+};
+
+const getArticlesForCategory = async (categoryIdList) => {
+  return await db.Article.findAll({
+    attributes: [`id`, `title`, `announce`, `createdAt`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [`id`, `category`],
+      },
+      {
+        model: db.Image,
+        as: `images`,
+        attributes: [`image`],
+        limit: 1,
+      },
+      {
+        model: db.Comment,
+        as: `comments`,
+        attributes: [`comment`],
+      }],
+    where: {
+      id: {
+        [Operator.in]: categoryIdList,
+      }
+    },
+    order: [
+      [`createdAt`, `DESC`]
+    ],
+  });
+};
+
+const getArticleById = async (id) => await db.Article.findAll({
+  attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
   include: [{
+    model: db.Image,
+    as: `images`,
+    attributes: [`image`],
+    limit: 1,
+  }, {
     model: db.Comment,
     as: `comments`,
-    attributes: [],
-    required: false,
+    attributes: [`comment`, `createdAt`],
+    include: {
+      model: db.User,
+      as: `users`,
+      attributes: [`firstName`, `lastName`],
+    }
+  }, {
+    model: db.Category,
+    as: `categories`,
+    attributes: [`id`, `category`],
   }],
-  group: [`Article.id`],
-  order: [[`count`, `desc`]],
+  where: {
+    id
+  },
 });
+
+const getMyArticles = async (userId) => await db.Article.findAll({
+  attributes: [`id`, `title`, `createdAt`],
+  where: {
+    userId,
+  }
+});
+
+
+const testSelect = async (categoryId) => {
+  return await db.Article.findAll({
+    attributes: [`id`],
+    include: [
+      {
+        model: db.Category,
+        as: `categories`,
+        attributes: [],
+        where: {
+          id: categoryId
+        }
+      }],
+  });
+};
 
 
 module.exports = {
@@ -142,6 +341,7 @@ module.exports = {
   findById,
   exists,
   save,
+  edit,
   remove,
   findByTitle,
   getLastComments,
@@ -150,4 +350,8 @@ module.exports = {
   getCountAllArticles,
   testSelect,
   getCommentsForArticle,
+  getArticlesForCategory,
+  getArticleIdListByCategoryId,
+  getArticleById,
+  getMyArticles,
 };

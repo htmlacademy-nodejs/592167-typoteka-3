@@ -4,12 +4,19 @@ const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, MOCK_USER_ID} = require(`../../constants`);
 
 router.get(`/`, async (req, res) => {
-  const response = await axios.get(`${BACKEND_URL}/api/articles`);
-  const articles = response.data;
-  res.render(`my`, {articles});
+  const response = await axios.get(`${BACKEND_URL}/api/articles/myArticles`);
+  const myArticles = response.data;
+  myArticles.errorList = [`error1`, `error2`, `error3`];
+  res.render(`my`, {myArticles});
+});
+
+router.get(`/comments`, async (req, res) => {
+  const commentsList = await axios.get(`${BACKEND_URL}/api/comments/${MOCK_USER_ID}`);
+  const comments = commentsList.data;
+  res.render(`comments`, {comments});
 });
 
 
