@@ -2,10 +2,11 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Личный блог Типотека">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>post-page</title>
+  <title>Типотека</title>
   <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/SFProDisplay-Regular.woff2" as="font" crossorigin="anonymous">
@@ -63,13 +64,11 @@
                 — к примеру интерфейс
                 публикации приложения в AppStore, для которого я уже неделю восстановливаю свой аккаунт разработчика.
               </p>
-              <p>
-                Или интерфейс подключения AirPods на макбуке. Чтобы переключить наушники между
+              <p>Или интерфейс подключения AirPods на макбуке. Чтобы переключить наушники между
                 телефоном и компьютером,
                 нужно сначала нажать на значок звука, затем дождаться, когда в списке устройств появятся наушники, потом
                 нажать на них и дождаться, пока случится вся магия подключения. Иногда по загадочным причинам магия не
-                случается, и операцию нужно повторить, выполняя все те же клики-ожидания-клики — бесит.
-              </p>
+                случается, и операцию нужно повторить, выполняя все те же клики-ожидания-клики — бесит.</p>
             </div>
           </div>
         </section>
@@ -98,11 +97,9 @@
                     <p>Александр Марков •</p>
                     <time class="comments__date" datetime="2019-03-21T20:33">21.03.2019, 20:33</time>
                   </div>
-                  <p class="comments__message">
-                    Конечно, прежде чем так писать, нужно
+                  <p class="comments__message">Конечно, прежде чем так писать, нужно
                     искренне
-                    приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.
-                  </p>
+                    приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.</p>
                 </div>
               </li>
               <li class="comments__comment">
@@ -125,10 +122,8 @@
                   <div class="comments__head">
                     <p>Александр Марков •</p>
                     <time class="comments__date" datetime="2019-03-21T20:33">21.03.2019, 20:33</time></div>
-                  <p class="comments__message">
-                    Конечно, прежде чем так писать, нужно
-                    искренне приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.
-                  </p>
+                  <p class="comments__message">Конечно, прежде чем так писать, нужно
+                    искренне приложить усилия, чтобы разобраться — не все люди умеют выражать свои мысли.</p>
                 </div>
               </li>
             </ul>
@@ -137,7 +132,7 @@
                 <div class="comments__avatar avatar">
                   <img src="img/avatar-2.png" alt="аватар пользователя">
                 </div>
-                <label><textarea rows="1" placeholder="Присоединиться к обсуждению"></textarea></label>
+                <label><textarea rows="1" name="message" placeholder="Присоединиться к обсуждению"></textarea></label>
                 <button type="submit" class="comments__button button button--colored">Опубликовать</button>
               </form>
             </div>
@@ -149,11 +144,12 @@
       <a class="footer__copyright" href="#" aria-label="HTMLAcademy">
         <img src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy">
       </a>
-      <span>•</span>
-      <p>Типотека, 2019</p>
+      <span class="footer__dot"></span>
+      <p class="footer__text">Типотека, 2019</p>
     </footer>
   </div>
-  <!-- <script src="js/vendor.js"></script> -->
+
+  <script src="js/vendor.js"></script>
   <script src="js/main.js"></script>
 </body>
 
