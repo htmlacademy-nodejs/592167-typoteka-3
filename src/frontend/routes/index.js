@@ -69,12 +69,12 @@ const initializeRoutes = (app) => {
     res.render(`main`, {mainPage});
   });
 
-  app.get(`/register`, (req, res) => {
-    res.render(`sign-up`);
+  app.get(`/registration`, (req, res) => {
+    res.render(`registration`);
   });
 
-  app.get(`/login`, (req, res) => {
-    res.render(`login`);
+  app.get(`/sign-in`, (req, res) => {
+    res.render(`sign-in`);
   });
 
   app.get(`/search`, async (req, res) => {
