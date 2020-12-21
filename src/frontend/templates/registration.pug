@@ -7,12 +7,12 @@ block content
       h1.visually-hidden Регистрация пользователя
       section
         .popup.popup--registration.popup--anti
-          a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
+          a.popup__button.button.button--popup-close(href='/' aria-label='Закрыть окно')
             | Закрыть
             | окно
           h2.popup__title Регистрация
           .popup__form.popup__form--active.form.form--register
-            form(action='#' method='get')
+            form(action='#' method='post')
               .form__field
                 label
                   input(type='email' name='email' placeholder='Электронная почта' required='')

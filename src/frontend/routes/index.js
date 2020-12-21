@@ -73,6 +73,10 @@ const initializeRoutes = (app) => {
     res.render(`registration`);
   });
 
+  app.post(`/registration`, (res, req) => {
+    res.send(req.body);
+  });
+
   app.get(`/sign-in`, (req, res) => {
     res.render(`sign-in`);
   });
