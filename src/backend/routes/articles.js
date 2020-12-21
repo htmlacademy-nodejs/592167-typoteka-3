@@ -165,7 +165,7 @@ router.get(`/:articleId`, async (req, res) => {
   }
 });
 
-router.post(`/add`, upload.single(`newArticlePhoto`), async (req, res) => {
+router.post(`/add`, upload.single(`upload`), async (req, res) => {
   try {
     const data = req.body;
     data.image = req.file.filename;

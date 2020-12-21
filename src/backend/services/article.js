@@ -63,10 +63,11 @@ const findById = (id) => {
 };
 
 const create = async (data) => {
+  console.log(data);
   const newArticle = {
-    'title': data.newArticleTitle,
-    'announce': data.newArticleAnnounce,
-    'description': data.newArticleFullText,
+    'title': data.title,
+    'announce': data.announcement,
+    'description': data[`full-text`],
     'userId': MOCK_USER_ID,
   };
 

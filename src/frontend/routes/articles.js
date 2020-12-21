@@ -7,8 +7,12 @@ const {Router} = require(`express`);
 const router = new Router();
 
 
-router.get(`/add`, (req, res) => {
-  res.render(`new-post`);
+router.get(`/add`, async (req, res) => {
+  const resCategories = await axios.get(`${BACKEND_URL}/api/categories?categoriesList=only`);
+  const myArticles = {
+    categories: resCategories.data,
+  };
+  res.render(`new-post`, {myArticles});
 });
 
 router.get(`/edit/:id`, async (req, res) => {
