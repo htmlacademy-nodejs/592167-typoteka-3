@@ -12,12 +12,15 @@ router.get(`/add`, async (req, res) => {
   const myArticles = {
     categories: resCategories.data,
   };
+  myArticles.action = `${BACKEND_URL}/api/articles/add`;
   res.render(`new-post`, {myArticles});
 });
 
 router.get(`/edit/:id`, async (req, res) => {
   const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=edit`);
   const myArticles = response.data;
+  myArticles.action = `${BACKEND_URL}/api/articles/edit/${req.params.id}`;
+  console.log(myArticles);
   res.render(`new-post`, {myArticles});
 });
 
