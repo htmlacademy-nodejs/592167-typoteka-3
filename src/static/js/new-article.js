@@ -38,12 +38,13 @@ const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
 // const newPublicationCheckbox = document.querySelectorAll(`.new-publication__checkbox`);
 
 
-buttonNewArticle.addEventListener(`click`, () => {
-  // eslint-disable-next-line no-undef
-  location.pathname = `/articles/add`;
-  // newArticleForm.action = `${BACKEND_URL}/api/articles/add`;
-  // newArticleModal.classList.remove(`invisible-block`);
-});
+if (buttonNewArticle) {
+  buttonNewArticle.addEventListener(`click`, () => {
+    // eslint-disable-next-line no-undef
+    location.pathname = `/articles/add`;
+  });
+}
+
 
 // if (buttonPopupClose) {
 //   buttonPopupClose.addEventListener(`click`, () => {
