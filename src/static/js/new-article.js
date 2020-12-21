@@ -20,8 +20,8 @@ const buttonNewArticle = document.querySelector(`.header__button-new`);
 const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
 // // eslint-disable-next-line no-undef
 // const editArticlesList = document.querySelectorAll(`.notes__item-text`);
-// // eslint-disable-next-line no-undef
-// const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
+// eslint-disable-next-line no-undef
+const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
 
 // Набор полей для модального окна
 // eslint-disable-next-line no-undef
@@ -100,27 +100,27 @@ if (buttonsDeleteComment) {
   }
 }
 
-// if (buttonsDeleteArticle) {
-//   for (let btnArticle of buttonsDeleteArticle) {
-//     btnArticle.addEventListener(`click`, (evt) => {
-//       const articleId = evt.target.getAttribute(`data-articleId`);
-//       // eslint-disable-next-line no-undef
-//       fetch(`${BACKEND_URL}/api/articles/delete/${articleId}`, {
-//         mode: `cors`,
-//         headers: {
-//           'Access-Control-Allow-Origin': `*`,
-//         },
-//       }).then((response) => response.json())
-//         .then((data) => {
-//           if (data.isDelete) {
-//             // eslint-disable-next-line no-undef
-//             location.reload();
-//           }
-//         });
-//     });
-//   }
-// }
-//
+if (buttonsDeleteArticle) {
+  for (let btnArticle of buttonsDeleteArticle) {
+    btnArticle.addEventListener(`click`, (evt) => {
+      const articleId = evt.target.getAttribute(`data-articleId`);
+      // eslint-disable-next-line no-undef
+      fetch(`${BACKEND_URL}/api/articles/delete/${articleId}`, {
+        mode: `cors`,
+        headers: {
+          'Access-Control-Allow-Origin': `*`,
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.isDelete) {
+            // eslint-disable-next-line no-undef
+            location.reload();
+          }
+        });
+    });
+  }
+}
+
 // const fillArticleModal = (data) => {
 //   newArticleForm.action = `${BACKEND_URL}/api/articles/edit/${data.articleId}`;
 //   newArticleTitle.value = data.title;
