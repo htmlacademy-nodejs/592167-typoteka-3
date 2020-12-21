@@ -168,7 +168,7 @@ router.get(`/:articleId`, async (req, res) => {
 router.post(`/add`, upload.single(`upload`), async (req, res) => {
   try {
     const data = req.body;
-    data.image = req.file.filename;
+    data.image = req.file !== undefined ? req.file.filename : ``;
 
     await articleService.create(data);
     res.redirect(`${FRONTEND_URL}/my`);

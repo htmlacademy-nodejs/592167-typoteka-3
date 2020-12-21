@@ -24,7 +24,10 @@ block content
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
-                      input(type='text' name='title' placeholder='Заголовок' required='' minlength=30 maxlength=250)
+                      if myArticles.title
+                        input(type='text' name='title' placeholder='Заголовок' required='' minlength=30 maxlength=250)
+                      else
+                        input(type='text' name='title' placeholder='Заголовок' required='' minlength=30 maxlength=250)
                   .form__field.form__field--post-image
                     label
                       input#image-name-field(type='text' name='photo' placeholder='Фотография' readonly='')
