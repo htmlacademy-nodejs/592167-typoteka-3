@@ -14,8 +14,8 @@ const buttonNewArticle = document.querySelector(`.header__button-new`);
 // const buttonSubmitForm = document.querySelector(`#submitMainForm`);
 // // eslint-disable-next-line no-undef
 // const buttonSubmitFake = document.querySelector(`.new-publication__button`);
-// // eslint-disable-next-line no-undef
-// const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
+// eslint-disable-next-line no-undef
+const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
 // eslint-disable-next-line no-undef
 const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
 // // eslint-disable-next-line no-undef
@@ -66,18 +66,18 @@ buttonNewArticle.addEventListener(`click`, () => {
 //     buttonSubmitForm.click();
 //   });
 // }
-//
-// if (buttonsDeleteCategory) {
-//   for (let i = 0; i < buttonsDeleteCategory.length; i++) {
-//     buttonsDeleteCategory[i].addEventListener(`click`, (evt) => {
-//       const form = evt.target.parentElement;
-//       let removeUrl = form.action.slice(0, -4);
-//       removeUrl = `${removeUrl}delete`;
-//       form.action = removeUrl;
-//       form.submit();
-//     });
-//   }
-// }
+
+if (buttonsDeleteCategory) {
+  for (let i = 0; i < buttonsDeleteCategory.length; i++) {
+    buttonsDeleteCategory[i].addEventListener(`click`, (evt) => {
+      const form = evt.target.parentElement;
+      let removeUrl = form.action.slice(0, -4);
+      removeUrl = `${removeUrl}delete`;
+      form.action = removeUrl;
+      form.submit();
+    });
+  }
+}
 
 if (buttonsDeleteComment) {
   for (let btnCategory of buttonsDeleteComment) {
