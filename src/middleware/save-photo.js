@@ -40,7 +40,7 @@ module.exports = (template) => (
     upload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         console.log(err);
-        res.render(template, {errorMessages: [``]});
+        res.render(template, {errorMessages: [`Загружаемый файл не должен превышать 5 Мб`]});
         return;
       }
       next();

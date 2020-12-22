@@ -28,11 +28,12 @@ block content
               .form__field
                 label
                   input(type='password' name='repeat-password' placeholder='Повтор пароля' required='')
-              .form__validation-error
-                p.form__error-message При регистрации произошли ошибки:
-                ul.form__errors
-                  li.form__error Пароль не может состоять из двух букв
-                  li.form__error Фамилия не должна быть смешной
+              if errorMessages
+                .form__validation-error
+                  p.form__error-message При регистрации произошли ошибки:
+                  ul.form__errors
+                    each error in errorMessages
+                      li.form__error #{error}
               .form__image-loader
                 a.form__avatar.avatar
                   img(src='img/icons/smile.svg' alt='аватар пользователя')
