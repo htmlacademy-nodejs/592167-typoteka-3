@@ -73,6 +73,20 @@ const initializeRoutes = (app) => {
     res.render(`registration`);
   });
 
+  app.post(`/registration`, async (req, res) => {
+    const {body} = req;
+    const user = {
+      firstName: body.name,
+      lastName: body.surname,
+      email: body.email,
+      password: body.password,
+      roleId: 3,
+      avatar: ``,
+    };
+    await axios.post(`${BACKEND_URL}/api/users`, user);
+    res.render(`sign-in`);
+  });
+
   app.get(`/sign-in`, (req, res) => {
     res.render(`sign-in`);
   });
