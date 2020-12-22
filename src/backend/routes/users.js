@@ -11,7 +11,7 @@ const userServices = require(`../services/users`);
 
 router.post(`/`, async (req, res) => {
   try {
-    await userServices.add(req.body);
+    res.send(await userServices.add(req.body));
   } catch (err) {
     logger.error(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
