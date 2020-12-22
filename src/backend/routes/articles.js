@@ -3,8 +3,6 @@
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
 const {StatusCode} = require(`http-status-codes`);
-const multer = require(`multer`);
-const md5 = require(`md5`);
 
 const router = new Router();
 
@@ -13,40 +11,9 @@ const logger = getLogger();
 
 const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
+const savePhoto = require(`../../middleware/save-photo`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
-const {MOCK_USER_ID, FRONTEND_URL} = require(`../../constants`);
-
-const UPLOAD_DIR = `${__dirname}/../../static/upload`;
-
-const MimeTypeExtension = {
-  'image/png': `png`,
-  'image/jpeg': `jpg`,
-  'image/jpg': `jpg`,
-};
-
-const maxFileSize = 5 * 1024 * 1024;
-
-// Подготовка хранилища для сохранения файлов
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  filename: (req, file, cb) => {
-    const fileExtention = MimeTypeExtension[file.mimetype];
-    cb(null, `${md5(Date.now())}.${fileExtention}`);
-  },
-});
-
-// Функция определяющая допустимые файлы для загрузки
-const fileFilter = (req, file, cb) => {
-  const allowTypes = Object.keys(MimeTypeExtension);
-  const isValid = allowTypes.includes(file.mimetype);
-  cb(null, isValid);
-};
-
-const upload = multer({
-  storage, fileFilter, limits: {
-    fileSize: maxFileSize,
-  }
-});
+const {MOCK_USER_ID, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
 
 
 router.get(`/`, async (req, res) => {
@@ -165,7 +132,7 @@ router.get(`/:articleId`, async (req, res) => {
   }
 });
 
-router.post(`/add`, upload.single(`upload`), async (req, res) => {
+router.post(`/add`, savePhoto(TEMPLATE.NEW_POST), async (req, res) => {
   try {
     const data = req.body;
     data.image = req.file !== undefined ? req.file.filename : ``;
@@ -193,7 +160,7 @@ router.post(`/:articleId/comments`, async (req, res) => {
   }
 });
 
-router.post(`/edit/:articleId`, upload.single(`newArticlePhoto`), async (req, res) => {
+router.post(`/edit/:articleId`, savePhoto(TEMPLATE.NEW_POST), async (req, res) => {
   try {
     const data = req.body;
     data.image = req.file !== undefined ? req.file.filename : ``;

@@ -34,6 +34,7 @@ const FRONTEND_URL = `http://localhost:8080`;
 
 const TEMPLATE = {
   REGISTRATION: `registration`,
+  NEW_POST: `new-post`,
 };
 
 
