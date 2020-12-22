@@ -4,33 +4,36 @@ module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model{ }
   User.init({
     id: {
-      type: DataTypes.integer,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
     firstName: {
-      type: DataTypes.string(50),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
     lastName: {
-      type: DataTypes.string(50),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
     email: {
-      type: DataTypes.string(100),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     password: {
-      type: DataTypes.string,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     roleId: {
-      type: DataTypes.integer,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     avatar: {
-      type: DataTypes.text,
+      type: DataTypes.TEXT,
       allowNull: true,
     }
   }, {
