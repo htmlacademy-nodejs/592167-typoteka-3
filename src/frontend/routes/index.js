@@ -1,8 +1,10 @@
 'use strict';
 
 const axios = require(`axios`);
-const {BACKEND_URL, DEFAULT} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT, TEMPLATE} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
+
+const savePhoto = require(`../../middleware/save-photo`);
 
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
@@ -73,7 +75,9 @@ const initializeRoutes = (app) => {
     res.render(`registration`);
   });
 
-  app.post(`/registration`, async (req, res) => {
+  app.post(`/registration`, [
+    savePhoto(TEMPLATE.REGISTRATION)
+  ], async (req, res) => {
     const {body} = req;
     const user = {
       firstName: body.name,

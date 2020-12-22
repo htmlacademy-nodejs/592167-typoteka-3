@@ -32,6 +32,10 @@ const MOCK_USER_ID = 1;
 const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
 
+const TEMPLATE = {
+  REGISTRATION: `registration`,
+};
+
 
 module.exports = {
   ExitCode,
@@ -43,4 +47,5 @@ module.exports = {
   DEFAULT,
   COMMENTS_COUNT_FOR_MAIN_PAGE,
   MOCK_USER_ID,
+  TEMPLATE,
 };

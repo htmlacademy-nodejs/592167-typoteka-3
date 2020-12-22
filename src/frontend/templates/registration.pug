@@ -12,7 +12,7 @@ block content
             | окно
           h2.popup__title Регистрация
           .popup__form.popup__form--active.form.form--register
-            form(action='#' method='post')
+            form(action='#' method='post' enctype='multipart/form-data')
               .form__field
                 label
                   input(type='email' name='email' placeholder='Электронная почта' required='')
