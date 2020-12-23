@@ -2,6 +2,7 @@
 
 const express = require(`express`);
 const cors = require(`cors`);
+const helmet = require(helmet);
 const {initializeRoutes} = require(`./routes/index`);
 const {getLogger} = require(`./logger`);
 const logger = getLogger();
@@ -22,6 +23,15 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: [`self`],
+    }
+  },
+  xssFilter: true,
+}));
 
 initializeRoutes(app);
 app.use((req, res) => {
