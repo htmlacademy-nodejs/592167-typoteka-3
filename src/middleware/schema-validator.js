@@ -1,6 +1,8 @@
 'use strict';
 
 const fs = require(`fs`);
+const bcrypt = require(`bcrypt`);
+const salt = 10;
 
 module.exports = (schema, template) => (
   async (req, res, next) => {
@@ -13,9 +15,10 @@ module.exports = (schema, template) => (
       repeat: body[`repeat-password`],
     };
     await schema.validateAsync(user, {abortEarly: false})
-      .then((response) => {
+      .then(async (response) => {
         req.user = response;
         req.user.avatar = req.file !== undefined ? req.file.filename : ``;
+        req.user.password = await bcrypt.hash(req.user.password, salt);
         return next();
       })
       .catch((err) => {
