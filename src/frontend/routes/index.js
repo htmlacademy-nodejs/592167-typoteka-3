@@ -4,7 +4,10 @@ const axios = require(`axios`);
 const {BACKEND_URL, DEFAULT, TEMPLATE} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
+const userSchema = require(`../../validation-schemas/user-schema`);
+
 const savePhoto = require(`../../middleware/save-photo`);
+const schemaValidation = require(`../../middleware/schema-validator`);
 
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
@@ -76,19 +79,17 @@ const initializeRoutes = (app) => {
   });
 
   app.post(`/registration`, [
-    savePhoto(TEMPLATE.REGISTRATION)
+    savePhoto(TEMPLATE.REGISTRATION),
+    schemaValidation(userSchema, TEMPLATE.REGISTRATION),
   ], async (req, res) => {
-    const {body} = req;
-    const user = {
-      firstName: body.name,
-      lastName: body.surname,
-      email: body.email,
-      password: body.password,
-      roleId: 3,
-      avatar: ``,
-    };
-    await axios.post(`${BACKEND_URL}/api/users`, user);
-    res.render(`sign-in`);
+    try {
+      req.user.roleId = 3;
+      await axios.post(`${BACKEND_URL}/api/users`, req.user);
+      res.render(`sign-in`);
+    } catch (err) {
+      console.log(err);
+      res.render(`errors/500`);
+    }
   });
 
   app.get(`/sign-in`, (req, res) => {
