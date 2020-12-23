@@ -7,6 +7,7 @@ const {cutString} = require(`../../utils`);
 const userSchema = require(`../../validation-schemas/user-schema`);
 
 const savePhoto = require(`../../middleware/save-photo`);
+const alreadyRegister = require(`../../middleware/already-register`);
 const schemaValidation = require(`../../middleware/schema-validator`);
 
 const myRoutes = require(`./my`);
@@ -81,6 +82,7 @@ const initializeRoutes = (app) => {
   app.post(`/registration`, [
     savePhoto(TEMPLATE.REGISTRATION),
     schemaValidation(userSchema, TEMPLATE.REGISTRATION),
+    alreadyRegister(),
   ], async (req, res) => {
     try {
       req.user.roleId = 3;
