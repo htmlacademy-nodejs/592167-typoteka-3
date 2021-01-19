@@ -7,7 +7,7 @@ module.exports = Joi.object({
   firstName: Joi.string()
     .required()
     .max(50)
-    .pattern(new RegExp(`^[a-zA-Zа-яА-Я ]{0,50}$`))
+    .pattern(new RegExp(`^[a-zа-я\s]*$`, `i`))
     .messages({
       'string.max': REGISTRATION_MESSAGE.USER_NAME_MAX_LENGTH,
       'any.required': REGISTRATION_MESSAGE.USER_NAME_REQUIRED_FIELD,
@@ -17,7 +17,7 @@ module.exports = Joi.object({
   lastName: Joi.string()
     .required()
     .max(50)
-    .pattern(new RegExp(`^[a-zA-Zа-яА-Я ]{0,50}$`))
+    .pattern(new RegExp(`^[a-zа-я\s]*$`, `i`))
     .messages({
       'string.max': REGISTRATION_MESSAGE.USER_SURNAME_MAX_LENGTH,
       'any.required': REGISTRATION_MESSAGE.USER_SURNAME_REQUIRED_FIELD,
