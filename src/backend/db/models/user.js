@@ -10,14 +10,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     firstName: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(50),
       allowNull: false,
     },
     lastName: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(50),
       allowNull: false,
     },
     email: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(100),
       allowNull: false,
     },
@@ -28,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    avatar: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     }
   }, {
     sequelize,

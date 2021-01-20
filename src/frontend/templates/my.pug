@@ -10,48 +10,7 @@ block content
           each article in myArticles.articles
             li.notes__list-item
               time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdAt}
-              a.notes__item-text(href=`/articles/${article.id}`, data-articleId=`${article.id}`) #{article.title}
+              a.notes__item-text(href=`/articles/edit/${article.id}`, data-articleId=`${article.id}`) #{article.title}
               button.notes__button.button.button--close-item(type='button', data-articleId=`${article.id}`)
                 span.visually-hidden Закрыть строку списка
-      section#newArticleModal.modal.modal--flex.invisible-block
-        .popup.popup--new-publication.popup--flex
-          .new-publication
-            .new-publication__header
-              h1 Новая публикация
-              .new-publication__date-form
-                h3 Дата публикации
-                form(action='#', method='get')
-                  .new-publication__date-block
-                    label(for='new-publication-date', aria-label='Календарь')
-                    input#new-publication-date(type='text', name='login', placeholder='21.03.2019')
-              button.new-publication__button.button.button--colored(type='button') Опубликовать
-            button.popup__button.button.button--popup-close(type='button', aria-label='Закрыть окно')
-              | Закрыть окно
-            .new-publication__form.form
-              form#newArticleForm(action='http://localhost:8081/api/articles/add', method='POST', enctype='multipart/form-data')
-                .form__wrapper.form__wrapper--intro
-                  .form__field
-                    label
-                      input(type='text', name='newArticleTitle', id='newArticleTitle', placeholder='Заголовок', required='', minlength=30, maxlength=250)
-                  .form__field.form__field--post-image
-                    label
-                      input#image-name-field(type='text', placeholder='Фотография', readonly='')
-                    .form__image-loader.form__image-loader--publication
-                      label
-                        input.visually-hidden(type='file', name='newArticlePhoto', id='newArticlePhoto')
-                        | Обзор
-                  each category in myArticles.categories
-                    div(class=`new-publication__checkbox new-publication__checkbox--${category.category}`)
-                      input(type='checkbox', id=`checkbox-${category.category}`, name=`checkbox-category`, value=`${category.id}`)
-                      label(for=`checkbox-${category.category}`) #{category.category}
-                  a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
-                .form__wrapper.form__wrapper--text
-                  .form__field.form__field--publication-text
-                    label
-                      textarea(rows='1', name='newArticleAnnounce', id='newArticleAnnounce', placeholder='Анонс публикации', required='', minlength=30, maxlength=250)
-                  .form__field.form__field--publication-text
-                    label
-                      textarea(rows='1', name='newArticleFullText', id='newArticleFullText', placeholder='Полный текст публикации', required='', maxlength=1000)
-                button#submitMainForm.visually-hidden(type=`submit`)
-        .modal__overlay
     include common/footer

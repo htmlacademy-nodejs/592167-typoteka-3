@@ -1,8 +1,14 @@
 'use strict';
 
 const axios = require(`axios`);
-const {BACKEND_URL, DEFAULT} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT, TEMPLATE} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
+
+const userSchema = require(`../../validation-schemas/user-schema`);
+
+const savePhoto = require(`../../middleware/save-photo`);
+const alreadyRegister = require(`../../middleware/already-register`);
+const schemaValidation = require(`../../middleware/schema-validator`);
 
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
@@ -69,12 +75,27 @@ const initializeRoutes = (app) => {
     res.render(`main`, {mainPage});
   });
 
-  app.get(`/register`, (req, res) => {
-    res.render(`sign-up`);
+  app.get(`/registration`, (req, res) => {
+    res.render(`registration`);
   });
 
-  app.get(`/login`, (req, res) => {
-    res.render(`login`);
+  app.post(`/registration`, [
+    savePhoto(TEMPLATE.REGISTRATION),
+    schemaValidation(userSchema, TEMPLATE.REGISTRATION),
+    alreadyRegister(),
+  ], async (req, res) => {
+    try {
+      req.user.roleId = 3;
+      await axios.post(`${BACKEND_URL}/api/users`, req.user);
+      res.render(`sign-in`);
+    } catch (err) {
+      console.log(err);
+      res.render(`errors/500`);
+    }
+  });
+
+  app.get(`/sign-in`, (req, res) => {
+    res.render(`sign-in`);
   });
 
   app.get(`/search`, async (req, res) => {
