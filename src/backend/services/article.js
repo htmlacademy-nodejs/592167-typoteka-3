@@ -133,7 +133,8 @@ const getCountAllArticles = async () => {
 };
 
 const getAllElementsForMainPage = async (queryParams) => {
-  const categories = await categoryServices.getCategories();
+  const resCategories = await categoryServices.getCategories();
+  const categories = resCategories.filter((el) => el.dataValues.count > 0);
   const mostDiscussed = await getMostDiscussed();
   const previews = await getPreviewsForMainPage(queryParams);
   const lastComments = await getLastComments();
