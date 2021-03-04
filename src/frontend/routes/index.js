@@ -89,9 +89,8 @@ const initializeRoutes = (app) => {
     alreadyRegister(),
   ], async (req, res) => {
     try {
-      req.user.roleId = 3;
       await axios.post(`${BACKEND_URL}/api/users`, req.user);
-      res.render(`sign-in`);
+      res.redirect(`/sign-in`);
     } catch (err) {
       console.log(err);
       res.render(`errors/500`);

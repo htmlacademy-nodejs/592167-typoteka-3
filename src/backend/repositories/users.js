@@ -17,8 +17,11 @@ const getUserPassword = async (email) => db.User.findOne({
   },
 });
 
+const getAllUsers = async () => db.User.findAll();
+
 module.exports = {
   add,
   checkUser,
   getUserPassword,
+  getAllUsers,
 };
