@@ -42,7 +42,7 @@ const REGISTRATION_MESSAGE = {
   EMAIL_REQUIRED_FIELD: `Поле "Электронная почта" обязательно для заполнения`,
   EMAIL_WRONG: `Неправильный email`,
   EMAIL_MAX_LENGTH: `Поле "Электронная почта" не может быть более 255 символов`,
-  PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадают`,
+  PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадает`,
   PASSWORD_MAX_LENGTH: `Поле "Пароль" не может быть более 255 символов`,
   PASSWORD_MIN_LENGTH: `Поле "Пароль" не может быть менее 6 символов`,
   PASSWORD_REQUIRED_FIELD: `Поле "Пароль" обязательно для заполнения`,
