@@ -34,6 +34,9 @@ const initializeRoutes = (app) => {
     if (Object.keys(req.query).length !== 0) {
       queryString = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
     }
+    if (req.session && req.session.isLogged) {
+      queryString += `&username=${req.session.username}`;
+    }
     const resAllElements = await axios.get(`${BACKEND_URL}/api/articles${queryString}`);
     const allElements = resAllElements.data;
 
@@ -65,8 +68,16 @@ const initializeRoutes = (app) => {
       });
     }
 
+    const userInfo = {};
+    if (allElements.userInfo.avatar) {
+      userInfo.userName = req.session.username;
+      userInfo.avatar = allElements.userInfo.avatar;
+      userInfo.userRole = allElements.userInfo.roleId;
+    } else {
+      userInfo.userRole = 3;
+    }
+
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
-    const userInfo = {userName: `${req.session.username}`, avatar: `avatar-3.png`, userRole: req.session.isLogged ? 1 : 3};
     const mainPage = {
       previews: allElements.previews,
       comments: allElements.lastComments,

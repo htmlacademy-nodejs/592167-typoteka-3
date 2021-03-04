@@ -23,8 +23,11 @@ const checkUserPassword = async (email, password) => {
   return await bcrypt.compare(password, user.dataValues.password);
 };
 
+const getUserInfo = async (email) => await userRepository.getUserInfo(email);
+
 module.exports = {
   add,
   checkUser,
   checkUserPassword,
+  getUserInfo,
 };

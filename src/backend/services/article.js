@@ -2,6 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
+const userServices = require(`../services/users`);
 const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
@@ -137,6 +138,10 @@ const getAllElementsForMainPage = async (queryParams) => {
   const previews = await getPreviewsForMainPage(queryParams);
   const lastComments = await getLastComments();
   const pagination = await getCountAllArticles();
+  let userInfo = {};
+  if (queryParams.username) {
+    userInfo = await userServices.getUserInfo(queryParams.username);
+  }
 
   return {
     categories,
@@ -144,6 +149,7 @@ const getAllElementsForMainPage = async (queryParams) => {
     previews,
     lastComments,
     pagination,
+    userInfo,
   };
 };
 
