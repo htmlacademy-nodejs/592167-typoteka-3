@@ -9,6 +9,8 @@ const userSchema = require(`../../validation-schemas/user-schema`);
 const savePhoto = require(`../../middleware/save-photo`);
 const alreadyRegister = require(`../../middleware/already-register`);
 const schemaValidation = require(`../../middleware/schema-validator`);
+const userIsNotRegister = require(`../../middleware/user-is-not-register`);
+const checkUserPassword = require(`../../middleware/check-user-password`);
 
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
@@ -64,6 +66,7 @@ const initializeRoutes = (app) => {
     }
 
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
+    const userInfo = {userName: `${req.session.username}`, avatar: `avatar-3.png`, userRole: req.session.isLogged ? 1 : 3};
     const mainPage = {
       previews: allElements.previews,
       comments: allElements.lastComments,
@@ -71,6 +74,7 @@ const initializeRoutes = (app) => {
       categories: allElements.categories,
       paginationStep,
       paginationVisible,
+      userInfo,
     };
     res.render(`main`, {mainPage});
   });
@@ -98,9 +102,24 @@ const initializeRoutes = (app) => {
     res.render(`sign-in`);
   });
 
+  app.post(`/sign-in`, [
+    userIsNotRegister(),
+    checkUserPassword(),
+  ], (req, res) => {
+    req.session.isLogged = true;
+    req.session.username = req.body.email;
+    res.redirect(`/`);
+  });
+
+  app.get(`/logout`, (req, res) => {
+    req.session.destroy();
+    res.redirect(`/`);
+  });
+
   app.get(`/search`, async (req, res) => {
     const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search?query=${req.query.search}`));
     const searchResult = response.data;
+    searchResult.userInfo = {userName: `${req.session.username}`, avatar: `avatar-3.png`, userRole: req.session.isLogged ? 1 : 3};
     res.render(`search`, {searchResult});
   });
 };

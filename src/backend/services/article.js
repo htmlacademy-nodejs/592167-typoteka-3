@@ -13,7 +13,6 @@ const logger = getLogger();
 
 
 const createDateForPreview = (date) => {
-  console.log(date);
   const createDate = new Date(date);
   const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
   const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
@@ -47,7 +46,6 @@ const getPreviewsForMainPage = async (queryParams) => {
       };
     });
     const isArticleId = comments.find((com) => com.articleId === el.id);
-    console.log(response);
     el.countComment = isArticleId ? isArticleId.dataValues.count : 0;
     return el;
   });
@@ -63,7 +61,6 @@ const findById = (id) => {
 };
 
 const create = async (data) => {
-  console.log(data);
   const newArticle = {
     'title': data.title,
     'announce': data.announcement,

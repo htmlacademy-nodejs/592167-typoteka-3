@@ -3,6 +3,7 @@ extends common/layout
 block content
   .wrapper-color
     include common/header
+    +header(searchResult.userInfo)
     main
       section.search-page
         .search-page__wrapper(class=searchResult.length === 0 ? 'search-page__wrapper--empty':'')

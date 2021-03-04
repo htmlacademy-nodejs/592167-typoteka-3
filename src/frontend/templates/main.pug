@@ -3,6 +3,7 @@ extends common/layout
 block content
   .wrapper
     include common/header
+    +header(mainPage.userInfo)
     main.main-page
       h1.visually-hidden Главная страница личного блога Типотека
       p

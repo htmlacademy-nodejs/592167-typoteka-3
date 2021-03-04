@@ -35,6 +35,7 @@ const FRONTEND_URL = `http://localhost:8080`;
 const TEMPLATE = {
   REGISTRATION: `registration`,
   NEW_POST: `new-post`,
+  SIGN_IN: `sign-in`,
 };
 
 const REGISTRATION_MESSAGE = {
@@ -57,6 +58,10 @@ const REGISTRATION_MESSAGE = {
   USER_SURNAME_REQUIRED_FIELD: `Поле "Фамилия" обязательно для заполнения`,
 };
 
+const LOGIN_MESSAGE = {
+  BAD_LOGIN: `Пользователь с таким Email не зарегистрирован или пароль указан неверно`,
+};
+
 
 module.exports = {
   ExitCode,
@@ -70,4 +75,5 @@ module.exports = {
   MOCK_USER_ID,
   TEMPLATE,
   REGISTRATION_MESSAGE,
+  LOGIN_MESSAGE,
 };
