@@ -20,7 +20,7 @@ const getUserPassword = async (email) => db.User.findOne({
 const getAllUsers = async () => db.User.findAll();
 
 const getUserInfo = async (email) => db.User.findOne({
-  attributes: [`avatar`, `roleId`],
+  attributes: [`firstName`, `lastName`, `avatar`, `roleId`],
   where: {
     email,
   },

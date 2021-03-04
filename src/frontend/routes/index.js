@@ -70,7 +70,7 @@ const initializeRoutes = (app) => {
 
     const userInfo = {};
     if (allElements.userInfo.avatar) {
-      userInfo.userName = req.session.username;
+      userInfo.userName = `${allElements.userInfo.firstName} ${allElements.userInfo.lastName}`;
       userInfo.avatar = allElements.userInfo.avatar;
       userInfo.userRole = allElements.userInfo.roleId;
     } else {
