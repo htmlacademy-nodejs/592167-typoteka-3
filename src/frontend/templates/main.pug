@@ -7,70 +7,75 @@ block content
     main.main-page
       h1.visually-hidden Главная страница личного блога Типотека
       p
-        | Это приветственный текст, который владелец блога может выбрать, чтобы описать себя &#x1F44F;
-      section.main-page__theme-list
-        h2.visually-hidden Список тем
-        ul.themes
-          each category in mainPage.categories
-            li.themes__item
-              a.themes__item-link(href=`/articles/category/${category.id}`)
-                | #{category.category}
-                sup #{category.count}
-      .main-page__section-flex
-        section.main-page__hot.hot
-          h2.hot__name
-            | Самое обсуждаемое
-            span.hot__icon.hot__icon--fire
-          ul.hot__list
-            each discuss in mainPage.mostDiscussed
-              li.hot__list-item
-                a.hot__list-link(href=`/articles/${discuss.id}`)
-                  | #{discuss.announce}
-                  sup.hot__link-sup #{discuss.count}
-        section.main-page__last.last
-          h2.last__name
-            | Последние комментарии
-            span.last__icon.last__icon--cloud
-          ul.last__list
-            each comment in mainPage.comments
-              li.last__list-item
-                img.last__list-image(src='/img/avatar-small-1.png', width='20', height='20', alt='Аватар пользователя')
-                b.last__list-name Анна Артамонова
-                a.last__list-link(href=`/articles/${comment.articleId}`)
-                  | #{comment.comment}
-      section.main-page__list.preview
-        h2.visually-hidden Список превью статей
-        ul.preview__list
-          each preview in mainPage.previews
-            li.preview__item
-              ul.preview__breadcrumbs
-                each category in preview.categories
-                  li.preview__breadcrumbs-item
-                    a.preview__breadcrumbs-link(href=`/articles/category/${category.id}`) #{category.category}
-              .preview__background
-                img.preview__background-image(src=`/upload/${preview.image}`, width='460', height='240', srcset=`/upload/${preview.image}`, alt='Фотография небоскреба')
-              time.preview__time(datetime='2019-03-21T20:33') #{preview.createdAt}
-              h3.preview__name
-                a.preview__name-link(href=`/articles/${preview.id}`) #{preview.title}
-              p.preview__text
-                | #{preview.announce}
-              a.preview__comment(href='#')
-                | Комментарии
-                span.preview__cloud
-                b.preview__comment-count #{preview.countComment}
-        .preview__toggle-wrapper(hidden = mainPage.paginationVisible)
-          ul.preview__pagination.pagination
-            li
-              a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
-                | Назад
-            each pagination in mainPage.paginationStep
-              li.pagination__item
-                if pagination.offset
-                  a() #{pagination.step}
-                else
-                  a(href=`/?start=${pagination.step}&count=8&offer=desc`) #{pagination.step}
+        | Всем привет! Это мой блог. Прошу любить и жаловать &#x1F44F;
+      if mainPage.previews.length > 0
+        section.main-page__theme-list
+          h2.visually-hidden Список тем
+          ul.themes
+            each category in mainPage.categories
+              li.themes__item
+                a.themes__item-link(href=`/articles/category/${category.id}`)
+                  | #{category.category}
+                  sup #{category.count}
+        .main-page__section-flex
+          section.main-page__hot.hot
+            h2.hot__name
+              | Самое обсуждаемое
+              span.hot__icon.hot__icon--fire
+            ul.hot__list
+              each discuss in mainPage.mostDiscussed
+                li.hot__list-item
+                  a.hot__list-link(href=`/articles/${discuss.id}`)
+                    | #{discuss.announce}
+                    sup.hot__link-sup #{discuss.count}
+          section.main-page__last.last
+            h2.last__name
+              | Последние комментарии
+              span.last__icon.last__icon--cloud
+            ul.last__list
+              each comment in mainPage.comments
+                li.last__list-item
+                  img.last__list-image(src='/img/avatar-small-1.png', width='20', height='20', alt='Аватар пользователя')
+                  b.last__list-name Анна Артамонова
+                  a.last__list-link(href=`/articles/${comment.articleId}`)
+                    | #{comment.comment}
+        section.main-page__list.preview
+          h2.visually-hidden Список превью статей
+          ul.preview__list
+            each preview in mainPage.previews
+              li.preview__item
+                ul.preview__breadcrumbs
+                  each category in preview.categories
+                    li.preview__breadcrumbs-item
+                      a.preview__breadcrumbs-link(href=`/articles/category/${category.id}`) #{category.category}
+                .preview__background
+                  img.preview__background-image(src=`/upload/${preview.image}`, width='460', height='240', srcset=`/upload/${preview.image}`, alt='Фотография небоскреба')
+                time.preview__time(datetime='2019-03-21T20:33') #{preview.createdAt}
+                h3.preview__name
+                  a.preview__name-link(href=`/articles/${preview.id}`) #{preview.title}
+                p.preview__text
+                  | #{preview.announce}
+                a.preview__comment(href='#')
+                  | Комментарии
+                  span.preview__cloud
+                  b.preview__comment-count #{preview.countComment}
+          .preview__toggle-wrapper(hidden = mainPage.paginationVisible)
+            ul.preview__pagination.pagination
+              li
+                a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
+                  | Назад
+              each pagination in mainPage.paginationStep
+                li.pagination__item
+                  if pagination.offset
+                    a() #{pagination.step}
+                  else
+                    a(href=`/?start=${pagination.step}&count=8&offer=desc`) #{pagination.step}
 
-            li
-              a.pagination__button.button.button--forward(href=`#`)
-                | Вперед
+              li
+                a.pagination__button.button.button--forward(href=`#`)
+                  | Вперед
+      else
+        .main-page__empty-wrapper
+          p.main-page__empty-text
+           | Здесь пока пусто!
     include common/footer
