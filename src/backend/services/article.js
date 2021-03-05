@@ -25,8 +25,12 @@ const findAll = async () => await articleRepository.findAll();
 const getLastComments = async () => await articleRepository.getLastComments();
 
 const getMostDiscussed = async () => {
-  const res = await articleRepository.getMostDiscussed();
-  return res.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
+  const resMostDiscussed = await articleRepository.getMostDiscussed();
+  const mostDiscussed = resMostDiscussed.filter((it) => it.dataValues.count > 0);
+  if (mostDiscussed <= COMMENTS_COUNT_FOR_MAIN_PAGE) {
+    return mostDiscussed;
+  }
+  return mostDiscussed.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
 };
 
 const getPreviewsForMainPage = async (queryParams) => {
