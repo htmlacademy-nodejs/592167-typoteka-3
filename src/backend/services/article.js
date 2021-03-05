@@ -120,15 +120,20 @@ const update = (newArticle, id) => {
 
 const remove = async (articleId) => await articleRepository.remove(articleId);
 
-const search = async (queryString) => {
-  const resArticle = await articleRepository.findByTitle(queryString);
-  return Array(resArticle.length).fill({}).map((el, i) => {
+const search = async (queryParams) => {
+  let userInfoForSearch = {};
+  if (queryParams.username) {
+    userInfoForSearch = await userServices.getUserInfo(queryParams.username);
+  }
+  const resArticle = await articleRepository.findByTitle(queryParams.query);
+  const articlesList = Array(resArticle.length).fill({}).map((el, i) => {
     return {
       id: resArticle[i].id,
       title: resArticle[i].title,
       createdAt: createDateForPreview(resArticle[i].createdAt),
     };
   });
+  return {articlesList, userInfoForSearch};
 };
 
 const getCountAllArticles = async () => {

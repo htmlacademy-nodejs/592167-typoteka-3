@@ -69,7 +69,7 @@ const initializeRoutes = (app) => {
     }
 
     const userInfo = {};
-    if (allElements.userInfo.avatar) {
+    if (allElements.userInfo.roleId) {
       userInfo.userName = `${allElements.userInfo.firstName} ${allElements.userInfo.lastName}`;
       userInfo.avatar = allElements.userInfo.avatar;
       userInfo.userRole = allElements.userInfo.roleId;
@@ -127,9 +127,21 @@ const initializeRoutes = (app) => {
   });
 
   app.get(`/search`, async (req, res) => {
-    const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search?query=${req.query.search}`));
+    let searchQueryString = `?query=${req.query.search}`;
+    if (req.session && req.session.isLogged) {
+      searchQueryString += `&username=${req.session.username}`;
+    }
+    const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search${searchQueryString}`));
     const searchResult = response.data;
-    searchResult.userInfo = {userName: `${req.session.username}`, avatar: `avatar-3.png`, userRole: req.session.isLogged ? 1 : 3};
+    const userInfo = {};
+    if (searchResult.userInfoForSearch.roleId) {
+      userInfo.userName = `${searchResult.userInfoForSearch.firstName} ${searchResult.userInfoForSearch.lastName}`;
+      userInfo.avatar = searchResult.userInfoForSearch.avatar;
+      userInfo.userRole = searchResult.userInfoForSearch.roleId;
+    } else {
+      userInfo.userRole = 3;
+    }
+    searchResult.userInfo = userInfo;
     res.render(`search`, {searchResult});
   });
 };
