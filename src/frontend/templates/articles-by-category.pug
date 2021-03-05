@@ -3,6 +3,7 @@ extends common/layout
 block content
   .wrapper
     include common/header
+    +header(articlesByCategory.userInfo)
     main.articles-category
       h1 #{articlesByCategory.categoryActive}
       section.articles-category__theme-list

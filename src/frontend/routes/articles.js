@@ -53,8 +53,18 @@ router.get(`/:id`, async (req, res) => {
 });
 
 router.get(`/category/:id`, async (req, res) => {
-  const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}`);
+  const queryStringForArticlesByCategoryId = (req.session && req.session.username) ? `?username=${req.session.username}` : ``;
+  const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}${queryStringForArticlesByCategoryId}`);
   const articlesByCategory = resArticlesForCategory.data;
+  const userInfo = {};
+  if (articlesByCategory.userInfoArticlesForCategory.roleId) {
+    userInfo.userName = `${articlesByCategory.userInfoArticlesForCategory.firstName} ${articlesByCategory.userInfoArticlesForCategory.lastName}`;
+    userInfo.avatar = articlesByCategory.userInfoArticlesForCategory.avatar;
+    userInfo.userRole = articlesByCategory.userInfoArticlesForCategory.roleId;
+  } else {
+    userInfo.userRole = USER_ROLE_GUEST;
+  }
+  articlesByCategory.userInfo = userInfo;
   res.render(`articles-by-category`, {articlesByCategory});
 });
 

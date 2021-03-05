@@ -169,8 +169,13 @@ const testSelect = async (categoryId) => {
 
 const testCategory = async () => await categoryServices.getCategories();
 
-const getArticlesForCategory = async (categoryId) => {
-  let categoriesList = await categoryServices.getCategories();
+const getArticlesForCategory = async (categoryId, queryParams) => {
+  let userInfoArticlesForCategory = {};
+  if (queryParams.username) {
+    userInfoArticlesForCategory = await userServices.getUserInfo(queryParams.username);
+  }
+  const resCategories = await categoryServices.getCategories();
+  let categoriesList = resCategories.filter((el) => el.dataValues.count > 0);
   categoriesList = categoriesList.map((cat) => {
     return {
       id: cat.id,
@@ -202,7 +207,7 @@ const getArticlesForCategory = async (categoryId) => {
   });
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
-  return {categoriesList, articles, categoryActive};
+  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory};
 };
 
 const getArticleById = async (id, queryParams) => {

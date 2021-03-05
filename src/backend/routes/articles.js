@@ -101,7 +101,7 @@ router.get(`/myArticles`, async (req, res) => {
 
 router.get(`/categories/:id`, async (req, res) => {
   try {
-    res.send(await articleService.getArticlesForCategory(req.params.id));
+    res.send(await articleService.getArticlesForCategory(req.params.id, req.query));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
