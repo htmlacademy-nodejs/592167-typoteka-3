@@ -3,6 +3,7 @@ extends common/layout
 block content
   .wrapper
     include common/header
+    +header(article.userInfo)
     main
       section.post
         h1.visually-hidden Пост
@@ -42,11 +43,11 @@ block content
                       p.comments__message #{comment.comment}
             else
               h2.comments__title.title.title--middle Комментарии отсутствуют
-            if article.authorization
+            if article.userInfo.userRole !== article.USER_ROLE_GUEST
               .comments__footer.comments__footer--user
                 form(action=`http://localhost:8081/api/articles/${article.articleId}/comments`, method='POST')
                   .comments__avatar.avatar
-                    img(src='/img/avatar-2.png', alt='аватар пользователя')
+                    img(src=`/upload/${article.userInfo.avatar}`, alt='аватар пользователя')
                   label
                     textarea(rows='1', name='comment', placeholder='Присоединиться к обсуждению', minlength=20)
                   button.comments__button.button.button--colored(type='submit') Опубликовать

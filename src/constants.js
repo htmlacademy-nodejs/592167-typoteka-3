@@ -31,6 +31,7 @@ const MOCK_FILE_NAME = `mock.json`;
 const MOCK_USER_ID = 1;
 const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
+const USER_ROLE_GUEST = 3;
 
 const TEMPLATE = {
   REGISTRATION: `registration`,
@@ -76,4 +77,5 @@ module.exports = {
   TEMPLATE,
   REGISTRATION_MESSAGE,
   LOGIN_MESSAGE,
+  USER_ROLE_GUEST,
 };

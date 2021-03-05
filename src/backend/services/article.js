@@ -205,7 +205,7 @@ const getArticlesForCategory = async (categoryId) => {
   return {categoriesList, articles, categoryActive};
 };
 
-const getArticleById = async (id, extension) => {
+const getArticleById = async (id, queryParams) => {
   const tempArticle = await articleRepository.getArticleById(id);
   const firstLine = tempArticle.shift();
   const categoriesForArticle = firstLine.categories.map((el) => el.id);
@@ -220,7 +220,7 @@ const getArticleById = async (id, extension) => {
     authorization: true,
   };
 
-  if (extension === `post-info`) {
+  if (queryParams.extension === `post-info`) {
     article.comments = firstLine.comments.map((el) => {
       return {
         comment: el.comment,
@@ -229,13 +229,18 @@ const getArticleById = async (id, extension) => {
       };
     });
     article.categories = await categoryRepository.getCategoryById(categoriesForArticle);
-  } else if (extension === `edit`) {
+  } else if (queryParams.extension === `edit`) {
     const resCategories = await categoryRepository.findAll();
     article.categories = resCategories.map((el) => {
       el.dataValues.isChecked = categoriesForArticle.includes(el.id);
       return el;
     });
   }
+  let userInfoForArticleById = {};
+  if (queryParams.username) {
+    userInfoForArticleById = await userServices.getUserInfo(queryParams.username);
+  }
+  article.userInfoForArticleById = userInfoForArticleById;
 
   return article;
 };

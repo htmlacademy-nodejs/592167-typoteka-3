@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, USER_ROLE_GUEST} = require(`../../constants`);
 
 const {Router} = require(`express`);
 const router = new Router();
@@ -17,7 +17,11 @@ router.get(`/add`, async (req, res) => {
 });
 
 router.get(`/edit/:id`, async (req, res) => {
-  const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=edit`);
+  let queryStringForArticleEdit = `?extension=edit`;
+  if (req.session && req.session.username) {
+    queryStringForArticleEdit += `&username=${req.session.username}`;
+  }
+  const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}${queryStringForArticleEdit}`);
   const myArticles = response.data;
   myArticles.action = `${BACKEND_URL}/api/articles/edit/${req.params.id}`;
   res.render(`new-post`, {myArticles});
@@ -25,8 +29,23 @@ router.get(`/edit/:id`, async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   try {
-    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}?extension=post-info`);
+    let queryStringForArticleInfo = `?extension=post-info`;
+    if (req.session && req.session.username) {
+      queryStringForArticleInfo += `&username=${req.session.username}`;
+    }
+    const resGetArticle = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}${queryStringForArticleInfo}`);
     const article = resGetArticle.data;
+    const userInfo = {};
+    if (article.userInfoForArticleById.roleId) {
+      userInfo.userName = `${article.userInfoForArticleById.firstName} ${article.userInfoForArticleById.lastName}`;
+      userInfo.avatar = article.userInfoForArticleById.avatar;
+      userInfo.userRole = article.userInfoForArticleById.roleId;
+    } else {
+      userInfo.userRole = USER_ROLE_GUEST;
+    }
+    article.userInfo = userInfo;
+    article.BACKEND_URL = BACKEND_URL;
+    article.USER_ROLE_GUEST = USER_ROLE_GUEST;
     return res.render(`post`, {article});
   } catch (err) {
     return res.render(`error/500`, {err});
