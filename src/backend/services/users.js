@@ -25,9 +25,15 @@ const checkUserPassword = async (email, password) => {
 
 const getUserInfo = async (email) => await userRepository.getUserInfo(email);
 
+const checkAdmin = async (email) => {
+  const userInfo = await userRepository.getUserInfo(email);
+  return userInfo.dataValues.roleId === 1 ? {isAdmin: true} : {isAdmin: false};
+};
+
 module.exports = {
   add,
   checkUser,
   checkUserPassword,
   getUserInfo,
+  checkAdmin,
 };

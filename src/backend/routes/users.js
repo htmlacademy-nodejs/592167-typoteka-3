@@ -47,4 +47,16 @@ router.post(`/check-password`, async (req, res) => {
   }
 });
 
+router.get(`/check-admin`, async (req, res) => {
+  try {
+    res.send(await userServices.checkAdmin(req.query.email));
+  } catch (err) {
+    logger.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
+  }
+});
+
 module.exports = router;
