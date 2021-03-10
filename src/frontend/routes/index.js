@@ -123,7 +123,7 @@ const initializeRoutes = (app) => {
 
   app.get(`/logout`, (req, res) => {
     req.session.destroy();
-    res.redirect(`/`);
+    res.redirect(`/sign-in`);
   });
 
   app.get(`/search`, async (req, res) => {
