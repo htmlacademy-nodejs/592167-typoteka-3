@@ -1,6 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
+const md5 = require(`md5`);
 const {BACKEND_URL, DEFAULT, TEMPLATE} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
@@ -11,6 +12,7 @@ const alreadyRegister = require(`../../middleware/already-register`);
 const schemaValidation = require(`../../middleware/schema-validator`);
 const userIsNotRegister = require(`../../middleware/user-is-not-register`);
 const checkUserPassword = require(`../../middleware/check-user-password`);
+const testCsrf = require(`../../middleware/test-csrf`);
 
 const myRoutes = require(`./my`);
 const articlesRoutes = require(`./articles`);
@@ -109,10 +111,12 @@ const initializeRoutes = (app) => {
   });
 
   app.get(`/sign-in`, (req, res) => {
-    res.render(`sign-in`);
+    const csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
+    res.render(`sign-in`, {csrfToken: csrf});
   });
 
   app.post(`/sign-in`, [
+    testCsrf(),
     userIsNotRegister(),
     checkUserPassword(),
   ], (req, res) => {
