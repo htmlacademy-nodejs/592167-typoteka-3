@@ -2,12 +2,13 @@
 
 const axios = require(`axios`);
 const {BACKEND_URL, USER_ROLE_GUEST} = require(`../../constants`);
+const privatePath = require(`../../middleware/private`);
 
 const {Router} = require(`express`);
 const router = new Router();
 
 
-router.get(`/add`, async (req, res) => {
+router.get(`/add`, [privatePath()], async (req, res) => {
   const resCategories = await axios.get(`${BACKEND_URL}/api/categories?categoriesList=only`);
   const myArticles = {
     categories: resCategories.data,
@@ -16,7 +17,7 @@ router.get(`/add`, async (req, res) => {
   res.render(`new-post`, {myArticles});
 });
 
-router.get(`/edit/:id`, async (req, res) => {
+router.get(`/edit/:id`, [privatePath()], async (req, res) => {
   let queryStringForArticleEdit = `?extension=edit`;
   if (req.session && req.session.username) {
     queryStringForArticleEdit += `&username=${req.session.username}`;
