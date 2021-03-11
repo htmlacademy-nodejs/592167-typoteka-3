@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 const md5 = require(`md5`);
-const {BACKEND_URL, USER_ROLE_GUEST} = require(`../../constants`);
+const {BACKEND_URL, USER_ROLE_GUEST, FRONTEND_URL} = require(`../../constants`);
 const privatePath = require(`../../middleware/private`);
 const testCsrf = require(`../../middleware/test-csrf`);
 
@@ -48,6 +48,7 @@ router.get(`/:id`, async (req, res) => {
     }
     article.userInfo = userInfo;
     article.BACKEND_URL = BACKEND_URL;
+    article.FRONTEND_URL = FRONTEND_URL;
     article.USER_ROLE_GUEST = USER_ROLE_GUEST;
     article.csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
     return res.render(`post`, {article});
