@@ -1,8 +1,10 @@
 'use strict';
 
 const axios = require(`axios`);
+const md5 = require(`md5`);
 const {BACKEND_URL, USER_ROLE_GUEST} = require(`../../constants`);
 const privatePath = require(`../../middleware/private`);
+const testCsrf = require(`../../middleware/test-csrf`);
 
 const {Router} = require(`express`);
 const router = new Router();
@@ -47,9 +49,19 @@ router.get(`/:id`, async (req, res) => {
     article.userInfo = userInfo;
     article.BACKEND_URL = BACKEND_URL;
     article.USER_ROLE_GUEST = USER_ROLE_GUEST;
+    article.csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
     return res.render(`post`, {article});
   } catch (err) {
     return res.render(`error/500`, {err});
+  }
+});
+
+router.post(`/:id`, [testCsrf()], async (req, res) => {
+  try {
+    axios.post(`${BACKEND_URL}/api/articles/${req.params.id}/comments`, req.body);
+    res.redirect(`/articles/${req.params.id}`);
+  } catch (err) {
+    res.render(`error/500`, {err});
   }
 });
 
