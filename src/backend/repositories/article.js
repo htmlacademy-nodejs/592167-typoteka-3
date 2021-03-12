@@ -31,6 +31,11 @@ const findAll = async () => {
 
 const getLastComments = async () => await db.Comment.findAll({
   attributes: [`comment`, `articleId`],
+  include: {
+    model: db.User,
+    as: `users`,
+    attributes: [`firstName`, `lastName`, `avatar`],
+  },
   order: [[`createdAt`, `DESC`]],
   limit: COMMENTS_COUNT_FOR_MAIN_PAGE,
 });

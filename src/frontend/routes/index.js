@@ -50,8 +50,10 @@ const initializeRoutes = (app) => {
 
     allElements.lastComments.map((it) => {
       it.comment = cutString(it.comment);
+      it.userName = `${it.users.firstName} ${it.users.lastName}`;
       return it;
     });
+    console.log(allElements.lastComments);
 
     allElements.mostDiscussed.map((it) => {
       it.announce = cutString(it.announce);
