@@ -231,6 +231,7 @@ const getArticleById = async (id, queryParams) => {
         comment: el.comment,
         createdAt: createDateForPreview(el.createdAt),
         user: `${el.users.firstName} ${el.users.lastName}`,
+        userAvatar: el.users.avatar,
       };
     });
     article.categories = await categoryRepository.getCategoryById(categoriesForArticle);

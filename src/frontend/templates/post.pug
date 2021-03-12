@@ -35,7 +35,7 @@ block content
                 each comment in article.comments
                   li.comments__comment
                     .comments__avatar.avatar
-                      img(src='/img/avatar-1.png', alt='аватар пользователя')
+                      img(src=`/upload/${comment.userAvatar}`, alt='аватар пользователя')
                     .comments__text
                       .comments__head
                         p #{comment.user} &bull;
@@ -52,6 +52,7 @@ block content
                     textarea(rows='1', name='comment', placeholder='Присоединиться к обсуждению', minlength=20)
                   button.comments__button.button.button--colored(type='submit') Опубликовать
                   input(type='hidden' name='csrf' value=`${article.csrf}`)
+                  input(type='hidden' name='username' value=`${article.userInfo.email ? article.userInfo.email : ``}`)
             else
               .comments__footer.comments__footer--visitor
                 button.comments__button.button.button--colored(type='submit' onclick=`location.href="${article.FRONTEND_URL}/sign-in"`) Войти

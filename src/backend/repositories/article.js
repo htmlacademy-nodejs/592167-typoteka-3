@@ -300,7 +300,7 @@ const getArticleById = async (id) => await db.Article.findAll({
     include: {
       model: db.User,
       as: `users`,
-      attributes: [`firstName`, `lastName`],
+      attributes: [`firstName`, `lastName`, `avatar`],
     }
   }, {
     model: db.Category,

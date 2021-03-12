@@ -147,7 +147,6 @@ router.post(`/add`, savePhoto(TEMPLATE.NEW_POST), async (req, res) => {
 router.post(`/:articleId/comments`, async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
     data.articleId = req.params.articleId;
     commentService.add(data);
     // res.redirect(`${FRONTEND_URL}/articles/${req.params.articleId}`);

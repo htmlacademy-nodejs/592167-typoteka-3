@@ -43,6 +43,7 @@ router.get(`/:id`, async (req, res) => {
       userInfo.userName = `${article.userInfoForArticleById.firstName} ${article.userInfoForArticleById.lastName}`;
       userInfo.avatar = article.userInfoForArticleById.avatar;
       userInfo.userRole = article.userInfoForArticleById.roleId;
+      userInfo.email = req.session.username;
     } else {
       userInfo.userRole = USER_ROLE_GUEST;
     }
@@ -51,6 +52,7 @@ router.get(`/:id`, async (req, res) => {
     article.FRONTEND_URL = FRONTEND_URL;
     article.USER_ROLE_GUEST = USER_ROLE_GUEST;
     article.csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
+    console.log(article);
     return res.render(`post`, {article});
   } catch (err) {
     return res.render(`error/500`, {err});
