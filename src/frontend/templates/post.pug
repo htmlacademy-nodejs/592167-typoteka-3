@@ -55,7 +55,7 @@ block content
                   input(type='hidden' name='username' value=`${article.userInfo.email ? article.userInfo.email : ``}`)
             else
               .comments__footer.comments__footer--visitor
-                button.comments__button.button.button--colored(type='submit' onclick=`location.href="${article.FRONTEND_URL}/sign-in"`) Войти
+                button.comments__button.button.button--colored(type='submit' onclick=`location.href="${article.FRONTEND_URL}/login"`) Войти
                 .comments__registration
                   p.text.text--signature
                     b.title.title-small Регистрация
