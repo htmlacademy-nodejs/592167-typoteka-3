@@ -53,7 +53,6 @@ const initializeRoutes = (app) => {
       it.userName = `${it.users.firstName} ${it.users.lastName}`;
       return it;
     });
-    console.log(allElements.lastComments);
 
     allElements.mostDiscussed.map((it) => {
       it.announce = cutString(it.announce);
@@ -94,30 +93,30 @@ const initializeRoutes = (app) => {
     res.render(`main`, {mainPage});
   });
 
-  app.get(`/registration`, (req, res) => {
+  app.get(`/register`, (req, res) => {
     res.render(`registration`);
   });
 
-  app.post(`/registration`, [
+  app.post(`/register`, [
     savePhoto(TEMPLATE.REGISTRATION),
     schemaValidation(userSchema, TEMPLATE.REGISTRATION),
     alreadyRegister(),
   ], async (req, res) => {
     try {
       await axios.post(`${BACKEND_URL}/api/users`, req.user);
-      res.redirect(`/sign-in`);
+      res.redirect(`/login`);
     } catch (err) {
       console.log(err);
       res.render(`errors/500`);
     }
   });
 
-  app.get(`/sign-in`, (req, res) => {
+  app.get(`/login`, (req, res) => {
     const csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
     res.render(`sign-in`, {csrfToken: csrf});
   });
 
-  app.post(`/sign-in`, [
+  app.post(`/login`, [
     testCsrf(),
     userIsNotRegister(),
     checkUserPassword(),
@@ -129,7 +128,7 @@ const initializeRoutes = (app) => {
 
   app.get(`/logout`, (req, res) => {
     req.session.destroy();
-    res.redirect(`/sign-in`);
+    res.redirect(`/login`);
   });
 
   app.get(`/search`, async (req, res) => {

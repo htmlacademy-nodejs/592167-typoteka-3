@@ -7,7 +7,7 @@ module.exports = () => (
     if (req.body.csrf === md5(req.session.cookie + process.env.CSRF_SECRET)) {
       next();
     } else {
-      res.redirect(`/sign-in`);
+      res.redirect(`/login`);
     }
   }
 );

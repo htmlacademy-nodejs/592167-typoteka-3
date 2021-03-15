@@ -7,7 +7,7 @@ const privatePath = require(`../../middleware/private`);
 
 const {BACKEND_URL} = require(`../../constants`);
 
-router.get(`/`, [privatePath()], async (req, res) => {
+router.get(`/`, [privatePath(true)], async (req, res) => {
   const categoriesList = await axios.get(`${BACKEND_URL}/api/categories?categoriesList=only`);
   const categories = categoriesList.data;
   res.render(`all-categories`, {categories});

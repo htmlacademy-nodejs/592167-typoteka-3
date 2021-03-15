@@ -6,7 +6,6 @@ const bcrypt = require(`bcrypt`);
 const add = async (user) => {
   const allUsers = await userRepository.getAllUsers();
   user.roleId = allUsers.length > 0 ? 2 : 1;
-  console.log(user);
   return await userRepository.add(user);
 };
 
