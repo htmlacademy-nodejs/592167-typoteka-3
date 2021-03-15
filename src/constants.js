@@ -36,7 +36,7 @@ const USER_ROLE_GUEST = 3;
 const TEMPLATE = {
   REGISTRATION: `registration`,
   NEW_POST: `new-post`,
-  SIGN_IN: `login`,
+  LOGIN: `login`,
 };
 
 const REGISTRATION_MESSAGE = {

@@ -113,7 +113,7 @@ const initializeRoutes = (app) => {
 
   app.get(`/login`, (req, res) => {
     const csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
-    res.render(`sign-in`, {csrfToken: csrf});
+    res.render(`login`, {csrfToken: csrf});
   });
 
   app.post(`/login`, [

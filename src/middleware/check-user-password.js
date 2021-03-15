@@ -10,7 +10,7 @@ module.exports = () => (
       await axios.post(`${BACKEND_URL}/api/users/check-password`, req.body);
       next();
     } catch (err) {
-      res.render(TEMPLATE.SIGN_IN, {
+      res.render(TEMPLATE.LOGIN, {
         errorMessage: LOGIN_MESSAGE.BAD_LOGIN,
       });
     }
