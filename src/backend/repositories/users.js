@@ -10,7 +10,26 @@ const checkUser = async (email) => db.User.findOne({
   },
 });
 
+const getUserPassword = async (email) => db.User.findOne({
+  attributes: [`password`],
+  where: {
+    email,
+  },
+});
+
+const getAllUsers = async () => db.User.findAll();
+
+const getUserInfo = async (email) => db.User.findOne({
+  attributes: [`id`, `firstName`, `lastName`, `avatar`, `roleId`],
+  where: {
+    email,
+  },
+});
+
 module.exports = {
   add,
   checkUser,
+  getUserPassword,
+  getAllUsers,
+  getUserInfo,
 };

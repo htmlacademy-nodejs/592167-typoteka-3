@@ -2,8 +2,8 @@
 
 const articleRepository = require(`../repositories/article`);
 const commentRepository = require(`../repositories/comment`);
+const userServices = require(`../services/users`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
-const {MOCK_USER_ID} = require(`../../constants`);
 
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
@@ -26,10 +26,11 @@ const getByArticleId = (articleId) => {
 
 const remove = async (commentId) => await commentRepository.remove(commentId);
 
-const add = (data) => {
+const add = async (data) => {
+  const user = await userServices.getUserInfo(data.username);
   const newComment = {
     articleId: data.articleId,
-    userId: MOCK_USER_ID,
+    userId: user.dataValues.id,
     comment: data.comment,
   };
 

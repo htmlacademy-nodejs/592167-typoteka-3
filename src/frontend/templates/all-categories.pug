@@ -3,6 +3,7 @@ extends common/layout
 block content
   .wrapper.wrapper--nobackground
     include common/header
+    +header({userRole: 1})
     main.main-page.main-page--padding
       section.main-page__category.category
         h1.category__title Категории

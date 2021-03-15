@@ -2,6 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
+const userServices = require(`../services/users`);
 const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
 const {COMMENTS_COUNT_FOR_MAIN_PAGE, MOCK_USER_ID} = require(`../../constants`);
@@ -13,7 +14,6 @@ const logger = getLogger();
 
 
 const createDateForPreview = (date) => {
-  console.log(date);
   const createDate = new Date(date);
   const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
   const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
@@ -25,8 +25,12 @@ const findAll = async () => await articleRepository.findAll();
 const getLastComments = async () => await articleRepository.getLastComments();
 
 const getMostDiscussed = async () => {
-  const res = await articleRepository.getMostDiscussed();
-  return res.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
+  const resMostDiscussed = await articleRepository.getMostDiscussed();
+  const mostDiscussed = resMostDiscussed.filter((it) => it.dataValues.count > 0);
+  if (mostDiscussed <= COMMENTS_COUNT_FOR_MAIN_PAGE) {
+    return mostDiscussed;
+  }
+  return mostDiscussed.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
 };
 
 const getPreviewsForMainPage = async (queryParams) => {
@@ -47,7 +51,6 @@ const getPreviewsForMainPage = async (queryParams) => {
       };
     });
     const isArticleId = comments.find((com) => com.articleId === el.id);
-    console.log(response);
     el.countComment = isArticleId ? isArticleId.dataValues.count : 0;
     return el;
   });
@@ -63,7 +66,6 @@ const findById = (id) => {
 };
 
 const create = async (data) => {
-  console.log(data);
   const newArticle = {
     'title': data.title,
     'announce': data.announcement,
@@ -118,15 +120,20 @@ const update = (newArticle, id) => {
 
 const remove = async (articleId) => await articleRepository.remove(articleId);
 
-const search = async (queryString) => {
-  const resArticle = await articleRepository.findByTitle(queryString);
-  return Array(resArticle.length).fill({}).map((el, i) => {
+const search = async (queryParams) => {
+  let userInfoForSearch = {};
+  if (queryParams.username) {
+    userInfoForSearch = await userServices.getUserInfo(queryParams.username);
+  }
+  const resArticle = await articleRepository.findByTitle(queryParams.query);
+  const articlesList = Array(resArticle.length).fill({}).map((el, i) => {
     return {
       id: resArticle[i].id,
       title: resArticle[i].title,
       createdAt: createDateForPreview(resArticle[i].createdAt),
     };
   });
+  return {articlesList, userInfoForSearch};
 };
 
 const getCountAllArticles = async () => {
@@ -135,11 +142,16 @@ const getCountAllArticles = async () => {
 };
 
 const getAllElementsForMainPage = async (queryParams) => {
-  const categories = await categoryServices.getCategories();
+  const resCategories = await categoryServices.getCategories();
+  const categories = resCategories.filter((el) => el.dataValues.count > 0);
   const mostDiscussed = await getMostDiscussed();
   const previews = await getPreviewsForMainPage(queryParams);
   const lastComments = await getLastComments();
   const pagination = await getCountAllArticles();
+  let userInfo = {};
+  if (queryParams.username) {
+    userInfo = await userServices.getUserInfo(queryParams.username);
+  }
 
   return {
     categories,
@@ -147,6 +159,7 @@ const getAllElementsForMainPage = async (queryParams) => {
     previews,
     lastComments,
     pagination,
+    userInfo,
   };
 };
 
@@ -156,8 +169,13 @@ const testSelect = async (categoryId) => {
 
 const testCategory = async () => await categoryServices.getCategories();
 
-const getArticlesForCategory = async (categoryId) => {
-  let categoriesList = await categoryServices.getCategories();
+const getArticlesForCategory = async (categoryId, queryParams) => {
+  let userInfoArticlesForCategory = {};
+  if (queryParams.username) {
+    userInfoArticlesForCategory = await userServices.getUserInfo(queryParams.username);
+  }
+  const resCategories = await categoryServices.getCategories();
+  let categoriesList = resCategories.filter((el) => el.dataValues.count > 0);
   categoriesList = categoriesList.map((cat) => {
     return {
       id: cat.id,
@@ -189,10 +207,10 @@ const getArticlesForCategory = async (categoryId) => {
   });
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
-  return {categoriesList, articles, categoryActive};
+  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory};
 };
 
-const getArticleById = async (id, extension) => {
+const getArticleById = async (id, queryParams) => {
   const tempArticle = await articleRepository.getArticleById(id);
   const firstLine = tempArticle.shift();
   const categoriesForArticle = firstLine.categories.map((el) => el.id);
@@ -207,22 +225,28 @@ const getArticleById = async (id, extension) => {
     authorization: true,
   };
 
-  if (extension === `post-info`) {
+  if (queryParams.extension === `post-info`) {
     article.comments = firstLine.comments.map((el) => {
       return {
         comment: el.comment,
         createdAt: createDateForPreview(el.createdAt),
         user: `${el.users.firstName} ${el.users.lastName}`,
+        userAvatar: el.users.avatar,
       };
     });
     article.categories = await categoryRepository.getCategoryById(categoriesForArticle);
-  } else if (extension === `edit`) {
+  } else if (queryParams.extension === `edit`) {
     const resCategories = await categoryRepository.findAll();
     article.categories = resCategories.map((el) => {
       el.dataValues.isChecked = categoriesForArticle.includes(el.id);
       return el;
     });
   }
+  let userInfoForArticleById = {};
+  if (queryParams.username) {
+    userInfoForArticleById = await userServices.getUserInfo(queryParams.username);
+  }
+  article.userInfoForArticleById = userInfoForArticleById;
 
   return article;
 };

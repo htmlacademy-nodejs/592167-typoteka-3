@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
-const {StatusCode} = require(`http-status-codes`);
+const {StatusCodes} = require(`http-status-codes`);
 
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
@@ -18,7 +18,7 @@ router.get(`/`, async (req, res) => {
     res.send(await categoriesService.getCategories(req.query.categoriesList));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({code: StatusCodes.INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
 
@@ -28,7 +28,7 @@ router.post(`/add`, async (req, res) => {
     res.redirect(`${FRONTEND_URL}/categories`);
   } catch (err) {
     logger.error(err);
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({code: StatusCodes.INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
 
@@ -38,7 +38,7 @@ router.post(`/edit/:categoryId`, async (req, res) => {
     res.redirect(`${FRONTEND_URL}/categories`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({code: StatusCodes.INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
 

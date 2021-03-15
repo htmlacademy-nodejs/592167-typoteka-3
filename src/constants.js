@@ -31,17 +31,19 @@ const MOCK_FILE_NAME = `mock.json`;
 const MOCK_USER_ID = 1;
 const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
+const USER_ROLE_GUEST = 3;
 
 const TEMPLATE = {
   REGISTRATION: `registration`,
   NEW_POST: `new-post`,
+  SIGN_IN: `sign-in`,
 };
 
 const REGISTRATION_MESSAGE = {
   EMAIL_REQUIRED_FIELD: `Поле "Электронная почта" обязательно для заполнения`,
   EMAIL_WRONG: `Неправильный email`,
   EMAIL_MAX_LENGTH: `Поле "Электронная почта" не может быть более 255 символов`,
-  PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадают`,
+  PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадает`,
   PASSWORD_MAX_LENGTH: `Поле "Пароль" не может быть более 255 символов`,
   PASSWORD_MIN_LENGTH: `Поле "Пароль" не может быть менее 6 символов`,
   PASSWORD_REQUIRED_FIELD: `Поле "Пароль" обязательно для заполнения`,
@@ -57,6 +59,10 @@ const REGISTRATION_MESSAGE = {
   USER_SURNAME_REQUIRED_FIELD: `Поле "Фамилия" обязательно для заполнения`,
 };
 
+const LOGIN_MESSAGE = {
+  BAD_LOGIN: `Пользователь с таким Email не зарегистрирован или пароль указан неверно`,
+};
+
 
 module.exports = {
   ExitCode,
@@ -70,4 +76,6 @@ module.exports = {
   MOCK_USER_ID,
   TEMPLATE,
   REGISTRATION_MESSAGE,
+  LOGIN_MESSAGE,
+  USER_ROLE_GUEST,
 };

@@ -33,4 +33,30 @@ router.get(`/check`, async (req, res) => {
   }
 });
 
+router.post(`/check-password`, async (req, res) => {
+  const {email, password} = req.body;
+  try {
+    const checkPassword = await userServices.checkUserPassword(email, password);
+    res.sendStatus(checkPassword ? StatusCodes.OK : StatusCodes.UNAUTHORIZED);
+  } catch (err) {
+    logger.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
+  }
+});
+
+router.get(`/check-admin`, async (req, res) => {
+  try {
+    res.send(await userServices.checkAdmin(req.query.email));
+  } catch (err) {
+    logger.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: `Internal server error`
+    });
+  }
+});
+
 module.exports = router;
