@@ -37,6 +37,19 @@ const getCommentsByUser = async (userId) => db.Comment.findAll({
   order: [[`createdAt`, `desc`]],
 });
 
+const getCommentsForArticle = async (articleId) => db.Comment.findAll({
+  attributes: [`id`, `comment`, `createdAt`],
+  include: {
+    model: db.User,
+    as: `users`,
+    attributes: [`firstName`, `lastName`, `avatar`],
+  },
+  where: {
+    articleId,
+  },
+  order: [[`createdAt`, `desc`]],
+});
+
 
 module.exports = {
   exists,
@@ -44,4 +57,5 @@ module.exports = {
   save,
   remove,
   getCommentsByUser,
+  getCommentsForArticle
 };

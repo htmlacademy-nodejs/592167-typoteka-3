@@ -63,7 +63,7 @@ router.post(`/:id`, [testCsrf()], async (req, res) => {
     axios.post(`${BACKEND_URL}/api/articles/${req.params.id}/comments`, req.body);
     res.redirect(`/articles/${req.params.id}`);
   } catch (err) {
-    res.render(`error/500`, {err});
+    res.render(`errors/500`, {err});
   }
 });
 

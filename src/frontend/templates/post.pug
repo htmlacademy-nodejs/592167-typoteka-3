@@ -49,7 +49,7 @@ block content
                   .comments__avatar.avatar
                     img(src=`/upload/${article.userInfo.avatar}`, alt='аватар пользователя')
                   label
-                    textarea(rows='1', name='comment', placeholder='Присоединиться к обсуждению', minlength=20)
+                    textarea(rows='1', name='comment', placeholder='Присоединиться к обсуждению', minlength=20, required)
                   button.comments__button.button.button--colored(type='submit') Опубликовать
                   input(type='hidden' name='csrf' value=`${article.csrf}`)
                   input(type='hidden' name='username' value=`${article.userInfo.email ? article.userInfo.email : ``}`)

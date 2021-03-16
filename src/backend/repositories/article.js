@@ -299,15 +299,6 @@ const getArticleById = async (id) => await db.Article.findAll({
     attributes: [`image`],
     limit: 1,
   }, {
-    model: db.Comment,
-    as: `comments`,
-    attributes: [`comment`, `createdAt`],
-    include: {
-      model: db.User,
-      as: `users`,
-      attributes: [`firstName`, `lastName`, `avatar`],
-    }
-  }, {
     model: db.Category,
     as: `categories`,
     attributes: [`id`, `category`],

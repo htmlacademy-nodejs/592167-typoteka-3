@@ -2,6 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
+const commentServices = require(`../services/comment`);
 const userServices = require(`../services/users`);
 const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
@@ -226,12 +227,13 @@ const getArticleById = async (id, queryParams) => {
   };
 
   if (queryParams.extension === `post-info`) {
-    article.comments = firstLine.comments.map((el) => {
+    const commentsList = await commentServices.getCommentsForAtricle(id);
+    article.comments = commentsList.map((el) => {
       return {
-        comment: el.comment,
-        createdAt: createDateForPreview(el.createdAt),
-        user: `${el.users.firstName} ${el.users.lastName}`,
-        userAvatar: el.users.avatar,
+        comment: el.dataValues.comment,
+        createdAt: createDateForPreview(el.dataValues.createdAt),
+        user: `${el.dataValues.users.firstName} ${el.dataValues.users.lastName}`,
+        userAvatar: el.dataValues.users.avatar,
       };
     });
     article.categories = await categoryRepository.getCategoryById(categoriesForArticle);

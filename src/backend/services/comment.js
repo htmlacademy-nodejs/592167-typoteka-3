@@ -55,10 +55,13 @@ const getCommentsByUser = async (userId) => {
   });
 };
 
+const getCommentsForAtricle = async (articleId) => commentRepository.getCommentsForArticle(articleId);
+
 
 module.exports = {
   getByArticleId,
   remove,
   add,
   getCommentsByUser,
+  getCommentsForAtricle,
 };
