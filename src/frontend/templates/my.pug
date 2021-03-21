@@ -3,7 +3,7 @@ extends common/layout
 block content
   .wrapper.wrapper--nobackground
     include common/header
-    +header({userRole: 1})
+    +header(myArticles.userInfo)
     main.main-page.main-page--padding
       section.main-page__notes.notes
         h1.notes__title Мои записи
