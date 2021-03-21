@@ -3,7 +3,7 @@ extends common/layout
 block content
   .wrapper
     include common/header
-    +header({userRole: 1})
+    +header(myArticles.userInfo)
     main
       section
         .popup.popup--new-publication.popup--anti

@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 const md5 = require(`md5`);
-const {BACKEND_URL, USER_ROLE_GUEST, FRONTEND_URL} = require(`../../constants`);
+const {BACKEND_URL, USER_ROLE_GUEST, FRONTEND_URL, USER_ROLE_ADMIN} = require(`../../constants`);
 const privatePath = require(`../../middleware/private`);
 const testCsrf = require(`../../middleware/test-csrf`);
 
@@ -16,6 +16,9 @@ router.get(`/add`, [privatePath(true)], async (req, res) => {
     categories: resCategories.data,
   };
   myArticles.action = `${BACKEND_URL}/api/articles/add`;
+  myArticles.userInfo = {
+    userRole: USER_ROLE_ADMIN
+  };
   res.render(`new-post`, {myArticles});
 });
 
