@@ -60,14 +60,39 @@ const initializeRoutes = (app) => {
     });
 
     let paginationStep = [];
+    const linkForward = {
+      link: ``,
+      disabled: true,
+    };
+    const linkBack = {
+      link: ``,
+      disabled: false,
+    };
     if (allElements.pagination > DEFAULT.PREVIEWS_COUNT) {
       const tempCount = Math.floor(allElements.pagination / DEFAULT.PREVIEWS_COUNT);
       const paginationCount = (allElements.pagination % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
       paginationStep = Array(paginationCount).fill({}).map((it, i) => {
-        return {
-          step: i + 1,
-          offset: Number.parseInt(req.query.start, 10) === i + 1,
-        };
+        if (i === 0 && !req.query.start) {
+          linkBack.link = ``;
+          linkBack.disabled = true;
+          linkForward.link = `/?start=${i + 2}&count=8&offer=desc`;
+          linkForward.disabled = false;
+          return {
+            step: i + 1,
+            offset: true,
+          };
+        } else {
+          if (Number.parseInt(req.query.start, 10) === i + 1) {
+            linkBack.link = i === 0 ? `` : `/?start=${i}&count=8&offer=desc`;
+            linkBack.disabled = i === 0;
+            linkForward.link = i + 1 > tempCount ? `` : `/?start=${i + 2}&count=8&offer=desc`;
+            linkForward.disabled = i === tempCount;
+          }
+          return {
+            step: i + 1,
+            offset: Number.parseInt(req.query.start, 10) === i + 1,
+          };
+        }
       });
     }
 
@@ -89,6 +114,8 @@ const initializeRoutes = (app) => {
       paginationStep,
       paginationVisible,
       userInfo,
+      linkForward,
+      linkBack,
     };
     res.render(`main`, {mainPage});
   });
