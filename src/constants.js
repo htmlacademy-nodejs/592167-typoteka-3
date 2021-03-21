@@ -29,6 +29,8 @@ const USER_ARGV_INDEX = 2;
 const COMMENTS_COUNT_FOR_MAIN_PAGE = 4;
 const MOCK_FILE_NAME = `mock.json`;
 const MOCK_USER_ID = 1;
+const USER_ROLE_ADMIN = 1;
+const USER_ROLE_USER = 2;
 const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
 const USER_ROLE_GUEST = 3;
@@ -78,4 +80,6 @@ module.exports = {
   REGISTRATION_MESSAGE,
   LOGIN_MESSAGE,
   USER_ROLE_GUEST,
+  USER_ROLE_ADMIN,
+  USER_ROLE_USER,
 };
