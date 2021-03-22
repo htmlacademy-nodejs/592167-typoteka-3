@@ -140,7 +140,6 @@ const getCountAllArticles = async () => {
 };
 
 const getCountArticlesForCategoryId = async (articleIdList) => {
-  console.log(articleIdList);
   const resCount = await articleRepository.getCountArticlesForCategoryId(articleIdList);
   return resCount[0].dataValues.articlesCount;
 };

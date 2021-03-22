@@ -261,7 +261,6 @@ const getArticleIdListByCategoryId = async (categoryId) => {
 };
 
 const getArticlesForCategory = async (categoryIdList, queryParams) => {
-  console.log(queryParams);
   const {start, count, offer} = queryParams;
   let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
   selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
