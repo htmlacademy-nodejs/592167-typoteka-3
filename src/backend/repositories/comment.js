@@ -20,7 +20,7 @@ const remove = async (commentId) => db.Comment.destroy({
   },
 });
 
-const getCommentsByUser = async (userId) => db.Comment.findAll({
+const getComments = async () => db.Comment.findAll({
   attributes: [`id`, `comment`, `createdAt`],
   include: [{
     model: db.Article,
@@ -29,11 +29,8 @@ const getCommentsByUser = async (userId) => db.Comment.findAll({
   }, {
     model: db.User,
     as: `users`,
-    attributes: [`firstName`, `lastName`],
+    attributes: [`firstName`, `lastName`, `avatar`],
   }],
-  where: {
-    userId,
-  },
   order: [[`createdAt`, `desc`]],
 });
 
@@ -56,6 +53,6 @@ module.exports = {
   findByArticleId,
   save,
   remove,
-  getCommentsByUser,
+  getComments,
   getCommentsForArticle
 };
