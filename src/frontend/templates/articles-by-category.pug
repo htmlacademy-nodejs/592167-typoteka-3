@@ -53,4 +53,20 @@ block content
                   | Комментарии
                   span.preview__cloud
                   b.preview__comment-count #{article.comments}
+        .preview__toggle-wrapper(hidden = articlesByCategory.paginationVisible)
+          ul.preview__pagination.pagination
+            li
+              //a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
+              a.pagination__button.button.button--backwards(href=`${articlesByCategory.linkBack.link}` class=`${articlesByCategory.linkBack.disabled ? ' button--disabled' : ''}` aria-label=`Страница назад`)
+                | Назад
+            each pagination in articlesByCategory.paginationStep
+              li.pagination__item(class = `${pagination.offset ? ' pagination__item--active' : ''}`)
+                if pagination.offset
+                  a() #{pagination.step}
+                else
+                  a(href=`/articles/category/${articlesByCategory.categoryId}?start=${pagination.step}&count=8&offer=desc`) #{pagination.step}
+
+            li
+              a.pagination__button.button.button--forward(href=`${articlesByCategory.linkForward.link}` class=`${articlesByCategory.linkForward.disabled ? ' button--disabled' : ''}` aria-label=`Страница вперед`)
+                | Вперед
     include common/footer

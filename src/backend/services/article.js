@@ -182,7 +182,7 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
       active: cat.id === Number.parseInt(categoryId, 10),
     };
   });
-  const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId);
+  const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId, queryParams);
   const articleIdList = resArticleIdList.map((el) => el.id);
   const resArticles = await articleRepository.getArticlesForCategory(articleIdList);
   const articles = Array(resArticles.length).fill({}).map((el, i) => {
@@ -205,7 +205,8 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
   });
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
-  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory};
+  const pagination = articles.length;
+  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory, pagination};
 };
 
 const getArticleById = async (id, queryParams) => {

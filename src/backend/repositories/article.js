@@ -245,7 +245,13 @@ const findByTitle = async (queryString) => {
   });
 };
 
-const getArticleIdListByCategoryId = async (categoryId) => {
+const getArticleIdListByCategoryId = async (categoryId, queryParams) => {
+  console.log(queryParams);
+  const {start, count, offer} = queryParams;
+  let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
+  selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
+  const selectionCount = Number.parseInt(count, 10) || DEFAULT.LIMIT;
+  const order = `${offer ? offer : DEFAULT.ORDER}`;
   return await db.Article.findAll({
     attributes: [`id`],
     include: [
@@ -257,6 +263,11 @@ const getArticleIdListByCategoryId = async (categoryId) => {
           id: categoryId
         }
       }],
+    order: [
+      [`createdAt`, `${order}`]
+    ],
+    offset: selectionOffset,
+    limit: selectionCount,
   });
 };
 

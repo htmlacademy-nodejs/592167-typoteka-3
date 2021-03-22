@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 const md5 = require(`md5`);
-const {BACKEND_URL, USER_ROLE_GUEST, FRONTEND_URL, USER_ROLE_ADMIN} = require(`../../constants`);
+const {BACKEND_URL, USER_ROLE_GUEST, FRONTEND_URL, USER_ROLE_ADMIN, DEFAULT} = require(`../../constants`);
 const privatePath = require(`../../middleware/private`);
 const testCsrf = require(`../../middleware/test-csrf`);
 
@@ -71,7 +71,14 @@ router.post(`/:id`, [testCsrf()], async (req, res) => {
 });
 
 router.get(`/category/:id`, async (req, res) => {
-  const queryStringForArticlesByCategoryId = (req.session && req.session.username) ? `?username=${req.session.username}` : ``;
+  let queryStringForArticlesByCategoryId = `?start=1&count=8&offer=desc`;
+  if (Object.keys(req.query).length !== 0) {
+    queryStringForArticlesByCategoryId = `?start=${req.query.start}&count=${req.query.count}&offer=${req.query.offer}`;
+  }
+  if (req.session && req.session.isLogged) {
+    queryStringForArticlesByCategoryId += `&username=${req.session.username}`;
+  }
+  // queryStringForArticlesByCategoryId = (req.session && req.session.username) ? `?username=${req.session.username}` : ``;
   const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}${queryStringForArticlesByCategoryId}`);
   const articlesByCategory = resArticlesForCategory.data;
   const userInfo = {};
@@ -82,7 +89,51 @@ router.get(`/category/:id`, async (req, res) => {
   } else {
     userInfo.userRole = USER_ROLE_GUEST;
   }
+
+  let paginationStep = [];
+  const linkForward = {
+    link: ``,
+    disabled: true,
+  };
+  const linkBack = {
+    link: ``,
+    disabled: false,
+  };
+  if (articlesByCategory.pagination > DEFAULT.PREVIEWS_COUNT) {
+    const tempCount = Math.floor(articlesByCategory.pagination / DEFAULT.PREVIEWS_COUNT);
+    const paginationCount = (articlesByCategory.pagination % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
+    paginationStep = Array(paginationCount).fill({}).map((it, i) => {
+      if (i === 0 && !req.query.start) {
+        linkBack.link = ``;
+        linkBack.disabled = true;
+        linkForward.link = `/articles/category/${req.params.id}?start=${i + 2}&count=8&offer=desc`;
+        linkForward.disabled = false;
+        return {
+          step: i + 1,
+          offset: true,
+        };
+      } else {
+        if (Number.parseInt(req.query.start, 10) === i + 1) {
+          linkBack.link = i === 0 ? `` : `/articles/category/${req.params.id}?start=${i}&count=8&offer=desc`;
+          linkBack.disabled = i === 0;
+          linkForward.link = i + 1 > tempCount ? `` : `/articles/category/${req.params.id}?start=${i + 2}&count=8&offer=desc`;
+          linkForward.disabled = i === tempCount;
+        }
+        return {
+          step: i + 1,
+          offset: Number.parseInt(req.query.start, 10) === i + 1,
+        };
+      }
+    });
+  }
+  const paginationVisible = DEFAULT.PREVIEWS_COUNT >= articlesByCategory.pagination;
+
   articlesByCategory.userInfo = userInfo;
+  articlesByCategory.paginationStep = paginationStep;
+  articlesByCategory.paginationVisible = paginationVisible;
+  articlesByCategory.linkForward = linkForward;
+  articlesByCategory.linkBack = linkBack;
+  articlesByCategory.categoryId = req.params.id;
   res.render(`articles-by-category`, {articlesByCategory});
 });
 
