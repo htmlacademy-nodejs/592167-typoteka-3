@@ -10,7 +10,8 @@
     "start": "node src/service.js",
     "start-front-server": "nodemon src/frontend/index.js",
     "server:start": "LOG_LEVEL=error nodemon src/service.js --server > src/backend/logs/app.log",
-    "server:start:debug": "LOG_LEVEL=debug node src/service.js --server | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log"
+    "server:start:debug": "LOG_LEVEL=debug node src/service.js --server | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log",
+    "server": "concurrently \"npm:server:start\" \"npm:start-front-server\""
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "axios": "0.19.2",
     "bcrypt": "5.0.0",
     "chalk": "3.0.0",
+    "concurrently": "6.0.0",
     "cors": "2.8.5",
     "cross-env": "7.0.2",
     "dotenv": "8.2.0",
