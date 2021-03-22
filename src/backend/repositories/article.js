@@ -245,13 +245,7 @@ const findByTitle = async (queryString) => {
   });
 };
 
-const getArticleIdListByCategoryId = async (categoryId, queryParams) => {
-  console.log(queryParams);
-  const {start, count, offer} = queryParams;
-  let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
-  selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
-  const selectionCount = Number.parseInt(count, 10) || DEFAULT.LIMIT;
-  const order = `${offer ? offer : DEFAULT.ORDER}`;
+const getArticleIdListByCategoryId = async (categoryId) => {
   return await db.Article.findAll({
     attributes: [`id`],
     include: [
@@ -263,15 +257,16 @@ const getArticleIdListByCategoryId = async (categoryId, queryParams) => {
           id: categoryId
         }
       }],
-    order: [
-      [`createdAt`, `${order}`]
-    ],
-    offset: selectionOffset,
-    limit: selectionCount,
   });
 };
 
-const getArticlesForCategory = async (categoryIdList) => {
+const getArticlesForCategory = async (categoryIdList, queryParams) => {
+  console.log(queryParams);
+  const {start, count, offer} = queryParams;
+  let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
+  selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
+  const selectionCount = Number.parseInt(count, 10) || DEFAULT.LIMIT;
+  const order = `${offer ? offer : DEFAULT.ORDER}`;
   return await db.Article.findAll({
     attributes: [`id`, `title`, `announce`, `createdAt`],
     include: [
@@ -297,10 +292,23 @@ const getArticlesForCategory = async (categoryIdList) => {
       }
     },
     order: [
-      [`createdAt`, `DESC`]
+      [`createdAt`, `${order}`]
     ],
+    offset: selectionOffset,
+    limit: selectionCount,
   });
 };
+
+const getCountArticlesForCategoryId = async (categoryIdList) => await db.Article.findAll({
+  attributes: [
+    [sequelize.fn(`count`, sequelize.col(`id`)), `articlesCount`],
+  ],
+  where: {
+    id: {
+      [Operator.in]: categoryIdList,
+    }
+  },
+});
 
 const getArticleById = async (id) => await db.Article.findAll({
   attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
@@ -361,4 +369,5 @@ module.exports = {
   getArticleIdListByCategoryId,
   getArticleById,
   getMyArticles,
+  getCountArticlesForCategoryId
 };

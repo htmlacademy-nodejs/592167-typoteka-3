@@ -139,6 +139,12 @@ const getCountAllArticles = async () => {
   return resCount[0].dataValues.articlesCount;
 };
 
+const getCountArticlesForCategoryId = async (articleIdList) => {
+  console.log(articleIdList);
+  const resCount = await articleRepository.getCountArticlesForCategoryId(articleIdList);
+  return resCount[0].dataValues.articlesCount;
+};
+
 const getAllElementsForMainPage = async (queryParams) => {
   const resCategories = await categoryServices.getCategories();
   const categories = resCategories.filter((el) => el.dataValues.count > 0);
@@ -182,9 +188,9 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
       active: cat.id === Number.parseInt(categoryId, 10),
     };
   });
-  const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId, queryParams);
+  const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId);
   const articleIdList = resArticleIdList.map((el) => el.id);
-  const resArticles = await articleRepository.getArticlesForCategory(articleIdList);
+  const resArticles = await articleRepository.getArticlesForCategory(articleIdList, queryParams);
   const articles = Array(resArticles.length).fill({}).map((el, i) => {
     const dataCreate = new Date(resArticles[i].createdAt);
     const categories = resArticles[i].categories.map((it) => {
@@ -205,7 +211,7 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
   });
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
-  const pagination = articles.length;
+  const pagination = await getCountArticlesForCategoryId(articleIdList);
   return {categoriesList, articles, categoryActive, userInfoArticlesForCategory, pagination};
 };
 
