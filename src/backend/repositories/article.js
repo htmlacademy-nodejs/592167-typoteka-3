@@ -330,7 +330,10 @@ const getMyArticles = async (userId) => await db.Article.findAll({
   attributes: [`id`, `title`, `createdAt`],
   where: {
     userId,
-  }
+  },
+  order: [
+    [`createdAt`, `desc`]
+  ],
 });
 
 
