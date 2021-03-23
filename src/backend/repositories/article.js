@@ -242,6 +242,7 @@ const findByTitle = async (queryString) => {
         [Operator.substring]: queryString,
       },
     },
+    order: [[`createdAt`, `desc`]],
   });
 };
 
