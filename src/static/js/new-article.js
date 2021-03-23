@@ -10,12 +10,22 @@ const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
 const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
 // eslint-disable-next-line no-undef
 const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
+// eslint-disable-next-line no-undef
+const buttonPostBackwards = document.querySelector(`.post__backwards`);
 
 
 if (buttonNewArticle) {
   buttonNewArticle.addEventListener(`click`, () => {
     // eslint-disable-next-line no-undef
     location.pathname = `/articles/add`;
+  });
+}
+
+if (buttonPostBackwards) {
+  buttonPostBackwards.addEventListener(`click`, (evt) => {
+    // eslint-disable-next-line no-undef
+    history.back();
+    evt.preventDefault();
   });
 }
 

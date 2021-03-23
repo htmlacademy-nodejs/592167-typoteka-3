@@ -2,6 +2,7 @@
 
 const articleRepository = require(`../repositories/article`);
 const categoryServices = require(`../services/categories`);
+const commentServices = require(`../services/comment`);
 const userServices = require(`../services/users`);
 const categoryRepository = require(`../repositories/categories`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
@@ -27,10 +28,7 @@ const getLastComments = async () => await articleRepository.getLastComments();
 const getMostDiscussed = async () => {
   const resMostDiscussed = await articleRepository.getMostDiscussed();
   const mostDiscussed = resMostDiscussed.filter((it) => it.dataValues.count > 0);
-  if (mostDiscussed <= COMMENTS_COUNT_FOR_MAIN_PAGE) {
-    return mostDiscussed;
-  }
-  return mostDiscussed.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
+  return mostDiscussed <= COMMENTS_COUNT_FOR_MAIN_PAGE ? mostDiscussed : mostDiscussed.slice(0, COMMENTS_COUNT_FOR_MAIN_PAGE);
 };
 
 const getPreviewsForMainPage = async (queryParams) => {
@@ -141,6 +139,11 @@ const getCountAllArticles = async () => {
   return resCount[0].dataValues.articlesCount;
 };
 
+const getCountArticlesForCategoryId = async (articleIdList) => {
+  const resCount = await articleRepository.getCountArticlesForCategoryId(articleIdList);
+  return resCount[0].dataValues.articlesCount;
+};
+
 const getAllElementsForMainPage = async (queryParams) => {
   const resCategories = await categoryServices.getCategories();
   const categories = resCategories.filter((el) => el.dataValues.count > 0);
@@ -186,7 +189,7 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
   });
   const resArticleIdList = await articleRepository.getArticleIdListByCategoryId(categoryId);
   const articleIdList = resArticleIdList.map((el) => el.id);
-  const resArticles = await articleRepository.getArticlesForCategory(articleIdList);
+  const resArticles = await articleRepository.getArticlesForCategory(articleIdList, queryParams);
   const articles = Array(resArticles.length).fill({}).map((el, i) => {
     const dataCreate = new Date(resArticles[i].createdAt);
     const categories = resArticles[i].categories.map((it) => {
@@ -207,7 +210,8 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
   });
 
   const categoryActive = categoriesList.find((catList) => catList.active === true).category;
-  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory};
+  const pagination = await getCountArticlesForCategoryId(articleIdList);
+  return {categoriesList, articles, categoryActive, userInfoArticlesForCategory, pagination};
 };
 
 const getArticleById = async (id, queryParams) => {
@@ -226,12 +230,13 @@ const getArticleById = async (id, queryParams) => {
   };
 
   if (queryParams.extension === `post-info`) {
-    article.comments = firstLine.comments.map((el) => {
+    const commentsList = await commentServices.getCommentsForAtricle(id);
+    article.comments = commentsList.map((el) => {
       return {
-        comment: el.comment,
-        createdAt: createDateForPreview(el.createdAt),
-        user: `${el.users.firstName} ${el.users.lastName}`,
-        userAvatar: el.users.avatar,
+        comment: el.dataValues.comment,
+        createdAt: createDateForPreview(el.dataValues.createdAt),
+        user: `${el.dataValues.users.firstName} ${el.dataValues.users.lastName}`,
+        userAvatar: el.dataValues.users.avatar,
       };
     });
     article.categories = await categoryRepository.getCategoryById(categoriesForArticle);

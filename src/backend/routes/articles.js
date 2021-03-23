@@ -13,7 +13,7 @@ const commentService = require(`../services/comment`);
 const articleService = require(`../services/article`);
 const savePhoto = require(`../../middleware/save-photo`);
 const {ArticleNotFoundError} = require(`../errors/errors`);
-const {MOCK_USER_ID, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
+const {USER_ROLE_ADMIN, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
 
 
 router.get(`/`, async (req, res) => {
@@ -88,7 +88,7 @@ router.get(`/countAllArticles`, async (req, res) => {
 
 router.get(`/myArticles`, async (req, res) => {
   try {
-    res.send(await articleService.getMyArticles(MOCK_USER_ID));
+    res.send(await articleService.getMyArticles(USER_ROLE_ADMIN));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({

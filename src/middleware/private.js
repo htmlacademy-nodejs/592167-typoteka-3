@@ -17,7 +17,7 @@ module.exports = (checkAdmin = false) => (
       }
       next();
     } else {
-      res.redirect(`/sign-in`);
+      res.redirect(`/login`);
     }
   }
 );

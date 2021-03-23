@@ -14,9 +14,8 @@ block content
           ul.themes
             each category in mainPage.categories
               li.themes__item
-                a.themes__item-link(href=`/articles/category/${category.id}`)
-                  | #{category.category}
-                  sup #{category.count}
+                a.themes__item-link(href=`/articles/category/${category.id}`) #{`${category.category} `}
+                 sup #{category.count}
         .main-page__section-flex.main-page__section-flex--short
           section.main-page__hot.hot
             h2.hot__name
@@ -26,8 +25,7 @@ block content
               ul.hot__list
                 each discuss in mainPage.mostDiscussed
                   li.hot__list-item
-                    a.hot__list-link(href=`/articles/${discuss.id}`)
-                      | #{discuss.announce}
+                    a.hot__list-link(href=`/articles/${discuss.id}`) #{`${discuss.announce} `}
                       sup.hot__link-sup #{discuss.count}
             else
               p.hot__empty
@@ -63,24 +61,24 @@ block content
                   a.preview__name-link(href=`/articles/${preview.id}`) #{preview.title}
                 p.preview__text
                   | #{preview.announce}
-                a.preview__comment(href='#')
-                  | Комментарии
+                a.preview__comment(href='#') Комментарии
                   span.preview__cloud
                   b.preview__comment-count #{preview.countComment}
           .preview__toggle-wrapper(hidden = mainPage.paginationVisible)
             ul.preview__pagination.pagination
               li
-                a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
+                //a.pagination__button.button.button--backwards.button--disabled(href=`#` aria-label=`Страница назад`)
+                a.pagination__button.button.button--backwards(href=`${mainPage.linkBack.link}` class=`${mainPage.linkBack.disabled ? ' button--disabled' : ''}` aria-label=`Страница назад`)
                   | Назад
               each pagination in mainPage.paginationStep
-                li.pagination__item
+                li.pagination__item(class = `${pagination.offset ? ' pagination__item--active' : ''}`)
                   if pagination.offset
                     a() #{pagination.step}
                   else
                     a(href=`/?start=${pagination.step}&count=8&offer=desc`) #{pagination.step}
 
               li
-                a.pagination__button.button.button--forward(href=`#`)
+                a.pagination__button.button.button--forward(href=`${mainPage.linkForward.link}` class=`${mainPage.linkForward.disabled ? ' button--disabled' : ''}` aria-label=`Страница вперед`)
                   | Вперед
       else
         .main-page__empty-wrapper

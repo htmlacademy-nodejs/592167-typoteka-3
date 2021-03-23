@@ -41,8 +41,8 @@ const add = async (data) => {
     .catch((err) => logger.error(err));
 };
 
-const getCommentsByUser = async (userId) => {
-  const commentsList = await commentRepository.getCommentsByUser(userId);
+const getComments = async () => {
+  const commentsList = await commentRepository.getComments();
   return Array(commentsList.length).fill({}).map((el, i) => {
     return {
       id: commentsList[i].id,
@@ -51,14 +51,18 @@ const getCommentsByUser = async (userId) => {
       createdAt: createDateForPreview(commentsList[i].createdAt),
       title: commentsList[i].comments.title,
       userName: `${commentsList[i].users.firstName} ${commentsList[i].users.lastName}`,
+      avatar: commentsList[i].users.avatar,
     };
   });
 };
+
+const getCommentsForAtricle = async (articleId) => commentRepository.getCommentsForArticle(articleId);
 
 
 module.exports = {
   getByArticleId,
   remove,
   add,
-  getCommentsByUser,
+  getComments,
+  getCommentsForAtricle,
 };

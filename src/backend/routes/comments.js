@@ -10,9 +10,9 @@ const router = new Router();
 const commentsService = require(`../services/comment`);
 
 
-router.get(`/:userId`, async (req, res) => {
+router.get(`/`, async (req, res) => {
   try {
-    res.send(await commentsService.getCommentsByUser(req.params.userId));
+    res.send(await commentsService.getComments());
   } catch (err) {
     logger.error(err);
     res.status(500).send({code: 500, message: `Internal service error`});

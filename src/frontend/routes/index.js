@@ -53,7 +53,6 @@ const initializeRoutes = (app) => {
       it.userName = `${it.users.firstName} ${it.users.lastName}`;
       return it;
     });
-    console.log(allElements.lastComments);
 
     allElements.mostDiscussed.map((it) => {
       it.announce = cutString(it.announce);
@@ -61,14 +60,39 @@ const initializeRoutes = (app) => {
     });
 
     let paginationStep = [];
+    const linkForward = {
+      link: ``,
+      disabled: true,
+    };
+    const linkBack = {
+      link: ``,
+      disabled: false,
+    };
     if (allElements.pagination > DEFAULT.PREVIEWS_COUNT) {
       const tempCount = Math.floor(allElements.pagination / DEFAULT.PREVIEWS_COUNT);
       const paginationCount = (allElements.pagination % DEFAULT.PREVIEWS_COUNT > 0) ? tempCount + 1 : tempCount;
       paginationStep = Array(paginationCount).fill({}).map((it, i) => {
-        return {
-          step: i + 1,
-          offset: Number.parseInt(req.query.start, 10) === i + 1,
-        };
+        if (i === 0 && !req.query.start) {
+          linkBack.link = ``;
+          linkBack.disabled = true;
+          linkForward.link = `/?start=${i + 2}&count=8&offer=desc`;
+          linkForward.disabled = false;
+          return {
+            step: i + 1,
+            offset: true,
+          };
+        } else {
+          if (Number.parseInt(req.query.start, 10) === i + 1) {
+            linkBack.link = i === 0 ? `` : `/?start=${i}&count=8&offer=desc`;
+            linkBack.disabled = i === 0;
+            linkForward.link = i + 1 > tempCount ? `` : `/?start=${i + 2}&count=8&offer=desc`;
+            linkForward.disabled = i === tempCount;
+          }
+          return {
+            step: i + 1,
+            offset: Number.parseInt(req.query.start, 10) === i + 1,
+          };
+        }
       });
     }
 
@@ -90,34 +114,36 @@ const initializeRoutes = (app) => {
       paginationStep,
       paginationVisible,
       userInfo,
+      linkForward,
+      linkBack,
     };
     res.render(`main`, {mainPage});
   });
 
-  app.get(`/registration`, (req, res) => {
+  app.get(`/register`, (req, res) => {
     res.render(`registration`);
   });
 
-  app.post(`/registration`, [
+  app.post(`/register`, [
     savePhoto(TEMPLATE.REGISTRATION),
     schemaValidation(userSchema, TEMPLATE.REGISTRATION),
     alreadyRegister(),
   ], async (req, res) => {
     try {
       await axios.post(`${BACKEND_URL}/api/users`, req.user);
-      res.redirect(`/sign-in`);
+      res.redirect(`/login`);
     } catch (err) {
       console.log(err);
       res.render(`errors/500`);
     }
   });
 
-  app.get(`/sign-in`, (req, res) => {
+  app.get(`/login`, (req, res) => {
     const csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
-    res.render(`sign-in`, {csrfToken: csrf});
+    res.render(`login`, {csrfToken: csrf});
   });
 
-  app.post(`/sign-in`, [
+  app.post(`/login`, [
     testCsrf(),
     userIsNotRegister(),
     checkUserPassword(),
@@ -129,7 +155,7 @@ const initializeRoutes = (app) => {
 
   app.get(`/logout`, (req, res) => {
     req.session.destroy();
-    res.redirect(`/sign-in`);
+    res.redirect(`/login`);
   });
 
   app.get(`/search`, async (req, res) => {

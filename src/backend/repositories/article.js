@@ -242,6 +242,7 @@ const findByTitle = async (queryString) => {
         [Operator.substring]: queryString,
       },
     },
+    order: [[`createdAt`, `desc`]],
   });
 };
 
@@ -260,7 +261,12 @@ const getArticleIdListByCategoryId = async (categoryId) => {
   });
 };
 
-const getArticlesForCategory = async (categoryIdList) => {
+const getArticlesForCategory = async (categoryIdList, queryParams) => {
+  const {start, count, offer} = queryParams;
+  let selectionOffset = Number.parseInt(start, 10) || DEFAULT.OFFSET;
+  selectionOffset = selectionOffset === DEFAULT.OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT.PREVIEWS_COUNT;
+  const selectionCount = Number.parseInt(count, 10) || DEFAULT.LIMIT;
+  const order = `${offer ? offer : DEFAULT.ORDER}`;
   return await db.Article.findAll({
     attributes: [`id`, `title`, `announce`, `createdAt`],
     include: [
@@ -286,10 +292,23 @@ const getArticlesForCategory = async (categoryIdList) => {
       }
     },
     order: [
-      [`createdAt`, `DESC`]
+      [`createdAt`, `${order}`]
     ],
+    offset: selectionOffset,
+    limit: selectionCount,
   });
 };
+
+const getCountArticlesForCategoryId = async (categoryIdList) => await db.Article.findAll({
+  attributes: [
+    [sequelize.fn(`count`, sequelize.col(`id`)), `articlesCount`],
+  ],
+  where: {
+    id: {
+      [Operator.in]: categoryIdList,
+    }
+  },
+});
 
 const getArticleById = async (id) => await db.Article.findAll({
   attributes: [`id`, `title`, `announce`, `description`, `createdAt`],
@@ -298,15 +317,6 @@ const getArticleById = async (id) => await db.Article.findAll({
     as: `images`,
     attributes: [`image`],
     limit: 1,
-  }, {
-    model: db.Comment,
-    as: `comments`,
-    attributes: [`comment`, `createdAt`],
-    include: {
-      model: db.User,
-      as: `users`,
-      attributes: [`firstName`, `lastName`, `avatar`],
-    }
   }, {
     model: db.Category,
     as: `categories`,
@@ -321,7 +331,10 @@ const getMyArticles = async (userId) => await db.Article.findAll({
   attributes: [`id`, `title`, `createdAt`],
   where: {
     userId,
-  }
+  },
+  order: [
+    [`createdAt`, `desc`]
+  ],
 });
 
 
@@ -359,4 +372,5 @@ module.exports = {
   getArticleIdListByCategoryId,
   getArticleById,
   getMyArticles,
+  getCountArticlesForCategoryId
 };

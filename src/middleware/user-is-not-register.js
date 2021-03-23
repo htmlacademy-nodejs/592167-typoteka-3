@@ -11,7 +11,7 @@ module.exports = () => (
     if (userRegister) {
       next();
     } else {
-      res.render(TEMPLATE.SIGN_IN, {
+      res.render(TEMPLATE.LOGIN, {
         errorMessage: LOGIN_MESSAGE.BAD_LOGIN,
       });
     }
