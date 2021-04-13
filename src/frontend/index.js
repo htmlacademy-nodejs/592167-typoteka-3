@@ -1,12 +1,29 @@
 'use strict';
 
 const express = require(`express`);
+const http = require(`http`);
 const expressSession = require(`express-session`);
 require(`dotenv`).config();
 
 const {initializeRoutes} = require(`./routes/index`);
 
 const app = express();
+const server = http.createServer(app);
+const io = require(`socket.io`)(server);
+
+io.on(`connection`, (socket) => {
+  const {address: ip} = socket.handshake;
+  console.log(`Новое подключение: ${ip}`);
+
+  socket.on(`message`, (clientMessage) => {
+    socket.broadcast.emit(`message`, clientMessage);
+  });
+
+  socket.on(`disconnect`, () => {
+    console.log(`Клиент отключён: ${ip}`);
+  });
+
+});
 
 app.set(`views`, `${__dirname}/templates`);
 app.set(`view engine`, `pug`);
@@ -23,6 +40,6 @@ app.use(expressSession({
 initializeRoutes(app);
 
 const port = process.env.FRONT_SERVER_PORT;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Сервер запущен на порту: ${port}`);
 });
