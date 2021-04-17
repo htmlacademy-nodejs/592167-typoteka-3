@@ -2,15 +2,10 @@
 
 const FRONTEND_URL = `http://localhost:8080`;
 
-// eslint-disable-next-line no-undef
 const socket = io(FRONTEND_URL);
-// eslint-disable-next-line no-undef
 const commentForm = document.querySelector(`.comment-form`);
-// eslint-disable-next-line no-undef
 const commentText = document.querySelector(`.comment-text`);
-// eslint-disable-next-line no-undef
 const lastList = document.querySelector(`.last__list`);
-// eslint-disable-next-line no-undef
 const lastComments = document.querySelectorAll(`.last__list-item`);
 
 
@@ -34,20 +29,10 @@ if (commentForm) {
     }
 
     socket.emit(`message`, JSON.stringify(commentJson));
-    // eslint-disable-next-line no-undef
-    // commentForm.submit();
+    commentForm.submit();
   });
 }
 
-// <li className="last__list-item">
-//   <img className="last__list-image"
-//        src="/upload/60daa1e52695dc9c849b50b63204a19c.jpg"
-//        width="20"
-//        height="20"
-//        alt="Аватар пользователя">
-//   <b className="last__list-name">Сидоров Виктор</b>
-//   <a className="last__list-link" href="/articles/5">Мне кажется или я уже читал это где-то?</a>
-// </li>
 
 const addLastComment = (message) => {
   const {comment, avatar, user, articleUrl} = JSON.parse(message);
