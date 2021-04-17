@@ -69,7 +69,12 @@ const addLastComment = (message) => {
   newComment.setAttribute(`href`, `${articleUrl}`);
   newComment.textContent = comment;
   newItem.appendChild(newComment);
-  lastList.appendChild(newItem);
+
+  const lastItem = document.querySelector(`.last__list-item:last-child`);
+  lastItem.remove();
+
+  const firstItem = document.querySelector(`.last__list-item:first-child`);
+  lastList.insertBefore(newItem, firstItem);
 };
 
 
