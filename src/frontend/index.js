@@ -3,10 +3,13 @@
 const express = require(`express`);
 const http = require(`http`);
 const expressSession = require(`express-session`);
+const RedisStorage = require(`connect-redis`)(expressSession);
+const redis = require(`redis`);
+const client = redis.createClient();
 const axios = require(`axios`);
 require(`dotenv`).config();
 
-const {BACKEND_URL} = require(`../constants`);
+const {BACKEND_URL, REDIS_HOST, REDIS_PORT} = require(`../constants`);
 
 const {initializeRoutes} = require(`./routes/index`);
 
@@ -15,12 +18,18 @@ const app = express();
 app.set(`views`, `${__dirname}/templates`);
 app.set(`view engine`, `pug`);
 
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(`${__dirname}/../static`));
 app.use(expressSession({
+  store: new RedisStorage({
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    client,
+  }),
   secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: false,
+  // resave: false,
+  saveUninitialized: true,
   name: `session_id`,
 }));
 

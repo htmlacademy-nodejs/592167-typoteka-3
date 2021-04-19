@@ -33,6 +33,8 @@ const USER_ROLE_ADMIN = 1;
 const USER_ROLE_USER = 2;
 const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
+const REDIS_HOST = `localhost`;
+const REDIS_PORT = 6379;
 const USER_ROLE_GUEST = 3;
 
 const TEMPLATE = {
@@ -82,4 +84,6 @@ module.exports = {
   USER_ROLE_GUEST,
   USER_ROLE_ADMIN,
   USER_ROLE_USER,
+  REDIS_HOST,
+  REDIS_PORT,
 };
