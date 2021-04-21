@@ -9,6 +9,7 @@ const client = redis.createClient();
 const axios = require(`axios`);
 require(`dotenv`).config();
 
+const {generateDate} = require(`../utils`);
 const {BACKEND_URL, REDIS_HOST, REDIS_PORT} = require(`../constants`);
 
 const {initializeRoutes} = require(`./routes/index`);
@@ -28,7 +29,7 @@ app.use(expressSession({
     client,
   }),
   secret: process.env.SECRET,
-  // resave: false,
+  resave: false,
   saveUninitialized: true,
   name: `session_id`,
 }));
@@ -49,6 +50,7 @@ io.on(`connection`, (socket) => {
     const commentInfo = {
       user: `${userInfo.firstName} ${userInfo.lastName}`,
       avatar: userInfo.avatar,
+      createdAt: generateDate(null, null),
       comment,
       articleUrl,
     };

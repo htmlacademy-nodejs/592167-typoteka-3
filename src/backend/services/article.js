@@ -14,12 +14,13 @@ const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
 
-const createDateForPreview = (date) => {
-  const createDate = new Date(date);
-  const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
-  const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
-  return `${tempDay}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-};
+const {generateDate} = require(`../../utils`);
+// const generateDate = (date) => {
+//   const createDate = new Date(date);
+//   const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
+//   const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
+//   return `${tempDay}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+// };
 
 const findAll = async () => await articleRepository.findAll();
 
@@ -128,7 +129,7 @@ const search = async (queryParams) => {
     return {
       id: resArticle[i].id,
       title: resArticle[i].title,
-      createdAt: createDateForPreview(resArticle[i].createdAt),
+      createdAt: generateDate(resArticle[i].createdAt),
     };
   });
   return {articlesList, userInfoForSearch};
@@ -204,7 +205,7 @@ const getArticlesForCategory = async (categoryId, queryParams) => {
       announce: resArticles[i].announce,
       categories,
       image: (resArticles[i].images.length > 0 && resArticles[i].images[0].image) ? resArticles[i].images[0].image : ``,
-      createdAt: createDateForPreview(dataCreate),
+      createdAt: generateDate(dataCreate),
       comments: resArticles[i].comments.length,
     };
   });
@@ -223,7 +224,7 @@ const getArticleById = async (id, queryParams) => {
     articleId: firstLine.id,
     title: firstLine.title,
     image: firstLine.images[0] ? firstLine.images[0].image : ``,
-    createdAt: createDateForPreview(firstLine.createdAt),
+    createdAt: generateDate(firstLine.createdAt),
     announce: firstLine.announce,
     description: firstLine.description,
     authorization: true,
@@ -234,7 +235,7 @@ const getArticleById = async (id, queryParams) => {
     article.comments = commentsList.map((el) => {
       return {
         comment: el.dataValues.comment,
-        createdAt: createDateForPreview(el.dataValues.createdAt),
+        createdAt: generateDate(el.dataValues.createdAt),
         user: `${el.dataValues.users.firstName} ${el.dataValues.users.lastName}`,
         userAvatar: el.dataValues.users.avatar,
       };
@@ -263,7 +264,7 @@ const getMyArticles = async (userId) => {
     return {
       id: response[i].id,
       title: response[i].title,
-      createdAt: createDateForPreview(response[i].createdAt),
+      createdAt: generateDate(response[i].createdAt),
     };
   });
   return {articles, categories};

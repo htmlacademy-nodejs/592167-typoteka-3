@@ -39,6 +39,16 @@ const cutString = (data) => {
   return data.length > MAX_LENGHT_ANNOUNCE ? `${data.slice(0, MAX_LENGHT_ANNOUNCE)}...` : data;
 };
 
+const generateDate = (date, time) => {
+  const createDate = !date ? new Date() : new Date(date);
+  const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
+  let result = `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}`;
+  if (time) {
+    result = `${result}:${createDate.getMinutes()}`;
+  }
+  return result;
+};
+
 
 module.exports = {
   getRandomInt,
@@ -46,4 +56,5 @@ module.exports = {
   deleteItemFromArray,
   getNewId,
   cutString,
+  generateDate,
 };
