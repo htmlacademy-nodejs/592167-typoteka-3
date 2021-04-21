@@ -1,6 +1,7 @@
 extends common/layout
 
 block content
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
   .wrapper
     include common/header
     +header(mainPage.userInfo)
@@ -85,3 +86,5 @@ block content
           p.main-page__empty-text
            | Здесь пока пусто!
     include common/footer
+block scripts
+  script(src='/js/websocket.js')

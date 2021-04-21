@@ -32,9 +32,18 @@ router.post(`/add`, async (req, res) => {
   }
 });
 
+router.get(`/edit/:categoryId`, async (req, res) => {
+  try {
+    res.json(await categoriesService.remove(req.params.categoryId));
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({code: StatusCodes.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+  }
+});
+
 router.post(`/edit/:categoryId`, async (req, res) => {
   try {
-    await categoriesService.edit(req.body, req.params.categoryId, req.query.extension);
+    await categoriesService.edit(req.body, req.params.categoryId);
     res.redirect(`${FRONTEND_URL}/categories`);
   } catch (err) {
     logger.error(chalk.red(err));

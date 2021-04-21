@@ -36,8 +36,26 @@ if (buttonsDeleteCategory) {
       const form = evt.target.parentElement;
       let removeUrl = form.action.slice(0, -4);
       removeUrl = `${removeUrl}delete`;
-      form.action = removeUrl;
-      form.submit();
+      // eslint-disable-next-line no-undef
+      fetch(removeUrl, {
+        mode: `cors`,
+        headers: {
+          'Access-Control-Allow-Origin': `*`,
+        },
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.isDelete) {
+            // eslint-disable-next-line no-undef
+            location.reload();
+          } else {
+            // eslint-disable-next-line no-undef
+            const spanElement = document.querySelector(`.delete-error`);
+            const categoryName = form.querySelector(`input[name='category']`).value;
+            spanElement.textContent = `Удаление невозможно, для категории "${categoryName}" есть публикации.`;
+          }
+        });
+      // form.action = removeUrl;
+      // form.submit();
     });
   }
 }
