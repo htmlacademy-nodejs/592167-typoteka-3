@@ -7,9 +7,57 @@ const commentForm = document.querySelector(`.comment-form`);
 const commentText = document.querySelector(`.comment-text`);
 const lastList = document.querySelector(`.last__list`);
 const lastComments = document.querySelectorAll(`.last__list-item`);
+const commentsList = document.querySelector(`.comments__list`);
+
+const addCommentOnPostPage = (message) => {
+  // <li className="comments__comment">
+  //   <div className="comments__avatar avatar">
+  //      <img src="/upload/60daa1e52695dc9c849b50b63204a19c.jpg"
+  //      alt="аватар пользователя">
+  //   </div>
+  //   <div className="comments__text">
+  //     <div className="comments__head"><p>Сидоров Виктор •</p>
+  //       <time className="comments__date" dateTime="2019-03-21T20:33">20.04.2021, 17:26</time>
+  //     </div>
+  //     <p className="comments__message">sdjflkadsj weurioewu lskdfklj ioweurior kljsdklfjewurio lksdfjklsdjfuewrio</p>
+  //   </div>
+  // </li>
+  const {comment, avatar, user, createdAt} = JSON.parse(message);
+  const newItem = document.createElement(`li`);
+  newItem.classList.add(`comments__comment`);
+  const avatarWrapper = document.createElement(`div`);
+  avatarWrapper.classList.add(`comments__avatar`);
+  avatarWrapper.classList.add(`avatar`);
+  const avatarImg = document.createElement(`img`);
+  avatarImg.setAttribute(`src`, `/upload/${avatar}`);
+  avatarImg.setAttribute(`alt`, `Аватар пользователя`);
+  avatarWrapper.appendChild(avatarImg);
+  const commentWrapper = document.createElement(`div`);
+  commentWrapper.classList.add(`comments__text`);
+  const commentHeadWrapper = document.createElement(`div`);
+  commentHeadWrapper.classList.add(`comments__head`);
+  const commentHeadText = document.createElement(`p`);
+  commentHeadText.innerHTML = `${user} &bull;`;
+  const commentHeadTime = document.createElement(`time`);
+  commentHeadTime.classList.add(`comments__date`);
+  commentHeadTime.setAttribute(`dateTime`, createdAt);
+  commentHeadTime.textContent = createdAt;
+  commentHeadWrapper.appendChild(commentHeadText);
+  commentHeadWrapper.appendChild(commentHeadTime);
+  const commentMessage = document.createElement(`p`);
+  commentMessage.classList.add(`comments__message`);
+  commentMessage.textContent = comment;
+  commentWrapper.appendChild(commentHeadWrapper);
+  commentWrapper.appendChild(commentMessage);
+  newItem.appendChild(avatarWrapper);
+  newItem.appendChild(commentWrapper);
+
+  const firstItem = document.querySelector(`.comments__comment:first-child`);
+  commentsList.insertBefore(newItem, firstItem);
+};
 
 
-if (commentForm) {
+if (commentForm && commentForm.length > 0) {
   commentForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
 
@@ -31,10 +79,14 @@ if (commentForm) {
     socket.emit(`message`, JSON.stringify(commentJson));
     commentForm.submit();
   });
+
+  socket.addEventListener(`message`, (message) => {
+    addCommentOnPostPage(message);
+  });
 }
 
 
-const addLastComment = (message) => {
+const addLastCommentOnMainPage = (message) => {
   const {comment, avatar, user, articleUrl} = JSON.parse(message);
   const newItem = document.createElement(`li`);
   newItem.classList.add(`last__list-item`);
@@ -63,9 +115,9 @@ const addLastComment = (message) => {
 };
 
 
-if (lastComments) {
+if (lastComments && lastComments.length > 0) {
   socket.addEventListener(`message`, (message) => {
-    addLastComment(message);
+    addLastCommentOnMainPage(message);
   });
 }
 

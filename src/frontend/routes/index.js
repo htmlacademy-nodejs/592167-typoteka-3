@@ -19,11 +19,12 @@ const articlesRoutes = require(`./articles`);
 const errorsRoutes = require(`./errors`);
 const categoriesRoutes = require(`./categories`);
 
-const createDateForPreview = (date) => {
-  const createDate = new Date(date);
-  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
-  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-};
+const {generateDate} = require(`../../utils`);
+// const generateDate = (date) => {
+//   const createDate = new Date(date);
+//   const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
+//   return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
+// };
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
@@ -43,8 +44,8 @@ const initializeRoutes = (app) => {
     const allElements = resAllElements.data;
 
     allElements.previews.map((it) => {
-      const dataCreate = new Date(it.createdAt);
-      it.createdAt = createDateForPreview(dataCreate);
+      // const dataCreate = new Date(it.createdAt);
+      it.createdAt = generateDate(it.createdAt);
       return it;
     });
 

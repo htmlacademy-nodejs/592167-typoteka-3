@@ -1,0 +1,11 @@
+.error-new-publication-date-form {
+  border: 1px solid #ff0000;
+}
+
+.error-border-bottom {
+  border-bottom-color: #ff0000;
+}
+
+.error-text {
+  color: #ff0000;
+}
