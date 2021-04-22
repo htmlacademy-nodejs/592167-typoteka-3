@@ -2,15 +2,10 @@
 
 const BACKEND_URL = `http://localhost:8081`;
 
-// eslint-disable-next-line no-undef
 const buttonNewArticle = document.querySelector(`.header__button-new`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
-// eslint-disable-next-line no-undef
 const buttonPostBackwards = document.querySelector(`.post__backwards`);
 const newPublicationForm = document.querySelector(`.js-publication-form`);
 const newPublication = document.querySelector(`.new-publication__button`);
