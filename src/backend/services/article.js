@@ -235,7 +235,7 @@ const getArticleById = async (id, queryParams) => {
     article.comments = commentsList.map((el) => {
       return {
         comment: el.dataValues.comment,
-        createdAt: generateDate(el.dataValues.createdAt),
+        createdAt: generateDate(el.dataValues.createdAt, true),
         user: `${el.dataValues.users.firstName} ${el.dataValues.users.lastName}`,
         userAvatar: el.dataValues.users.avatar,
       };

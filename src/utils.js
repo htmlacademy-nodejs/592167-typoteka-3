@@ -44,7 +44,7 @@ const generateDate = (date, time) => {
   const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
   let result = `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}`;
   if (time) {
-    result = `${result}:${createDate.getMinutes()}`;
+    result = `${result}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
   }
   return result;
 };
