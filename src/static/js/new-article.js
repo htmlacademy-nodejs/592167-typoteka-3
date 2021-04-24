@@ -17,6 +17,10 @@ const viewErrorsList = document.querySelector(`.js-errors-list`);
 const newPublicationAnnouncement = document.querySelector(`#new-publication-announcement`);
 const errorNewPublicationAnnouncement = document.querySelector(`#error-new-publication-announcement`);
 const errorNewPublicationCategory = document.querySelector(`#error-new-publication-category`);
+const commentButton = document.querySelector(`.comments__button`);
+const newCommentText = document.querySelector(`.comment-text`);
+const errorComment = document.querySelector(`#error-comment`);
+const newCommentForm = document.querySelector(`.comment-form`);
 
 
 if (buttonNewArticle) {
@@ -157,6 +161,21 @@ if (newPublication) {
       });
     } else {
       newPublicationForm.submit();
+    }
+  });
+}
+
+if (commentButton) {
+  commentButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+
+    if (newCommentText.value === ``) {
+      errorComment.textContent = `Данное поле обязательно для заполнения`;
+    } else if (newCommentText.value !== `` && newCommentText.value.length < 20) {
+      errorComment.textContent = `Комментарий должен содержать минимум 20 символов`;
+    } else {
+      errorComment.textContent = ``;
+      newCommentForm.submit();
     }
   });
 }

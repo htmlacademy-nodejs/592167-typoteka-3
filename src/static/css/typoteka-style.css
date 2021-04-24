@@ -9,3 +9,7 @@
 .error-text {
   color: #ff0000;
 }
+
+.error-text--comment {
+  padding-left: 75px;
+}

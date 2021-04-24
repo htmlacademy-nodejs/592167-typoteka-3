@@ -50,8 +50,9 @@ block content
                   .comments__avatar.avatar
                     img(src=`/upload/${article.userInfo.avatar}`, alt='аватар пользователя')
                   label
-                    textarea.comment-text(rows='1', name='comment', placeholder='Присоединиться к обсуждению', minlength=20, required)
+                    textarea.comment-text(rows='1', name='comment', placeholder='Присоединиться к обсуждению')
                   button.comments__button.button.button--colored(type='submit') Опубликовать
+                  span#error-comment.error-text.error-text--comment
                   input(type='hidden' name='csrf' value=`${article.csrf}`)
                   input(type='hidden' name='username' value=`${article.userInfo.email ? article.userInfo.email : ``}`)
             else
