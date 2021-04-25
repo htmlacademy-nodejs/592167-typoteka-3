@@ -16,7 +16,11 @@ block content
                   .new-publication__date-form-division
                     .new-publication__date-block
                       label(for='new-publication-date' aria-label='Календарь')
-                      input#new-publication-date(type='text' name='date' placeholder='2019-03-21')
+                      if myArticles.calendarDate
+                        input#new-publication-date(type='text' value=`${myArticles.calendarDate}` name='date' placeholder='2019-03-21')
+                      else
+                        input#new-publication-date(type='text' name='date' placeholder='2019-03-21')
+
                 button.new-publication__button.button.button--colored(type='button') Опубликовать
               a.popup__button.button.button--popup-close(href=`/` aria-label='Закрыть окно')
                 | Закрыть
