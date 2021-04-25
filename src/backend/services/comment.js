@@ -49,7 +49,7 @@ const getComments = async () => {
       id: commentsList[i].id,
       articleId: commentsList[i].comments.id,
       comment: commentsList[i].comment,
-      createdAt: generateDate(commentsList[i].createdAt),
+      createdAt: generateDate(commentsList[i].createdAt, true),
       title: commentsList[i].comments.title,
       userName: `${commentsList[i].users.firstName} ${commentsList[i].users.lastName}`,
       avatar: commentsList[i].users.avatar,
