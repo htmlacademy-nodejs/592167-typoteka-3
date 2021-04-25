@@ -127,10 +127,7 @@ if (newPublication) {
     if (newPublicationTitle.value === ``) {
       errorNewPublicationTitle.textContent = `Поле "Заголовок" обязательно для заполнения`;
       errorsList.push(`Поле "Заголовок" обязательно для заполнения`);
-    } else {
-      errorNewPublicationTitle.textContent = ``;
-    }
-    if (newPublicationTitle.value !== `` && newPublicationTitle.value.length < 30) {
+    } else if (newPublicationTitle.value !== `` && newPublicationTitle.value.length < 30) {
       errorNewPublicationTitle.textContent = `Заголовок должен содержать минимум 30 символов`;
       errorsList.push(`Заголовок должен содержать минимум 30 символов`);
     } else {
