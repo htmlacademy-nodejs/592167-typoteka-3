@@ -29,7 +29,18 @@ router.get(`/edit/:id`, [privatePath(true)], async (req, res) => {
   }
   const response = await axios.get(`${BACKEND_URL}/api/articles/${req.params.id}${queryStringForArticleEdit}`);
   const myArticles = response.data;
+  const userInfo = {};
+  if (myArticles.userInfoForArticleById.roleId) {
+    userInfo.userName = `${myArticles.userInfoForArticleById.firstName} ${myArticles.userInfoForArticleById.lastName}`;
+    userInfo.avatar = myArticles.userInfoForArticleById.avatar;
+    userInfo.userRole = myArticles.userInfoForArticleById.roleId;
+  } else {
+    userInfo.userRole = USER_ROLE_GUEST;
+  }
+  myArticles.calendarDate = `${myArticles.createdAt.slice(6)}-${myArticles.createdAt.slice(3, 5)}-${myArticles.createdAt.slice(0, 2)}`;
   myArticles.action = `${BACKEND_URL}/api/articles/edit/${req.params.id}`;
+  myArticles.userInfo = userInfo;
+  console.log(myArticles);
   res.render(`new-post`, {myArticles});
 });
 
