@@ -21,6 +21,10 @@ const commentButton = document.querySelector(`.comments__button`);
 const newCommentText = document.querySelector(`.comment-text`);
 const errorComment = document.querySelector(`#error-comment`);
 const newCommentForm = document.querySelector(`.comment-form`);
+const newCategoryForm = document.querySelector(`.new-category-form`);
+const newCategory = document.querySelector(`#add-form-add-category`);
+const errorNewCategory = document.querySelector(`#error-new-category`);
+const addCategoryButton = document.querySelector(`.category__button`);
 
 
 if (buttonNewArticle) {
@@ -173,6 +177,21 @@ if (commentButton) {
     } else {
       errorComment.textContent = ``;
       newCommentForm.submit();
+    }
+  });
+}
+
+if (newCategoryForm) {
+  addCategoryButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+
+    if (newCategory.value === ``) {
+      errorNewCategory.textContent = `Поле "Новая категория" обязательно для заполнения`;
+    } else if (newCategory.value !== `` && newCategory.value.length < 5) {
+      errorNewCategory.textContent = `Категория должна содержать минимум 5 символов`;
+    } else {
+      errorNewCategory.textContent = ``;
+      newCategoryForm.submit();
     }
   });
 }
