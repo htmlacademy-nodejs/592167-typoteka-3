@@ -20,11 +20,6 @@ const errorsRoutes = require(`./errors`);
 const categoriesRoutes = require(`./categories`);
 
 const {generateDate} = require(`../../utils`);
-// const generateDate = (date) => {
-//   const createDate = new Date(date);
-//   const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
-//   return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-// };
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);

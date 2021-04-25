@@ -89,7 +89,6 @@ router.get(`/category/:id`, async (req, res) => {
   if (req.session && req.session.isLogged) {
     queryStringForArticlesByCategoryId += `&username=${req.session.username}`;
   }
-  // queryStringForArticlesByCategoryId = (req.session && req.session.username) ? `?username=${req.session.username}` : ``;
   const resArticlesForCategory = await axios.get(`${BACKEND_URL}/api/articles/categories/${req.params.id}${queryStringForArticlesByCategoryId}`);
   const articlesByCategory = resArticlesForCategory.data;
   const userInfo = {};

@@ -15,12 +15,6 @@ const logger = getLogger();
 
 
 const {generateDate} = require(`../../utils`);
-// const generateDate = (date) => {
-//   const createDate = new Date(date);
-//   const tempDay = `${createDate.getDate()}`.padStart(2, `00`);
-//   const tempMonth = `${createDate.getMonth() + 1}`.padStart(2, `00`);
-//   return `${tempDay}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-// };
 
 const findAll = async () => await articleRepository.findAll();
 

@@ -11,11 +11,6 @@ const logger = getLogger();
 const checkComment = require(`../validation-schemas/comment-shema`);
 
 const {generateDate} = require(`../../utils`);
-// const generateDate = (date) => {
-//   const createDate = new Date(date);
-//   const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
-//   return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-// };
 
 const getByArticleId = (articleId) => {
   if (!articleRepository.exists(articleId)) {
