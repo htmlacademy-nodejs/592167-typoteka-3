@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 const md5 = require(`md5`);
-const {BACKEND_URL, DEFAULT, TEMPLATE} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT, TEMPLATE, USER_ROLE_GUEST} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
 const userSchema = require(`../../validation-schemas/user-schema`);
@@ -155,19 +155,21 @@ const initializeRoutes = (app) => {
   });
 
   app.get(`/search`, async (req, res) => {
-    let searchQueryString = `?query=${req.query.search}`;
-    if (req.session && req.session.isLogged) {
-      searchQueryString += `&username=${req.session.username}`;
-    }
-    const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search${searchQueryString}`));
-    const searchResult = response.data;
     const userInfo = {};
-    if (searchResult.userInfoForSearch.roleId) {
-      userInfo.userName = `${searchResult.userInfoForSearch.firstName} ${searchResult.userInfoForSearch.lastName}`;
-      userInfo.avatar = searchResult.userInfoForSearch.avatar;
-      userInfo.userRole = searchResult.userInfoForSearch.roleId;
-    } else {
-      userInfo.userRole = 3;
+    let searchResult = {};
+    if (req.session && req.session.isLogged) {
+      const resUserInfo = await axios.get(`${BACKEND_URL}/api/users/info?email=${req.session.username}`);
+      if (resUserInfo.data.roleId) {
+        userInfo.userName = `${resUserInfo.data.firstName} ${resUserInfo.data.lastName}`;
+        userInfo.avatar = resUserInfo.data.avatar;
+        userInfo.userRole = resUserInfo.data.roleId;
+      } else {
+        userInfo.userRole = USER_ROLE_GUEST;
+      }
+    }
+    if (req.query.search) {
+      const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search?query=${req.query.search}`));
+      searchResult = response.data;
     }
     searchResult.userInfo = userInfo;
     res.render(`search`, {searchResult});
