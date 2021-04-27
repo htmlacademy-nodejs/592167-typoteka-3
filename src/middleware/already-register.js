@@ -14,8 +14,6 @@ module.exports = () => (
       res.render(TEMPLATE.REGISTRATION, {
         errorMessages: [REGISTRATION_MESSAGE.USER_ALREADY_REGISTER]
       });
-      // eslint-disable-next-line consistent-return
-
     }
   }
 );

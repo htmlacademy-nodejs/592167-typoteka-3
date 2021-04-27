@@ -8,11 +8,12 @@ block content
       section.main-page__category.category
         h1.category__title Категории
         .category__add-form
-          form(action=`${categories.BACKEND_URL}/api/categories/add`, method='POST')
-            input#add-form-add-category(type='text', name='category', placeholder='Новая категория')
+          form.new-category-form(action=`${categories.BACKEND_URL}/api/categories/add`, method='POST')
+            input#add-form-add-category(type='text', name='category', placeholder='Новая категория', maxlength=30)
             label(for='add-form-add-category')
               span.visually-hidden Добавить категорию
             button.category__button.button.button--category(type='submit') Добавить
+          span#error-new-category.error-text
         ul.category__list
           each category in categories
             li.category__list-item

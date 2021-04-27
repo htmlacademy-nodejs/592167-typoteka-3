@@ -10,11 +10,7 @@ const logger = getLogger();
 
 const checkComment = require(`../validation-schemas/comment-shema`);
 
-const createDateForPreview = (date) => {
-  const createDate = new Date(date);
-  const tempMonth = `${createDate.getMonth()}`.padStart(2, `00`);
-  return `${createDate.getDate()}.${tempMonth}.${createDate.getFullYear()}, ${createDate.getUTCHours()}:${createDate.getMinutes()}`;
-};
+const {generateDate} = require(`../../utils`);
 
 const getByArticleId = (articleId) => {
   if (!articleRepository.exists(articleId)) {
@@ -48,7 +44,7 @@ const getComments = async () => {
       id: commentsList[i].id,
       articleId: commentsList[i].comments.id,
       comment: commentsList[i].comment,
-      createdAt: createDateForPreview(commentsList[i].createdAt),
+      createdAt: generateDate(commentsList[i].createdAt, true),
       title: commentsList[i].comments.title,
       userName: `${commentsList[i].users.firstName} ${commentsList[i].users.lastName}`,
       avatar: commentsList[i].users.avatar,

@@ -2,16 +2,29 @@
 
 const BACKEND_URL = `http://localhost:8081`;
 
-// eslint-disable-next-line no-undef
 const buttonNewArticle = document.querySelector(`.header__button-new`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteCategory = document.querySelectorAll(`.js-delete-category`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteComment = document.querySelectorAll(`.publication__button`);
-// eslint-disable-next-line no-undef
 const buttonsDeleteArticle = document.querySelectorAll(`.notes__button`);
-// eslint-disable-next-line no-undef
 const buttonPostBackwards = document.querySelector(`.post__backwards`);
+const newPublicationForm = document.querySelector(`.js-publication-form`);
+const newPublication = document.querySelector(`.new-publication__button`);
+const newPublicationDate = document.querySelector(`#new-publication-date`);
+const newPublicationDateForm = document.querySelector(`.new-publication__date-form`);
+const newPublicationTitle = document.querySelector(`#new-publication-title`);
+const errorNewPublicationTitle = document.querySelector(`#error-new-publication-title`);
+const viewErrorsList = document.querySelector(`.js-errors-list`);
+const newPublicationAnnouncement = document.querySelector(`#new-publication-announcement`);
+const errorNewPublicationAnnouncement = document.querySelector(`#error-new-publication-announcement`);
+const errorNewPublicationCategory = document.querySelector(`#error-new-publication-category`);
+const commentButton = document.querySelector(`.comments__button`);
+const newCommentText = document.querySelector(`.comment-text`);
+const errorComment = document.querySelector(`#error-comment`);
+const newCommentForm = document.querySelector(`.comment-form`);
+const newCategoryForm = document.querySelector(`.new-category-form`);
+const newCategory = document.querySelector(`#add-form-add-category`);
+const errorNewCategory = document.querySelector(`#error-new-category`);
+const addCategoryButton = document.querySelector(`.category__button`);
 
 
 if (buttonNewArticle) {
@@ -28,7 +41,6 @@ if (buttonPostBackwards) {
     evt.preventDefault();
   });
 }
-
 
 if (buttonsDeleteCategory) {
   for (let i = 0; i < buttonsDeleteCategory.length; i++) {
@@ -100,4 +112,86 @@ if (buttonsDeleteArticle) {
         });
     });
   }
+}
+
+if (newPublication) {
+  newPublication.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+
+    const errorsList = [];
+    viewErrorsList.innerHTML = ``;
+
+    if (newPublicationDate.value === ``) {
+      newPublicationDateForm.classList.add(`error-new-publication-date-form`);
+      errorsList.push(`Поле "Дата публикации" обязательно для заполнения`);
+    } else {
+      newPublicationDateForm.classList.remove(`error-new-publication-date-form`);
+    }
+
+    if (newPublicationTitle.value === ``) {
+      errorNewPublicationTitle.textContent = `Поле "Заголовок" обязательно для заполнения`;
+      errorsList.push(`Поле "Заголовок" обязательно для заполнения`);
+    } else if (newPublicationTitle.value !== `` && newPublicationTitle.value.length < 30) {
+      errorNewPublicationTitle.textContent = `Заголовок должен содержать минимум 30 символов`;
+      errorsList.push(`Заголовок должен содержать минимум 30 символов`);
+    } else {
+      errorNewPublicationTitle.textContent = ``;
+    }
+
+    if (newPublicationAnnouncement.value === ``) {
+      errorNewPublicationAnnouncement.textContent = `Поле "Анонс" обязательно для заполнения`;
+      errorsList.push(`Поле "Анонс" обязательно для заполнения`);
+    } else {
+      errorNewPublicationAnnouncement.textContent = ``;
+    }
+
+    const checkboxCategory = document.querySelector(`input[name='checkbox-category']:checked`);
+    if (!checkboxCategory) {
+      errorNewPublicationCategory.textContent = `Выберите хотя бы одну из категорий`;
+      errorsList.push(`Выберите хотя бы одну из категорий`);
+    } else {
+      errorNewPublicationCategory.textContent = ``;
+    }
+
+    if (errorsList.length > 0) {
+      errorsList.forEach((it) => {
+        const liItem = document.createElement(`li`);
+        liItem.classList.add(`error-text`);
+        liItem.textContent = it;
+        viewErrorsList.appendChild(liItem);
+      });
+    } else {
+      newPublicationForm.submit();
+    }
+  });
+}
+
+if (commentButton) {
+  commentButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+
+    if (newCommentText.value === ``) {
+      errorComment.textContent = `Данное поле обязательно для заполнения`;
+    } else if (newCommentText.value !== `` && newCommentText.value.length < 20) {
+      errorComment.textContent = `Комментарий должен содержать минимум 20 символов`;
+    } else {
+      errorComment.textContent = ``;
+      newCommentForm.submit();
+    }
+  });
+}
+
+if (newCategoryForm) {
+  addCategoryButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+
+    if (newCategory.value === ``) {
+      errorNewCategory.textContent = `Поле "Новая категория" обязательно для заполнения`;
+    } else if (newCategory.value !== `` && newCategory.value.length < 5) {
+      errorNewCategory.textContent = `Категория должна содержать минимум 5 символов`;
+    } else {
+      errorNewCategory.textContent = ``;
+      newCategoryForm.submit();
+    }
+  });
 }

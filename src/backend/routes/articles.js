@@ -149,7 +149,6 @@ router.post(`/:articleId/comments`, async (req, res) => {
     const data = req.body;
     data.articleId = req.params.articleId;
     commentService.add(data);
-    // res.redirect(`${FRONTEND_URL}/articles/${req.params.articleId}`);
     res.sendStatus(StatusCodes.OK);
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
