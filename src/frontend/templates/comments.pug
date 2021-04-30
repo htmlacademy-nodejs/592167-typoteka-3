@@ -11,7 +11,7 @@ block content
           each comment in comments
             li.publication__list-item
               .publication__header
-                img.publication__list-image(src=`/upload/${comment.avatar}`, width='20', height='20', alt='Аватар пользователя')
+                img.publication__list-image(src=`${comment.avatar}`, width='20', height='20', alt='Аватар пользователя')
                 b.publication__list-name #{comment.userName}
                 time.publication__item-time(datetime='2019-03-21T20:33') #{comment.createdAt}
               a.publication__item-text(href=`/articles/${comment.articleId}`)

@@ -28,7 +28,7 @@ mixin header(userInfo)
           li.header__list-item
             a.header__exit(href='/logout') Выйти
       a.header__avatar.avatar
-        img(src=`/upload/${userInfo.avatar}` alt='аватар пользователя')
+        img(src=`${userInfo.avatar}` alt='аватар пользователя')
     else if (userInfo.userRole === userRoleGuest)
       nav.header__nav
         ul.header__nav-list

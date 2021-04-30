@@ -47,7 +47,7 @@ const initializeRoutes = (app) => {
     allElements.lastComments.map((it) => {
       it.comment = cutString(it.comment);
       it.userName = `${it.users.firstName} ${it.users.lastName}`;
-      it.avatar = it.users.avatar !== `` ? it.users.avatar : `${NO_NAME_IMAGE}`;
+      it.avatar = it.users.avatar !== `` ? `/upload/${it.users.avatar}` : NO_NAME_IMAGE;
       return it;
     });
 
@@ -96,7 +96,7 @@ const initializeRoutes = (app) => {
     const userInfo = {};
     if (allElements.userInfo.roleId) {
       userInfo.userName = `${allElements.userInfo.firstName} ${allElements.userInfo.lastName}`;
-      userInfo.avatar = allElements.userInfo.avatar !== `` ? allElements.userInfo.avatar : NO_NAME_IMAGE;
+      userInfo.avatar = allElements.userInfo.avatar !== `` ? `/upload/${allElements.userInfo.avatar}` : NO_NAME_IMAGE;
       userInfo.userRole = allElements.userInfo.roleId;
     } else {
       userInfo.userRole = USER_ROLE_GUEST;
@@ -163,7 +163,7 @@ const initializeRoutes = (app) => {
       const resUserInfo = await axios.get(`${BACKEND_URL}/api/users/info?email=${req.session.username}`);
       if (resUserInfo.data.roleId) {
         userInfo.userName = `${resUserInfo.data.firstName} ${resUserInfo.data.lastName}`;
-        userInfo.avatar = resUserInfo.data.avatar !== `` ? resUserInfo.data.avatar : NO_NAME_IMAGE;
+        userInfo.avatar = resUserInfo.data.avatar !== `` ? `/upload/${resUserInfo.data.avatar}` : NO_NAME_IMAGE;
         userInfo.userRole = resUserInfo.data.roleId;
       } else {
         userInfo.userRole = USER_ROLE_GUEST;

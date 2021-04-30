@@ -54,14 +54,14 @@ router.get(`/:id`, async (req, res) => {
     const article = resGetArticle.data;
 
     article.comments.map((it) => {
-      it.userAvatar = it.userAvatar !== `` ? it.userAvatar : NO_NAME_IMAGE;
+      it.userAvatar = it.userAvatar !== `` ? `/upload/${it.userAvatar}` : NO_NAME_IMAGE;
       return it;
     });
 
     const userInfo = {};
     if (article.userInfoForArticleById.roleId) {
       userInfo.userName = `${article.userInfoForArticleById.firstName} ${article.userInfoForArticleById.lastName}`;
-      userInfo.avatar = article.userInfoForArticleById.avatar !== `` ? article.userInfoForArticleById.avatar : NO_NAME_IMAGE;
+      userInfo.avatar = article.userInfoForArticleById.avatar !== `` ? `/upload/${article.userInfoForArticleById.avatar}` : NO_NAME_IMAGE;
       userInfo.userRole = article.userInfoForArticleById.roleId;
       userInfo.email = req.session.username;
     } else {
@@ -102,7 +102,7 @@ router.get(`/category/:id`, async (req, res) => {
   const userInfo = {};
   if (articlesByCategory.userInfoArticlesForCategory.roleId) {
     userInfo.userName = `${articlesByCategory.userInfoArticlesForCategory.firstName} ${articlesByCategory.userInfoArticlesForCategory.lastName}`;
-    userInfo.avatar = articlesByCategory.userInfoArticlesForCategory.avatar !== `` ? articlesByCategory.userInfoArticlesForCategory.avatar : NO_NAME_IMAGE;
+    userInfo.avatar = articlesByCategory.userInfoArticlesForCategory.avatar !== `` ? `/upload/${articlesByCategory.userInfoArticlesForCategory.avatar}` : NO_NAME_IMAGE;
     userInfo.userRole = articlesByCategory.userInfoArticlesForCategory.roleId;
   } else {
     userInfo.userRole = USER_ROLE_GUEST;

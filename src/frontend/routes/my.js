@@ -21,7 +21,7 @@ router.get(`/comments`, [privatePath(true)], async (req, res) => {
   const commentsList = await axios.get(`${BACKEND_URL}/api/comments`);
   const comments = commentsList.data;
   comments.map((it) => {
-    it.avatar = it.avatar !== `` ? it.avatar : NO_NAME_IMAGE;
+    it.avatar = it.avatar !== `` ? `/upload/${it.avatar}` : NO_NAME_IMAGE;
   });
   comments.userInfo = {
     userRole: USER_ROLE_ADMIN
