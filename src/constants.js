@@ -36,6 +36,7 @@ const FRONTEND_URL = `http://localhost:8080`;
 const REDIS_HOST = `localhost`;
 const REDIS_PORT = 6379;
 const USER_ROLE_GUEST = 3;
+const NO_NAME_IMAGE = `noname.png`;
 
 const TEMPLATE = {
   REGISTRATION: `registration`,
@@ -86,4 +87,5 @@ module.exports = {
   USER_ROLE_USER,
   REDIS_HOST,
   REDIS_PORT,
+  NO_NAME_IMAGE,
 };
