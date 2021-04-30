@@ -118,6 +118,7 @@ module.exports = {
     const titles = await readFile(FILE_TITLES_PATH);
 
     const [count] = args;
+    const emptyTables = count === `init`;
     const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
     const dbData = {
@@ -163,6 +164,6 @@ module.exports = {
       countArticles,
     };
 
-    initDb(dbData);
+    initDb(dbData, emptyTables);
   }
 };
