@@ -133,21 +133,24 @@ module.exports = {
           lastName: `Иван`,
           email: `ivanov@mail.ru`,
           password: `1234`,
-          roleId: 1
+          roleId: 1,
+          avatar: ``,
         },
         {
           firstName: `Сидоров`,
           lastName: `Виктор`,
           email: `sidorov@mail.ru`,
           password: `1234`,
-          roleId: 2
+          roleId: 2,
+          avatar: ``,
         },
         {
           firstName: `Фролов`,
           lastName: `Егор`,
           email: `frolov@mail.ru`,
           password: `1234`,
-          roleId: 2
+          roleId: 2,
+          avatar: ``,
         },
       ],
       categories: [
