@@ -17,7 +17,7 @@ const DEFAULT_COUNT = 1;
 
 const UserRoles = {
   MIN: 1,
-  MAX: 3,
+  MAX: 2,
 };
 
 const ArticlesToCategories = {
@@ -147,7 +147,7 @@ module.exports = {
           lastName: `Егор`,
           email: `frolov@mail.ru`,
           password: `1234`,
-          roleId: 3
+          roleId: 2
         },
       ],
       categories: [
