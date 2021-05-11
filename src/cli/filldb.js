@@ -17,7 +17,7 @@ const DEFAULT_COUNT = 1;
 
 const UserRoles = {
   MIN: 1,
-  MAX: 3,
+  MAX: 2,
 };
 
 const ArticlesToCategories = {
@@ -118,6 +118,7 @@ module.exports = {
     const titles = await readFile(FILE_TITLES_PATH);
 
     const [count] = args;
+    const emptyTables = count === `init`;
     const countArticles = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
     const dbData = {
@@ -132,21 +133,24 @@ module.exports = {
           lastName: `Иван`,
           email: `ivanov@mail.ru`,
           password: `1234`,
-          roleId: 1
+          roleId: 1,
+          avatar: ``,
         },
         {
           firstName: `Сидоров`,
           lastName: `Виктор`,
           email: `sidorov@mail.ru`,
           password: `1234`,
-          roleId: 2
+          roleId: 2,
+          avatar: ``,
         },
         {
           firstName: `Фролов`,
           lastName: `Егор`,
           email: `frolov@mail.ru`,
           password: `1234`,
-          roleId: 3
+          roleId: 2,
+          avatar: ``,
         },
       ],
       categories: [
@@ -163,6 +167,6 @@ module.exports = {
       countArticles,
     };
 
-    initDb(dbData);
+    initDb(dbData, emptyTables);
   }
 };

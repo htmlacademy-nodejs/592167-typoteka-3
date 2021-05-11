@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 const md5 = require(`md5`);
-const {BACKEND_URL, DEFAULT, TEMPLATE, USER_ROLE_GUEST} = require(`../../constants`);
+const {BACKEND_URL, DEFAULT, TEMPLATE, USER_ROLE_GUEST, NO_NAME_IMAGE} = require(`../../constants`);
 const {cutString} = require(`../../utils`);
 
 const userSchema = require(`../../validation-schemas/user-schema`);
@@ -47,6 +47,7 @@ const initializeRoutes = (app) => {
     allElements.lastComments.map((it) => {
       it.comment = cutString(it.comment);
       it.userName = `${it.users.firstName} ${it.users.lastName}`;
+      it.avatar = it.users.avatar !== `` ? `/upload/${it.users.avatar}` : NO_NAME_IMAGE;
       return it;
     });
 
@@ -95,10 +96,11 @@ const initializeRoutes = (app) => {
     const userInfo = {};
     if (allElements.userInfo.roleId) {
       userInfo.userName = `${allElements.userInfo.firstName} ${allElements.userInfo.lastName}`;
-      userInfo.avatar = allElements.userInfo.avatar;
+      userInfo.avatar = allElements.userInfo.avatar !== `` ? `/upload/${allElements.userInfo.avatar}` : NO_NAME_IMAGE;
       userInfo.userRole = allElements.userInfo.roleId;
     } else {
-      userInfo.userRole = 3;
+      userInfo.userRole = USER_ROLE_GUEST;
+      userInfo.avatar = NO_NAME_IMAGE;
     }
 
     const paginationVisible = DEFAULT.PREVIEWS_COUNT >= allElements.pagination;
@@ -161,10 +163,11 @@ const initializeRoutes = (app) => {
       const resUserInfo = await axios.get(`${BACKEND_URL}/api/users/info?email=${req.session.username}`);
       if (resUserInfo.data.roleId) {
         userInfo.userName = `${resUserInfo.data.firstName} ${resUserInfo.data.lastName}`;
-        userInfo.avatar = resUserInfo.data.avatar;
+        userInfo.avatar = resUserInfo.data.avatar !== `` ? `/upload/${resUserInfo.data.avatar}` : NO_NAME_IMAGE;
         userInfo.userRole = resUserInfo.data.roleId;
       } else {
         userInfo.userRole = USER_ROLE_GUEST;
+        userInfo.avatar = NO_NAME_IMAGE;
       }
     }
     if (req.query.search) {

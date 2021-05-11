@@ -68,29 +68,31 @@ Category.belongsToMany(Article, {
   foreignKey: `categoryId`,
 });
 
-const initDb = async (dbData) => {
+const initDb = async (dbData, emptyTables) => {
   await sequelize.sync({force: true});
   console.info(`Структура БД успешно создана`);
 
   await UserRole.bulkCreate(dbData.roles);
-  await User.bulkCreate(dbData.users);
-  await Category.bulkCreate(dbData.categories);
-  await Article.bulkCreate(dbData.articles);
-  await Image.bulkCreate(dbData.images);
-  await Comment.bulkCreate(dbData.comments);
+  if (!emptyTables) {
+    await User.bulkCreate(dbData.users);
+    await Category.bulkCreate(dbData.categories);
+    await Article.bulkCreate(dbData.articles);
+    await Image.bulkCreate(dbData.images);
+    await Comment.bulkCreate(dbData.comments);
 
 
-  for (let i = 0; i < dbData.countArticles; i++) {
-    const categories = await Category.findAll({
-      where: {
-        id: {
-          [Sequelize.Op.in]: dbData.articlesToCategories[i]
-        }
-      },
-    });
+    for (let i = 0; i < dbData.countArticles; i++) {
+      const categories = await Category.findAll({
+        where: {
+          id: {
+            [Sequelize.Op.in]: dbData.articlesToCategories[i]
+          }
+        },
+      });
 
-    const article = await Article.findByPk(i + 1);
-    await article.addCategories(categories);
+      const article = await Article.findByPk(i + 1);
+      await article.addCategories(categories);
+    }
   }
 };
 

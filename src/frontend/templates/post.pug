@@ -36,7 +36,7 @@ block content
                 each comment in article.comments
                   li.comments__comment
                     .comments__avatar.avatar
-                      img(src=`/upload/${comment.userAvatar}`, alt='аватар пользователя')
+                      img(src=`${comment.userAvatar}`, alt='аватар пользователя')
                     .comments__text
                       .comments__head
                         p #{comment.user} &bull;
@@ -48,7 +48,7 @@ block content
               .comments__footer.comments__footer--user
                 form.comment-form(action='#', method='POST')
                   .comments__avatar.avatar
-                    img(src=`/upload/${article.userInfo.avatar}`, alt='аватар пользователя')
+                    img(src=`${article.userInfo.avatar}`, alt='аватар пользователя')
                   label
                     textarea.comment-text(rows='1', name='comment', placeholder='Присоединиться к обсуждению')
                   button.comments__button.button.button--colored(type='submit') Опубликовать

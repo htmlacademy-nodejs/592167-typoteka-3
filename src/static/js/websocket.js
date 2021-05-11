@@ -29,7 +29,7 @@ const addCommentOnPostPage = (message) => {
   avatarWrapper.classList.add(`comments__avatar`);
   avatarWrapper.classList.add(`avatar`);
   const avatarImg = document.createElement(`img`);
-  avatarImg.setAttribute(`src`, `/upload/${avatar}`);
+  avatarImg.setAttribute(`src`, `${avatar}`);
   avatarImg.setAttribute(`alt`, `Аватар пользователя`);
   avatarWrapper.appendChild(avatarImg);
   const commentWrapper = document.createElement(`div`);
@@ -92,7 +92,7 @@ const addLastCommentOnMainPage = (message) => {
   newItem.classList.add(`last__list-item`);
   const newImg = document.createElement(`img`);
   newImg.classList.add(`last__list-image`);
-  newImg.setAttribute(`src`, `/upload/${avatar}`);
+  newImg.setAttribute(`src`, `${avatar}`);
   newImg.setAttribute(`width`, `20`);
   newImg.setAttribute(`height`, `20`);
   newImg.setAttribute(`alt`, `Аватар пользователя`);
