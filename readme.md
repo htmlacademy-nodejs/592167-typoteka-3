@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Агафонов](https://up.htmlacademy.ru/nodejs/3/user/592167).
-* Наставник: [Андрей Маирович](https://htmlacademy.ru/profile/id1307747).
+* Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
 
 ---
 
