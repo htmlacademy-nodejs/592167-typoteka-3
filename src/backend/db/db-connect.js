@@ -3,6 +3,7 @@
 const Sequelize = require(`sequelize`);
 const Operator = Sequelize.Op;
 require(`dotenv`).config();
+const fs = require(`fs`);
 
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
@@ -92,6 +93,10 @@ const initDb = async (dbData, emptyTables) => {
 
       const article = await Article.findByPk(i + 1);
       await article.addCategories(categories);
+    }
+  } else {
+    if (!fs.existsSync(`${__dirname}/../logs`)) {
+      fs.mkdirSync(`${__dirname}/../logs`);
     }
   }
 };
