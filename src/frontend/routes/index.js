@@ -39,7 +39,6 @@ const initializeRoutes = (app) => {
     const allElements = resAllElements.data;
 
     allElements.previews.map((it) => {
-      // const dataCreate = new Date(it.createdAt);
       it.createdAt = generateDate(it.createdAt);
       return it;
     });
