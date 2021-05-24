@@ -1,5 +1,7 @@
 'use strict';
 
+require(`dotenv`).config();
+
 const ExitCode = {
   SUCCESS: 0,
   ERROR: 1,
@@ -31,8 +33,8 @@ const MOCK_FILE_NAME = `mock.json`;
 const MOCK_USER_ID = 1;
 const USER_ROLE_ADMIN = 1;
 const USER_ROLE_USER = 2;
-const BACKEND_URL = `http://localhost:8081`;
-const FRONTEND_URL = `http://localhost:8080`;
+const BACKEND_URL = `http://localhost:${process.env.SERVER_PORT}`;
+const FRONTEND_URL = `http://localhost:${process.env.FRONT_SERVER_PORT}`;
 const REDIS_HOST = `localhost`;
 const REDIS_PORT = 6379;
 const USER_ROLE_GUEST = 3;
