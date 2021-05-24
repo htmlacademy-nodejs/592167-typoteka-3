@@ -29,14 +29,12 @@ const addCategoryButton = document.querySelector(`.category__button`);
 
 if (buttonNewArticle) {
   buttonNewArticle.addEventListener(`click`, () => {
-    // eslint-disable-next-line no-undef
     location.pathname = `/articles/add`;
   });
 }
 
 if (buttonPostBackwards) {
   buttonPostBackwards.addEventListener(`click`, (evt) => {
-    // eslint-disable-next-line no-undef
     history.back();
     evt.preventDefault();
   });
@@ -48,7 +46,6 @@ if (buttonsDeleteCategory) {
       const form = evt.target.parentElement;
       let removeUrl = form.action.slice(0, -4);
       removeUrl = `${removeUrl}delete`;
-      // eslint-disable-next-line no-undef
       fetch(removeUrl, {
         mode: `cors`,
         headers: {
@@ -57,17 +54,13 @@ if (buttonsDeleteCategory) {
       }).then((response) => response.json())
         .then((data) => {
           if (data.isDelete) {
-            // eslint-disable-next-line no-undef
             location.reload();
           } else {
-            // eslint-disable-next-line no-undef
             const spanElement = document.querySelector(`.delete-error`);
             const categoryName = form.querySelector(`input[name='category']`).value;
             spanElement.textContent = `Удаление невозможно, для категории "${categoryName}" есть публикации.`;
           }
         });
-      // form.action = removeUrl;
-      // form.submit();
     });
   }
 }
@@ -76,7 +69,6 @@ if (buttonsDeleteComment) {
   for (let btnCategory of buttonsDeleteComment) {
     btnCategory.addEventListener(`click`, (evt) => {
       const commentId = evt.target.getAttribute(`data-commentId`);
-      // eslint-disable-next-line no-undef
       fetch(`${BACKEND_URL}/api/comments/delete/${commentId}`, {
         mode: `cors`,
         headers: {
@@ -85,7 +77,6 @@ if (buttonsDeleteComment) {
       }).then((response) => response.json())
         .then((data) => {
           if (data.isDelete) {
-            // eslint-disable-next-line no-undef
             location.reload();
           }
         });
@@ -97,7 +88,6 @@ if (buttonsDeleteArticle) {
   for (let btnArticle of buttonsDeleteArticle) {
     btnArticle.addEventListener(`click`, (evt) => {
       const articleId = evt.target.getAttribute(`data-articleId`);
-      // eslint-disable-next-line no-undef
       fetch(`${BACKEND_URL}/api/articles/delete/${articleId}`, {
         mode: `cors`,
         headers: {
@@ -106,7 +96,6 @@ if (buttonsDeleteArticle) {
       }).then((response) => response.json())
         .then((data) => {
           if (data.isDelete) {
-            // eslint-disable-next-line no-undef
             location.reload();
           }
         });

@@ -10,18 +10,6 @@ const lastComments = document.querySelectorAll(`.last__list-item`);
 const commentsList = document.querySelector(`.comments__list`);
 
 const addCommentOnPostPage = (message) => {
-  // <li className="comments__comment">
-  //   <div className="comments__avatar avatar">
-  //      <img src="/upload/60daa1e52695dc9c849b50b63204a19c.jpg"
-  //      alt="аватар пользователя">
-  //   </div>
-  //   <div className="comments__text">
-  //     <div className="comments__head"><p>Сидоров Виктор •</p>
-  //       <time className="comments__date" dateTime="2019-03-21T20:33">20.04.2021, 17:26</time>
-  //     </div>
-  //     <p className="comments__message">sdjflkadsj weurioewu lskdfklj ioweurior kljsdklfjewurio lksdfjklsdjfuewrio</p>
-  //   </div>
-  // </li>
   const {comment, avatar, user, createdAt} = JSON.parse(message);
   const newItem = document.createElement(`li`);
   newItem.classList.add(`comments__comment`);
@@ -71,7 +59,6 @@ if (commentForm && commentForm.length > 0) {
     };
 
     if (!socket.connected) {
-      // eslint-disable-next-line no-alert,no-undef
       alert(`Соединение с сервером прервано. Обновите страницу.`);
       return;
     }
