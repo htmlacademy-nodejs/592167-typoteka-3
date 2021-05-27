@@ -131,27 +131,19 @@ module.exports = {
         {
           firstName: `Иванов`,
           lastName: `Иван`,
-          email: `ivanov@mail.ru`,
-          password: `1234`,
+          email: `admin@mail.ru`,
+          password: `$2b$10$TKcQeeQZWM9bP5SqR8LUie3kFlTwgMN0oWEc2r8f50AuAUao8In1S`, // пароль - 123qwe
           roleId: 1,
           avatar: ``,
         },
         {
           firstName: `Сидоров`,
           lastName: `Виктор`,
-          email: `sidorov@mail.ru`,
-          password: `1234`,
+          email: `user@mail.ru`,
+          password: `$2b$10$20yT8gk8XrUy0nxouMK4getoF6CaTaNrLICw8hPxbB331ydF4zCmi`, // пароль - 123qwe
           roleId: 2,
           avatar: ``,
-        },
-        {
-          firstName: `Фролов`,
-          lastName: `Егор`,
-          email: `frolov@mail.ru`,
-          password: `1234`,
-          roleId: 2,
-          avatar: ``,
-        },
+        }
       ],
       categories: [
         {category: `Железо`},
