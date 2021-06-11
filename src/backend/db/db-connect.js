@@ -56,7 +56,7 @@ Article.hasMany(Image, {
 });
 
 Article.belongsToMany(Category, {
-  through: `ArticlesToCategories`,
+  through: `Articles_To_Categories`,
   as: `categories`,
   foreignKey: `articleId`,
   timestamps: true,
@@ -64,7 +64,7 @@ Article.belongsToMany(Category, {
 });
 
 Category.belongsToMany(Article, {
-  through: `ArticlesToCategories`,
+  through: `Articles_To_Categories`,
   as: `articles`,
   foreignKey: `categoryId`,
 });
