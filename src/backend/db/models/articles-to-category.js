@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     timestamps: true,
     paranoid: true,
+    tableName: `Articles_To_Category`,
   });
 
   return ArticlesToCategory;
