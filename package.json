@@ -13,6 +13,12 @@
     "server:start:debug": "cross-env LOG_LEVEL=debug node src/service.js --server | ./node_modules/.bin/pino-pretty > src/backend/logs/app.log",
     "server": "concurrently \"npm:server:start\" \"npm:start-front-server\""
   },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Agafon87/592167-typoteka-3.git"
@@ -25,7 +31,7 @@
   "homepage": "https://github.com/Agafon87/592167-typoteka-3#readme",
   "devDependencies": {
     "eslint": "6.8.0",
-    "eslint-config-htmlacademy": "0.5.2",
+    "eslint-config-htmlacademy": "0.6.0",
     "jest": "25.4.0",
     "nodemon": "2.0.2",
     "pino-pretty": "4.0.0",

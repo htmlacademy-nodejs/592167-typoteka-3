@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class ArticlesToCategory extends sequelize.Sequelize.Model{ }
+  class ArticlesToCategory extends sequelize.Sequelize.Model { }
   ArticlesToCategory.init({
     articleId: {
       type: DataTypes.INTEGER,

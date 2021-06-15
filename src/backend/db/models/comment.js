@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class Comment extends sequelize.Sequelize.Model{ }
+  class Comment extends sequelize.Sequelize.Model { }
   Comment.init({
     id: {
       type: DataTypes.INTEGER,
