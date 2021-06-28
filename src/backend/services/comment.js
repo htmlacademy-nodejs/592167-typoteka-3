@@ -30,11 +30,13 @@ const add = async (data) => {
     comment: data.comment,
   };
 
-  checkComment.validateAsync(newComment)
-    .then(async (response) => {
-      return await commentRepository.save(response);
-    })
-    .catch((err) => logger.error(err));
+  try {
+    const response = await checkComment.validateAsync(newComment);
+    return await commentRepository.save(response);
+  } catch (err) {
+    logger.error(err);
+    return [];
+  }
 };
 
 const getComments = async () => {

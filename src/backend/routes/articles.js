@@ -163,7 +163,9 @@ router.post(`/:articleId/comments`, async (req, res) => {
 router.post(`/edit/:articleId`, savePhoto(TEMPLATE.NEW_POST), async (req, res) => {
   try {
     const data = req.body;
+    console.log(data);
     data.image = req.file !== undefined ? req.file.filename : ``;
+    console.log(data);
 
     await articleService.edit(data, req.params.articleId);
     res.redirect(`${FRONTEND_URL}/my`);

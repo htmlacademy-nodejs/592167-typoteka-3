@@ -40,7 +40,6 @@ router.get(`/edit/:id`, [privatePath(true)], async (req, res) => {
   myArticles.calendarDate = `${myArticles.createdAt.slice(6)}-${myArticles.createdAt.slice(3, 5)}-${myArticles.createdAt.slice(0, 2)}`;
   myArticles.action = `${BACKEND_URL}/api/articles/edit/${req.params.id}`;
   myArticles.userInfo = userInfo;
-  console.log(myArticles);
   res.render(`new-post`, {myArticles});
 });
 
@@ -73,7 +72,6 @@ router.get(`/:id`, async (req, res) => {
     article.FRONTEND_URL = FRONTEND_URL;
     article.USER_ROLE_GUEST = USER_ROLE_GUEST;
     article.csrf = md5(req.session.cookie + process.env.CSRF_SECRET);
-    console.log(article);
     return res.render(`post`, {article});
   } catch (err) {
     return res.render(`error/500`, {err});

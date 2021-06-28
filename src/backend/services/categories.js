@@ -11,8 +11,9 @@ const getCategories = async (queryString) => {
   }
 };
 
-const create = (data) => {
-  return categoriesRepository.create(data);
+const create = async (data) => {
+  const answer = await categoriesRepository.create(data);
+  return answer;
 };
 
 const edit = async (data, categoryId) => {

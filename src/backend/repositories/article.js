@@ -168,7 +168,6 @@ const edit = async (newArticle, articleId) => {
   }
 };
 
-
 const remove = async (articleId) => {
   try {
     const temp = await db.Article.findOne({
@@ -216,7 +215,7 @@ const remove = async (articleId) => {
       await temp.removeCategories(category);
     });
 
-    if (temp.images && temp.images[0]) {
+    if (temp.images && temp.images[0] && temp.images[0].dataValues.image !== ``) {
       try {
         fs.unlinkSync(`${__dirname}/../../static/upload/${temp.images[0].dataValues.image}`);
       } catch (err) {

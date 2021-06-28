@@ -12,10 +12,10 @@ const commentsService = require(`../services/comment`);
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(await commentsService.getComments());
+    return res.send(await commentsService.getComments());
   } catch (err) {
     logger.error(err);
-    res.status(500).send({code: 500, message: `Internal service error`});
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({code: StatusCodes.INTERNAL_SERVER_ERROR, message: `Internal server error`});
   }
 });
 

@@ -2,11 +2,12 @@
 
 const commentRepository = require(`../repositories/comment`);
 const articleRepository = require(`../repositories/article`);
+const userServices = require(`../services/users`);
 jest.mock(`../repositories/comment`);
 jest.mock(`../repositories/article`);
+jest.mock(`../services/users`);
 
 const underTest = require(`./comment`);
-const {CommentNotFoundError, ArticleNotFoundError} = require(`../errors/errors`);
 
 const MOCK_ID = 123456;
 
@@ -20,47 +21,34 @@ describe(`getByArticleId`, () => {
 
     expect(actual).toBe(expectedComments);
   });
-
-  test(`for non-existing article should throw error`, () => {
-    articleRepository.exists.mockReturnValue(false);
-
-    expect(() => underTest.getByArticleId(MOCK_ID))
-      .toThrowError(new ArticleNotFoundError(MOCK_ID));
-  });
 });
 
 describe(`add comment`, () => {
-  test(`for existing article should add new comment and return its id`, () => {
-    articleRepository.exists.mockReturnValue(true);
+  test(`for existing article should add new comment and return its id`, async () => {
+    const mockData = {
+      articleId: MOCK_ID,
+      comment: `some text some text some text some text some text some text some text`,
+    };
+    const mockUserInfo = {
+      dataValues: {
+        id: 1,
+      }
+    };
     commentRepository.save.mockReturnValue(MOCK_ID);
+    userServices.getUserInfo.mockReturnValue(mockUserInfo);
 
-    const actual = underTest.add({text: `some text`});
+    const actual = await underTest.add(mockData);
 
     expect(actual).toBe(MOCK_ID);
-  });
-
-  test(`for non-existing article should throw error`, () => {
-    articleRepository.exists.mockReturnValue(false);
-
-    expect(() => underTest.getByArticleId(MOCK_ID))
-      .toThrowError(new ArticleNotFoundError(MOCK_ID));
   });
 });
 
 describe(`remove comment`, () => {
-  test(`should return 'true' if existing comment was successfully deleted`, () => {
-    commentRepository.exists.mockReturnValue(true);
+  test(`should return 'true' if existing comment was successfully deleted`, async () => {
     commentRepository.remove.mockReturnValue(true);
 
-    const actual = underTest.remove(MOCK_ID, MOCK_ID);
+    const actual = await underTest.remove(MOCK_ID);
 
     expect(actual).toBe(true);
-  });
-
-  test(`for non-existing comment should throw error`, () => {
-    commentRepository.exists.mockReturnValue(false);
-
-    expect(() => underTest.remove(MOCK_ID, MOCK_ID))
-      .toThrowError(new CommentNotFoundError(MOCK_ID, MOCK_ID));
   });
 });
