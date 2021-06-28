@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class Article extends sequelize.Sequelize.Model{ }
+  class Article extends sequelize.Sequelize.Model { }
   Article.init({
     id: {
       type: DataTypes.INTEGER,
@@ -10,14 +10,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     title: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(100),
       allowNull: false,
     },
     announce: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(250),
       allowNull: false,
     },
     description: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(1000),
       allowNull: true,
     },

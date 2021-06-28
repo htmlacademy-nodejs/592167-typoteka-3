@@ -77,11 +77,22 @@ const create = async (data) => {
     image: data.image,
   };
 
-  checkArticle.validateAsync(newArticle)
-    .then(async (response) => {
-      return await articleRepository.save(response, image);
-    })
-    .catch((err) => logger.error(err));
+  try {
+    const response = await checkArticle.validateAsync(newArticle);
+    const someRes = await articleRepository.save(response, image);
+    return someRes;
+  } catch (err) {
+    logger.error(err);
+    return [];
+  }
+
+  // await checkArticle.validateAsync(newArticle)
+  //   .then(async (response) => {
+  //     const someRes = await articleRepository.save(response, image);
+  //     console.log(someRes);
+  //     return someRes;
+  //   })
+  //   .catch((err) => logger.error(err));
 };
 
 const edit = async (data, articleId) => {
@@ -248,6 +259,7 @@ const getArticleById = async (id, queryParams) => {
   }
   article.userInfoForArticleById = userInfoForArticleById;
 
+  // console.log(article);
   return article;
 };
 

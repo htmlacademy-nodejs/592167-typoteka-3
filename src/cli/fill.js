@@ -69,7 +69,7 @@ const writeDataToFile = async (fileName, content) => {
 
 const readContent = async (filePath) => {
   try {
-    const content = await fs.readFile(filePath, 'utf8');
+    const content = await fs.readFile(filePath, `utf8`);
     return content.split(`\n`);
   } catch (err) {
     logger.error(err.message());

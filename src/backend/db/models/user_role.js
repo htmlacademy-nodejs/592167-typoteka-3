@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class UserRole extends sequelize.Sequelize.Model{ }
+  class UserRole extends sequelize.Sequelize.Model { }
   UserRole.init({
     id: {
       type: DataTypes.INTEGER,
@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     role: {
+      // eslint-disable-next-line new-cap
       type: DataTypes.STRING(50),
       allowNull: false,
     },
